@@ -1,40 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-    <?php
-    include('login_test.php');
-
-
-    if (isset($_GET['error'])) {
-      if ($_GET['error'] == "fejl") {
-        echo "Du blev ikke logget ud";
-      }
-    }
-
-    //er brugeren logget in
-    if (isset($_SESSION['username'])) {
-      if ($row['username'] == $user) {
-        echo '<br><a href="user_site.php">Bruger</a> <br>';
-        echo '<br><a href="browse.php">Browse</a><br>';
-        echo '<br><a href="logout.php">Log ud</a>';
-    }
-    }else{
-      echo '<br><a href="login.php">Log in</a> <br>';
-      echo '<br><a href="new_user.php">Opret bruger</a> <br>';
-      echo '<br><a href="browse.php">Browse</a><br>';
-    }
-
-      //admin
-      if ($_SESSION['username'] == "andre") {
-        echo '<br><br><a href="new_data.php">Tilføj ny film til databasen</a><br>';
-
-      }
-
-hello world
-    ?>
-  </body>
-</html>
+<?php
+$i=1;
+while ($i < 10) {
+  echo "Whether you're up in the clouds or going way underground, it's easy to take your music with you whereever you go. With Spotify Premium, you can save your favorite songs to your phone and listen offline. That means you can play anywhere, anytime without using any data. And right now, you can try Premium free for 30 days. Ready to make the move? Tap the banner to learn more.<br><br>";
+  $i++;
+}
+ ?>
