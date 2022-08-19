@@ -1,21 +1,22 @@
-<style>
 #maintable {
   border-spacing: 0px;
   table-layout: fixed;
   width: 840px;
   border-collapse: collapse;
 }
-table {
+
+#innertable {
   margin-left: auto;
   margin-right: auto;
 }
+
 td {
   border: 1px solid #000;
   word-break: break-word;
   vertical-align: top;
   text-align: center;
 }
+
 img {
     width: 120px;
 }
-</style>
