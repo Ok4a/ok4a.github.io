@@ -3,6 +3,8 @@
   table-layout: fixed;
   width: 840px;
   border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #innertable {
