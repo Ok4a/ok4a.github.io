@@ -9,7 +9,7 @@ with open('Boardgame.csv') as csv_file:
         count = 0
 
 
-        txt.write(f'<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>BOOKS</title>\n<body>')
+        txt.write(f'<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>Boardgames</title>\n<body>')
         txt.write(f'<table id="maintable">\n \t <tr colspan="{tablewidth}"> <th>Brætpils liste</th> </tr> \n \t <tr> \n')
 
         for row in csv_reader:
@@ -17,7 +17,7 @@ with open('Boardgame.csv') as csv_file:
                  txt.write(f'\t </tr> \n \t <tr>\n')
                  count = 0
             else:
-                txt.write(f'\t\t <td> \n \t\t\t  <table><tr> <td><img src="{row[3]}"> </td></tr> <tr> <td>{row[0]}</td></tr></table></td> \n')
+                txt.write(f'\t\t <td> \n \t\t\t  <table  id="innertable"><tr> <td><img src="{row[3]}"> </td></tr> <tr> <td>{row[0]}</td></tr></table></td> \n')
                 count += 1
 
         txt.write('</tr>\n</table>')
