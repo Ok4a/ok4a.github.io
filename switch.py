@@ -9,7 +9,7 @@ with open('Switch.csv') as csv_file:
 
 
         txt.write(f'<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>Boardgames</title>\n<body>')
-        txt.write(f'<table id="maintable">\n \t <tr colspan="{tablewidth}"> <th>Brætpils liste</th> </tr> \n \t <tr> \n')
+        txt.write(f'<table id="maintable">\n \t <tr> <th colspan="{tablewidth}">Nintendo Switch Games</th> </tr> \n \t <tr> \n')
 
         for row in csv_reader:
             if  count == tablewidth:
