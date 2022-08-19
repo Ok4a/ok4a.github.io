@@ -8,7 +8,7 @@ with open('Switch.csv') as csv_file:
         count = 0
 
 
-        txt.write(f'<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>Boardgames</title>\n<body>')
+        txt.write('<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<style>td{text-align: top;}</style\n<title>Boardgames</title>\n<body>')
         txt.write(f'<table id="maintable">\n \t <tr> <th colspan="{tablewidth}">Nintendo Switch Games</th> </tr> \n \t <tr> \n')
 
         for row in csv_reader:
