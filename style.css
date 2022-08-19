@@ -1,7 +1,7 @@
 #maintable {
   border-spacing: 0px;
   table-layout: fixed;
-  width: 840px;
+  width: 1250px;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
@@ -12,15 +12,22 @@
   margin-right: auto;
 }
 
+
+
 td {
   border: 1px solid #000;
   word-break: break-word;
   vertical-align: bottom;
   text-align: center;
 }
-
+#cont_td{
+  border: 0px;
+  word-break: break-word;
+  vertical-align: bottom;
+  text-align: center;
+}
 #switch_td{
-  border: 1px solid #000;
+  
   word-break: break-word;
   vertical-align: top;
   text-align: center;
