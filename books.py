@@ -10,9 +10,8 @@ with open('Books.csv') as csv_file:
         
 
         txt.write(f'<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>BOOKS</title>\n<body>')
-
-
         txt.write(f'<table id="maintable">\n \t <tr colspan="{tablewidth}"> <th>Bog liste</th> </tr> \n \t <tr> \n')
+        
         for row in csv_reader:
             if row[0] == "book":
                 if  count == tablewidth:
