@@ -3,7 +3,9 @@ import csv , operator
 with open('Switch.csv') as csv_file:
     with open('switch.txt', 'w') as txt:
         csv_reader = csv.reader(csv_file, delimiter=';')
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(3))
         csv_reader = sorted(csv_reader, key=operator.itemgetter(5))
+
         line_count = -1
         tablewidth = 6
         count = 0
