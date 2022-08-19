@@ -19,6 +19,13 @@ td {
   text-align: center;
 }
 
+#switch_td{
+  border: 1px solid #000;
+  word-break: break-word;
+  vertical-align: top;
+  text-align: center;
+}
+
 img {
     width: 120px;
 }
