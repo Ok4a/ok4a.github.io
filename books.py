@@ -1,13 +1,17 @@
 import csv , operator
 
 with open('Books.csv') as csv_file:
-    with open('books.txt', 'w') as txt:
+    with open('books.html', 'w') as txt:
         csv_reader = csv.reader(csv_file, delimiter=';')
         csv_reader = sorted(csv_reader, key=operator.itemgetter(5))
         line_count = -1
         tablewidth = 6
         count = 0
         
+
+        txt.write(f'<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>BOOKS</title>\n<body>')
+
+
         txt.write(f'<table id="maintable">\n \t <tr colspan="{tablewidth}"> <th>Bog liste</th> </tr> \n \t <tr> \n')
         for row in csv_reader:
             if row[0] == "book":
@@ -15,7 +19,7 @@ with open('Books.csv') as csv_file:
                     txt.write(f'\t </tr> \n \t <tr>\n')
                     count = 0
                 else:
-                    txt.write(f'\t\t <td> \n \t\t\t  <table><tr> <td><img src="{row[7]}"> </td></tr> <tr> <td>{row[2]} <br> {row[5]} </td></tr></table></td> \n')
+                    txt.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td><img src="{row[7]}"> </td></tr> <tr> <td>{row[2]} <br> {row[5]} </td></tr></table></td> \n')
                     count += 1
 
         txt.write('</tr>\n</table>')
