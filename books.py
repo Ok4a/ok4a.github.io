@@ -11,7 +11,7 @@ with open('Books.csv') as csv_file:
         
 
         txt.write(f'<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>BOOKS</title>\n<body>')
-        txt.write(f'<table id="maintable">\n \t <tr><td colspan="2"><a href="boardgame.html">Boardgames</a></td><td colspan="2"><a href="books.html">Books</a></td><td colspan="2"><a href="switch.html">Nindtendo Switch</a></td></tr>\n \t <tr> <th colspan="{tablewidth}">Bog liste</th> </tr> \n \t <tr> \n')
+        txt.write(f'<table id="maintable">\n \t <tr><td colspan="2"><a href="boardgame.html">Boardgames</a></td><td colspan="2"><a href="books.html">Books</a></td><td colspan="2"><a href="switch.html">Nindtendo Switch</a></td></tr>\n \t <tr> <th colspan="{tablewidth}">Books</th> </tr> \n \t <tr> \n')
         
         for row in csv_reader:
 
