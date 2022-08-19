@@ -17,9 +17,9 @@ with open('Books.csv') as csv_file:
             if  count == tablewidth:
                 txt.write(f'\t </tr> \n \t <tr>\n')
                 count = 0
-            else:
-                txt.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td><img src="{row[6]}"> </td></tr> <tr> <td>{row[1]} <br>{row[5]} {row[4]} </td></tr></table></td> \n')
-                count += 1
+                
+            txt.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td><img src="{row[6]}"> </td></tr> <tr> <td>{row[1]} <br>{row[5]} {row[4]} </td></tr></table></td> \n')
+            count += 1
 
         txt.write('</tr>\n</table>')
 
