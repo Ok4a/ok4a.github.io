@@ -4,6 +4,7 @@ with open('Books.csv') as csv_file:
     with open('books.html', 'w') as txt:
         csv_reader = csv.reader(csv_file, delimiter=';')
         csv_reader = sorted(csv_reader, key=operator.itemgetter(3))
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(1))
         csv_reader = sorted(csv_reader, key=operator.itemgetter(4))
         line_count = -1
         tablewidth = 6
