@@ -12,7 +12,13 @@
   margin-right: auto;
 }
 
-
+#topbar{
+  width: 1250px;
+  margin-left: auto;
+  margin-right: auto;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
 
 td {
   border: 1px solid #000;
@@ -34,5 +40,5 @@ td {
 }
 
 img {
-    width: 120px;
+    width: 150px;
 }
