@@ -3,7 +3,7 @@ import csv , operator
 with open('Books.csv') as csv_file:
     with open('books.html', 'w') as txt:
         csv_reader = csv.reader(csv_file, delimiter=';')
-        csv_reader = sorted(csv_reader, key=operator.itemgetter(3))
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(7))
         csv_reader = sorted(csv_reader, key=operator.itemgetter(1))
         csv_reader = sorted(csv_reader, key=operator.itemgetter(4))
 
@@ -20,8 +20,10 @@ with open('Books.csv') as csv_file:
             if  count == tablewidth:
                 txt.write(f'\t </tr> \n \t <tr>\n')
                 count = 0
-
-            txt.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td {cid}><img src="{row[6]}"> </td></tr> <tr> <td {cid}>{row[1]} <br>{row[5]} {row[4]} </td></tr></table></td> \n')
+            if row[0] == 'manga':
+                txt.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td {cid}><img src="{row[6]}"> </td></tr> <tr> <td {cid}>{row[1]} vol. {row[3]} <br>{row[5]} {row[4]} </td></tr></table></td> \n')
+            else:
+                txt.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td {cid}><img src="{row[6]}"> </td></tr> <tr> <td {cid}>{row[1]} <br>{row[5]} {row[4]} </td></tr></table></td> \n')
             count += 1
 
         txt.write('</tr>\n</table>')
