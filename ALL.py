@@ -6,7 +6,7 @@ sid ='id="switch_td"'
 cid ='id=cont_td'
 
 start_string = '<!DOCTYPE html> \n<html lang="en" dir="ltr">\n<link rel="stylesheet" href="style.css"> <head> <meta charset="utf-8"> </head>\n'
-topbar_string = '<table id="topbar"> <tr> <th colspan="3">Mine lister over brætspil, bøger og spil til Nintendo Switch</th> </tr> <tr><td><a href="boardgame.html">Boardgames</a></td><td ><a href="books.html">Books</a></td><td><a href="switch.html">Nindtendo Switch</a></td></tr> </table>'
+topbar_string = '<table id="topbar"> <tr> <th colspan="3">Mine lister over brætspil, bøger og spil til Nintendo Switch</th> </tr> <tr><td><a href="boardgame.html">Boardgames</a></td><td ><a href="books.html">Books</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
 
 #Boardgames
 with open('Boardgame.csv') as boardgame_csv:
