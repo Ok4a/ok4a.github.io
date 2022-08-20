@@ -5,7 +5,7 @@ tablewidth = 6
 sid ='id="switch_td"'
 cid ='id=cont_td'
 
-start_string = '<!DOCTYPE html> \n<html>\n<link rel="stylesheet" href="style.css">\n<title>Boardgames</title>\n<body>'
+start_string = '<!DOCTYPE html> \n<html  lang="en" dir="ltr">\n<link rel="stylesheet" href="style.css"> <head> <meta charset="utf-8"> </head>\n<title>Boardgames</title>\n<body>'
 topbar_string = '<table id="topbar"> <tr> <th colspan="3">Mine lister over brætspil, bøger og spil til Nintendo Switch</th> </tr> <tr><td><a href="boardgame.html">Boardgames</a></td><td ><a href="books.html">Books</a></td><td><a href="switch.html">Nindtendo Switch</a></td></tr> </table>'
 
 #Boardgames
