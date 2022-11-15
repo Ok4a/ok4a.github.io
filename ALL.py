@@ -30,8 +30,7 @@ with open('Boardgame.csv') as boardgame_csv:
 
         boardgame_html.write('</tr>\n</table>')
 
-        boardgame_csv.close()
-        boardgame_html.close()
+
         print('done')
 
 
@@ -59,8 +58,7 @@ with open('Books.csv') as book_csv:
 
         book_html.write('</tr>\n</table>')
 
-        book_csv.close()
-        book_html.close()
+
         print('done')
 
 
@@ -91,8 +89,7 @@ with open('Switch.csv') as switch_csv:
 
         switch_html.write('</tr>\n</table>')
 
-        switch_csv.close()
-        switch_html.close()
+
         print('done')
 
 
