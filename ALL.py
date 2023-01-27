@@ -1,6 +1,6 @@
 import csv , operator
 
-tablewidth = 6
+tablewidth = 5
 
 sid ='id="switch_td"'
 cid ='id=cont_td'
@@ -31,7 +31,7 @@ with open('Boardgame.csv') as boardgame_csv:
         boardgame_html.write('</tr>\n</table>')
 
 
-        print('done')
+        print('Boardgame')
 
 
 #BOOKS
@@ -59,7 +59,7 @@ with open('Books.csv') as book_csv:
         book_html.write('</tr>\n</table>')
 
 
-        print('done')
+        print('Books')
 
 
 #Switch games
@@ -83,13 +83,11 @@ with open('Switch.csv') as switch_csv:
 
             switch_html.write(f'\t\t <td {sid}> \n \t\t\t  <table  id="innertable"><tr> <td {cid}><img src="{row[2]}"> </td></tr> <tr> <td {cid}>{row[0]}</td {sid}></tr></table></td> \n')
             count += 1
-            if row[0] == 'Pokémon Shield':
-                with open('test.txt','w') as text:
-                    text.write(row[0])
+
 
         switch_html.write('</tr>\n</table>')
 
 
-        print('done')
+        print('Switch')
 
 
