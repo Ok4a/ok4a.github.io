@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.326">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Morten Møller Jensen (morje21@student.sdu.dk)   Ole Wolsing Kaa (olkaa21@student.sdu.dk)">
+
+<title>ST522: Project 2, Spring 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="ST522_Project_2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ST522_Project_2_files/libs/quarto-html/quarto.js"></script>
+<script src="ST522_Project_2_files/libs/quarto-html/popper.min.js"></script>
+<script src="ST522_Project_2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ST522_Project_2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ST522_Project_2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ST522_Project_2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ST522_Project_2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ST522_Project_2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ST522_Project_2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ST522: Project 2, Spring 2023</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Morten Møller Jensen (morje21@student.sdu.dk) <br> Ole Wolsing Kaa (olkaa21@student.sdu.dk) </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">25/05/23</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="mixture-distributions-bayesian-approach" class="level2">
+<h2 class="anchored" data-anchor-id="mixture-distributions-bayesian-approach">1. Mixture distributions: Bayesian approach</h2>
+<section id="a" class="level4">
+<h4 class="anchored" data-anchor-id="a">(a)</h4>
+<p>First we find the conditional distribution of <span class="math inline">\(p | X_1,\dots,X_n, Z_1,\dots,Z_n\)</span> with the assumption that the prior distribution of of <span class="math inline">\(p\)</span> is <span class="math inline">\(\beta(a = 1, b = 1)\)</span>. We can use the definition of conditional probability to rewrite the conditional distribution:</p>
+<p><span class="math display">\[P(p | X_1,\dots,X_n,Z_1,\dots,Z_n) = \frac{P(X_1,\dots,X_n,Z_1,\dots,Z_n,p)}{P(X_1,\dots,X_n,Z_1,\dots,Z_n)}\]</span></p>
+<p>The term in the denomitor is only dependent on known data and not <span class="math inline">\(p\)</span> is therefore constant with respect to <span class="math inline">\(p\)</span>. We will then rewrite the remaining term with Bayes Law:</p>
+<p><span class="math display">\[\propto P(X_1,\dots,X_n,Z_1,\dots,Z_n | p)P(p)\]</span> We again rewrite the first term using Bayes Law: <span class="math display">\[\propto P(X_1,\dots,X_n | Z_1,\dots,Z_n, p)P(Z_1,\dots,Z_n | p) P(p)\]</span> Using the fact that <span class="math inline">\((X_i,Z_i)\)</span> is independent of <span class="math inline">\((X_j,Z_j), i \neq j\)</span>: <span class="math display">\[\propto\left(\prod_{i = 1}^{n}P(X_i | Z_i, p)P(Z_i | p)\right) P(p)\]</span></p>
+<p>Since the values of <span class="math inline">\(Z_i, X_i\)</span> we know the value of each <span class="math inline">\(P(X_i | Z_i, p)\)</span> since we know which normal-distribution <span class="math inline">\(X_i\)</span> comes from and what the density is. So that term is constant with respect to <span class="math inline">\(p\)</span>. The remaining terms can then be reduced like this:</p>
+<p><span class="math display">\[\propto \left(\prod_{i=1}^{n}P(Z_i | p)\right)P(p) = (\prod_{i=1}^{n}p^{Z_i}(1-p)^{1-Z_i})p^{a-1}(1-p)^{b-1}\]</span></p>
+<p><span class="math display">\[= p^{\sum_{i=1}^{n}Z_i}(1-p)^{n-\sum_{i=1}^{n}Z_i}p^{a-1}(1-p)^{b-1}\]</span></p>
+<p><span class="math display">\[= p^{\sum_{i=1}^{n}Z_i + a}(1-p)^{n - \sum_{i=1}^{n}Z_i + b}\]</span></p>
+<p>Therefore, <span class="math inline">\(p | X_1,..., X_n, Z_1, \dots , Z_n \sim \beta(\sum_{i=1}^{n}Z_i + a, n - \sum_{i=1}^{n}Z_i + b)\)</span></p>
+<p>Now for <span class="math inline">\(Z_i | X_1,\dots, X_n, p\)</span>. Since <span class="math inline">\(Z_i\)</span> is naturally Bernoulli, we can discern all the necessary information to determine its conditional distribution by finding <span class="math inline">\(P(Z_i = 1 | X_1,\dots, X_n, p)\)</span>. We will start by rewriting the expression using Bayes Law:</p>
+<p><span class="math display">\[P(Z_i = 1 | X_1,\dots, X_n, p) = \frac{P(Z_i = 1, X_1,\dots, X_n | p)}{P(X_1,\dots,X_n | p)}\]</span></p>
+<p>Using the fact that <span class="math inline">\(Z_i\)</span> is independent from every <span class="math inline">\(X_j\)</span>, where <span class="math inline">\(i \neq j\)</span>:</p>
+<p><span class="math display">\[=\frac{P(Z_i = 1, X_i | p)P(X_1,...,X_{i-1},X_{i+1},...,X_n | p)}{P(X_i | p)P(X_1,...,X_{i-1},X_{i+1},...,X_n | p)}\]</span></p>
+<p>The terms do not involve <span class="math inline">\(Z_i\)</span> are constant with respect to <span class="math inline">\(Z_i\)</span>. Rewriting the term in the numerator using Bayes Law yields: <span class="math display">\[\propto \frac{P(Z_i = 1, X_i | p)}{P(X_i | p)} = \frac{P(X_i | Z_i = 1, p)P(Z_i = 1 | p)}{P(X_i | p)}\]</span></p>
+<p>By the condition that <span class="math inline">\(Z_i = 1\)</span>, <span class="math inline">\(P(X_i | Z_i = 1, p) = \phi(X_i;\mu _1,\sigma _1^2)\)</span>. <span class="math inline">\(P(Z_i = 1| p) = p\)</span> and <span class="math inline">\(P(X_i | p) = p\phi(X_i; \mu _1, \sigma _1^2) + (1-p)\phi(X_i;\mu _2, \sigma _2^2)\)</span>. Therefore the resulting expression becomes:</p>
+<p><span class="math display">\[\frac{\phi(x_i;\mu _1, \sigma _1^2)\cdot p}{p\cdot\phi(x_i;\mu _1, \sigma _1^2)+(1-p)\cdot\phi(x_i; \mu _2, \sigma _2^2)}\]</span></p>
+<p>This works as a probability, since the normal density is always greater than <span class="math inline">\(0\)</span> regardless of the value of <span class="math inline">\(X_i\)</span>, so the expression in the denomitor is greater than the expression in the numerator and therefore the resulting probability is less than 1. And since we found the conditional probability that <span class="math inline">\(Z_i = 1\)</span> given the data, we have found the probability parameter <span class="math inline">\(p\)</span> for a Bernoulli distribution.</p>
+<p>Therefore, <span class="math inline">\(Z_i | X_1,...,X_n, p \sim Bernoulli\left(\frac{\phi(x_i;\mu _1, \sigma _1^2)\cdot p}{p\cdot\phi(x_i;\mu _1, \sigma _1^2)+(1-p)\cdot\phi(x_i; \mu _2, \sigma _2^2)}\right)\)</span></p>
+</section>
+<section id="b" class="level4">
+<h4 class="anchored" data-anchor-id="b">(b)</h4>
+<p>Will construct a Markov-chain using a Gibbs sampler. We will use an initial value of <span class="math inline">\(p\)</span> generated randomly from <span class="math inline">\(\beta(1,1)\)</span> distribution, since we do not have any values for <span class="math inline">\(Z_i\)</span> initially. Using this generated value of <span class="math inline">\(p\)</span>, we will then generate a value for each <span class="math inline">\(Z_i, i = 1, 2, ..., 200\)</span> using the conditional distribution <span class="math inline">\(Bernoulli\left(\frac{\phi(x_i;\mu _1, \sigma _1^2)\cdot p}{p\cdot\phi(x_i;\mu _1, \sigma _1^2)+(1-p)\cdot\phi(x_i; \mu _2, \sigma _2^2)}\right)\)</span>.</p>
+<p>Using this iteration of the <span class="math inline">\(Z_i\)</span>´s we then generate a new <span class="math inline">\(p\)</span> from the conditional distribution <span class="math inline">\(\beta\left(\sum_{i=1}^{n}Z_i + a, n - \sum_{i=1}^{n}Z_i + b\right)\)</span>. We then use this iteration of <span class="math inline">\(p\)</span> to generate a new set of <span class="math inline">\(Z_i\)</span>´s, use these values to compute a new <span class="math inline">\(p\)</span> and repeat the process.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load</span>(<span class="st">"x.RData"</span>) <span class="co">#Variable with the data is named 'x'</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(x)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  mu1 <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  sigma1 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  mu2 <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  sigma2 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  N <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">3</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  Z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">nrow=</span> N<span class="sc">+</span><span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">200</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  p[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N){</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>      Z[i<span class="sc">+</span><span class="dv">1</span>,j] <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1</span>, <span class="dv">1</span>, (<span class="fu">dnorm</span>(x[j],mu1,sigma1)<span class="sc">*</span>p[i])<span class="sc">/</span>(p[i]<span class="sc">*</span><span class="fu">dnorm</span>(x[j],mu1,sigma1)<span class="sc">+</span>(<span class="dv">1</span><span class="sc">-</span>p[i])<span class="sc">*</span><span class="fu">dnorm</span>(x[j],mu2,sigma2)))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    p[i<span class="sc">+</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>, <span class="fu">sum</span>(Z[i<span class="sc">+</span><span class="dv">1</span>,]) <span class="sc">+</span> a, n <span class="sc">-</span> <span class="fu">sum</span>(Z[i<span class="sc">+</span><span class="dv">1</span>,]) <span class="sc">+</span> b)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>p.burn <span class="ot">&lt;-</span> p[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span>m)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We can see from the plotted data that <span class="math inline">\(p\)</span> converges rather quickly to a narrowed interval roughly between 0.2 and 0.45.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>(N<span class="sc">+</span><span class="dv">1</span>), p, <span class="at">type=</span> <span class="st">"l"</span>, <span class="at">ylab=</span><span class="st">"p"</span>, <span class="at">xlab=</span><span class="st">"t"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="ST522_Project_2_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#plot((m+1):(N+1),p.burn,type= "l", ylab="p.burn", xlab="t")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="c" class="level4">
+<h4 class="anchored" data-anchor-id="c">(c)</h4>
+<section id="square-error-loss" class="level6">
+<h6 class="anchored" data-anchor-id="square-error-loss">Square error loss</h6>
+<p>From the slide <span class="citation" data-cites="slide18">(<a href="#ref-slide18" role="doc-biblioref">Characiejus 2023, 14</a>)</span> we have that the Bayes estimate using square error loss is equal the posterior mean.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(p.burn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3174593</code></pre>
+</div>
+</div>
+</section>
+<section id="credible-interval" class="level6">
+<h6 class="anchored" data-anchor-id="credible-interval">Credible interval</h6>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>  uppder.index <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fl">0.975</span><span class="sc">*</span><span class="fu">length</span>(p.burn))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  lower.index <span class="ot">&lt;-</span> <span class="fu">floor</span>(<span class="fl">0.025</span><span class="sc">*</span><span class="fu">length</span>(p.burn))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  p.sort <span class="ot">&lt;-</span> <span class="fu">sort</span>(p.burn)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  l <span class="ot">&lt;-</span> p.sort[lower.index]</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  u <span class="ot">&lt;-</span> p.sort[uppder.index]</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  CI <span class="ot">&lt;-</span> <span class="fu">c</span>(l,u)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  CI</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2528859 0.3857862</code></pre>
+</div>
+</div>
+<p>Intuitivly as <span class="math inline">\(N\)</span> grows, it will only make a noticable difference if we have not already converged to the stationary distribution. Based on the plot in (b) it seem we have already converged to a stationary distribution, so changing <span class="math inline">\(N\)</span> will not make a huge difference. As for <span class="math inline">\(n\)</span>, intuitivly it would allow us to narrow our confidence interval if we have more observations to work with.</p>
+</section>
+</section>
+<section id="d" class="level4">
+<h4 class="anchored" data-anchor-id="d">(d)</h4>
+<p>We calculate the probability <span class="math inline">\(P(Z_i = 1 | X_1,\cdots,X_n)\)</span> by taking sample means of the columns in our matrix over iterations of <span class="math inline">\(Z_1,\cdots,Z_n\)</span>. We then go through each <span class="math inline">\(X_i\)</span> and look at the probability that it is from distribution <span class="math inline">\(\xi_1\)</span>. If the probability is greater than or equal to 0.5, we say that <span class="math inline">\(X_i\)</span> is from the <span class="math inline">\(\xi_1\)</span> distribution. Else we say <span class="math inline">\(X_i\)</span> is from them <span class="math inline">\(\xi_2\)</span> distribution.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>  Z.burn <span class="ot">&lt;-</span> Z[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span>m),]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  Z.est <span class="ot">&lt;-</span> <span class="fu">apply</span>(Z.burn, <span class="dv">2</span>, mean)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  xi1.class <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  xi2.class <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (Z.est[i] <span class="sc">&gt;</span> <span class="fl">0.5</span>){</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      xi1.class <span class="ot">&lt;-</span> <span class="fu">c</span>(xi1.class, x[i])</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      xi2.class <span class="ot">&lt;-</span> <span class="fu">c</span>(xi2.class, x[i])</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The sample mean of the <span class="math inline">\(\xi_1\)</span> class is</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(xi1.class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.878508</code></pre>
+</div>
+</div>
+<p>The sample mean of the <span class="math inline">\(\xi_2\)</span> class is</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(xi2.class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.110015</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="mixture-distributions-the-em-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="mixture-distributions-the-em-algorithm">2. Mixture distributions: The EM algorithm</h2>
+<section id="a-1" class="level4">
+<h4 class="anchored" data-anchor-id="a-1">(a)</h4>
+<p>The <span class="math inline">\(Q\)</span>-function is defined as <span class="math inline">\(E[\log(L(\theta | X, W)) | X = x, \theta^{(t)}]\)</span> The total-likelihood is given by this function <span class="math inline">\(L(\theta | X) = \prod_{i=1}^{n}\prod_{j=1}^{3}p_j^{Z_{ij}}(\phi(x_i; \mu _j, \sigma^2))^{Z_{ij}}\)</span>$</p>
+<p>If we take the log of this function we get the following expression: <span class="math display">\[\log(L(\theta | X)) = \sum_{i=1}^{n}\sum_{j=1}^{3}(\log(p_j^{Z_{ij}})+\log((\phi(x_i;\mu_j, \sigma^2))^{Z_{ij}})\]</span> <span class="math display">\[= \sum_{i=1}^{n}\sum_{j=1}^{3}Z_{ij}(\log(p_j)+\log(\phi(x_i; \mu_1, \sigma^2)))\]</span> If we write out the normal density we get: <span class="math display">\[= \sum_{i=1}^{n}\sum_{j=1}^{3}Z_{ij}\left(\log(p_j)-\frac{1}{2}\log(2\pi)-\frac{1}{2}\log(\sigma^2)-\frac{(x_i-\mu_j)^2}{2\sigma_2^2}\right)\]</span> Now we need the conditional expectation of this expression given <span class="math inline">\(X = x, \theta^{t}\)</span>: <span class="math display">\[E\left[\sum_{i=1}^{n}\sum_{j=1}^{3}Z_{ij}\left(\log(p_j)-\frac{1}{2}\log(2\pi)-\frac{1}{2}\log(\sigma^2)-\frac{(x_i-\mu_j)^2}{2\sigma_2^2}\right) \Bigg| X = x, \theta^{t}\right]\]</span></p>
+<p>The expectation is linear and given the data and iteration of <span class="math inline">\(\theta\)</span>, the expressions that do not involve <span class="math inline">\(Z_{ij}\)</span> are constant with respect to <span class="math inline">\(Z_{ij}\)</span>. We therefore rewrite the expectation like this: <span class="math display">\[\sum_{i=1}^{n}\sum_{j=1}^{3}\left(\log(p_j)-\frac{1}{2}\log(2\pi)-\frac{1}{2}\log(\sigma^2)-\frac{(x_i-\mu_j)^2}{2\sigma^2}\right)\cdot E\left[Z_{ij} | X = x, \theta^{(t)}\right]\]</span></p>
+<p>Need an expression for <span class="math inline">\(E\left[Z_{ij} | X = x, \theta^{(t)}\right]\)</span>. Since <span class="math inline">\(Z_{ij}\)</span> is bernoulli, we can find the condition expectation like this: <span class="math display">\[E\left[Z_{ij} | X = x, \theta^{(t)}\right] = 0\cdot P(Z_{ij} = 0 | X = x, \theta^{(t)})+1\cdot P(Z_{ij} = 1 | X = x, \theta^{(t)})\]</span> <span class="math display">\[= P(Z_{ij} = 1 | X = x, \theta^{(t)})\]</span> We can rewrite this expression with Bayes theorem as like this: <span class="math display">\[=\frac{\phi(x_i;\mu_j, \sigma^2)p_j}{\sum_{l = 1}^{3}\phi(x_i;\mu_l,\sigma^2)p_l}\]</span> We will denote this conditional expectation by <span class="math inline">\(\gamma_{ij}^{(t)}\)</span>. This gives us a final expression for <span class="math inline">\(Q(\theta | \theta^(t))\)</span>: <span class="math display">\[Q(\theta | \theta^{(t)}) = \sum_{i=1}^{n}\sum_{j = 1}^{3}\gamma_{ij}^{(t)}\left(\log(p_j)-\frac{1}{2}\log(2\pi)-\frac{1}{2}\log(\sigma^2)-\frac{(x_i-\mu_j)^2}{2\sigma^2}\right)\]</span></p>
+<p>This concludes the E-step, which is to derive the Q-function.</p>
+<p>The M-step is to maximize the function <span class="math inline">\(Q(\theta | \theta^{(t)}\)</span> with respect to <span class="math inline">\(\theta\)</span>, which in our case is <span class="math inline">\(\theta = (\mu_1, \mu_2, \mu_3, \sigma^2, p_1, p_2, p_3)\)</span>. Before we do that we will write this problem as a Lagrange multiplication problem, the reason for which will become evident later. We will write the following: <span class="math display">\[Q(\theta | \theta^{(t)})_{\lambda} = \sum_{i=1}^{n}\sum_{j = 1}^{3}\gamma_{ij}^{(t)}\left(\log(p_j)-\frac{1}{2}\log(2\pi)-\frac{1}{2}\log(\sigma^2)-\frac{(x_i-\mu_j)^2}{2\sigma^2}\right) + \lambda\left(\sum_{j=1}^{3}p_j-1\right)\]</span></p>
+<p>Let us start by finding the partial derivatives of <span class="math inline">\(Q(\theta | \theta^{(t)})_\lambda\)</span> with respect to the various parameters: For <span class="math inline">\(\sigma^2\)</span>, since it is involved in all three normal-distributions we end up having a double sum <span class="math display">\[\frac{\partial Q(\theta | \theta^{(t)})_\lambda}{\partial \sigma^2}=\sum_{i=1}^{n}\sum_{j=1}^{3}\gamma_{ij}^{(t)}\left(-\frac{1}{2\sigma^2}-\frac{(x_i-\mu_j)^2}{2(\sigma^2)^2}\right)\]</span> For <span class="math inline">\(\mu_j, j = 1, 2, 3\)</span>, if we fix a index <span class="math inline">\(j\)</span> we can find its partial derivative like this: <span class="math display">\[\frac{\partial Q(\theta | \theta^{(t)})_\lambda}{\partial \mu_j} = \sum_{i=1}^{n}\gamma_{ij}^{(t)}\left(-\frac{1}{2\sigma^2}\cdot2\cdot(x_i-\mu_j)\cdot(-1)\right)\]</span> <span class="math display">\[=\sum_{i=1}^{n}\gamma_{ij}^{(t)}\frac{(x_i-\mu_j)}{\sigma^2}\]</span> Finally, for <span class="math inline">\(p_j, j = 1, 2, 3\)</span>, if we fix a index <span class="math inline">\(j\)</span> we get the following expression for the partial derivative: <span class="math display">\[\frac{\partial Q(\theta | \theta^{(t)})_\lambda}{\partial p_j} = \sum_{i=1}^{n}\gamma_{ij}^{(t)}\cdot\frac{1}{p_j} + \lambda\]</span> <span class="math display">\[=\frac{1}{p_j}\sum_{i=1}^{n}\gamma_{ij}^{(t)} + \lambda\]</span></p>
+<p>Now we need to maximize each of these. Let us first maximize <span class="math inline">\(\mu_j\)</span>: <span class="math display">\[\frac{\partial Q(\theta | \theta^{(t)})_\lambda}{\partial \mu_j} = 0 \Leftrightarrow 0 = \sum_{i=1}^{n}\gamma_{ij}^{(t)}\frac{(x_i-\mu_j)}{\sigma^2}\]</span> We can separate the sum into two terms and add on both sides to get the following expression: <span class="math display">\[\Leftrightarrow \sum_{i=1}^{n}\gamma_{ij}^{(t)}\frac{x_i}{\sigma^2} = \sum_{i=1}^{n}\gamma_{ij}^{(t)}\frac{\mu_j}{\sigma^2}\]</span> <span class="math inline">\(\sigma^2\)</span> cancels and we can then divide by <span class="math inline">\(\sum_{i=1}^{n}\gamma_{ij}^{(t)}\)</span> on both sides: <span class="math display">\[\mu_j^{(t+1)} = \frac{\sum_{i=1}^{n}\gamma_{ij}^{(t)}x_i}{\sum_{i=1}^{n}\gamma_{ij}^{(t)}}\]</span> For <span class="math inline">\(j = 1, 2, 3\)</span>. Now we maximize <span class="math inline">\(\sigma^2\)</span>: <span class="math display">\[0 = \sum_{i=1}^{n}\sum_{j=1}^{3}\left(\frac{(x_i-\mu_j^{(t)})^2}{2(\sigma^2)^2}-\frac{1}{2\sigma^2}\right)\]</span> We can separate the sum: <span class="math display">\[\Leftrightarrow \sum_{i=1}^{n}\sum_{j=1}^{3}\frac{\gamma_{ij}^{(t)}(x_i-\mu_j^{(t)})^2}{2(\sigma^2)^2}=\sum_{i=1}^{n}\sum_{j=1}^{3}\frac{\gamma_{ij}^{(t)}}{2\sigma^2}\]</span> We can cancel <span class="math inline">\(2\sigma^2\)</span> on both sides, multiply by <span class="math inline">\(\sigma^2\)</span> and divide by the sum of <span class="math inline">\(\gamma_{ij}^{(t)}\)</span>´s on the RHS: <span class="math display">\[(\sigma^2)^{(t+1)} = \frac{\sum_{i=1}^{n}\sum_{j=1}^{3}\gamma_{ij}^{(t)}(x_i-\mu_j^{(t)})^2}{\sum_{i=1}^{n}\sum_{j=1}^{3}\gamma_{ij}^{(t)}}\]</span></p>
+<p>Finally we maximize <span class="math inline">\(p_j\)</span> for some fix <span class="math inline">\(j = 1,2,3\)</span>. We set the partial derivative equal to <span class="math inline">\(0\)</span>: <span class="math display">\[0 =\frac{1}{p_j}\sum_{i=1}^{n}\gamma_{ij}^{(t)} + \lambda \Leftrightarrow -\lambda =\frac{1}{p_j}\sum_{j=1}^{3}\gamma_{ij}^{(t)}\]</span></p>
+<p><span class="math display">\[\Leftrightarrow p_j^{(t)} = \frac{\sum_{j=1}^{3}\gamma_{ij}^{(t)}}{-\lambda}\]</span> Now we just need to select a value of <span class="math inline">\(\lambda\)</span>. If we look at the definition of <span class="math inline">\(\gamma_{ij}^{(t)}\)</span> we notice that if we sum all the <span class="math inline">\(\gamma_{ij}^{(t)}\)</span> over <span class="math inline">\(j\)</span> we get: <span class="math display">\[\sum_{j=1}^{3}\gamma_{ij}^{(t)}=\sum_{j=1}^{3}\frac{p_j\phi(x_i;\mu _j, \sigma^2)}{\sum_{l=1}^{3}p_l\phi(x_i,\mu _l, \sigma^2)}=1\]</span> Therefore if we sum our three estimates for <span class="math inline">\(p_1,p_2,p_3\)</span> under the assumption that <span class="math inline">\(\sum_{j=1}^{3}p_j=1\)</span> we get the following: <span class="math display">\[1 = \sum_{j=1}^{3}p_j{(t)}=\frac{\sum_{j=1}^{3}\sum_{i=1}^{n}\gamma_{ij}^{(t)}}{-\lambda}=\frac{\sum_{i=1}^{n}\sum_{j=1}^{3}\gamma_{ij}^{(t)}}{-\lambda}\]</span> <span class="math display">\[=\frac{\sum_{i=1}^{n}1}{-\lambda}=\frac{n}{-\lambda}\Leftrightarrow \lambda = -n\]</span> Setting <span class="math inline">\(\lambda = -n\)</span> yields as our maximizing value for <span class="math inline">\(p_j\)</span>: <span class="math display">\[p_j^{(t+1)}=\frac{\sum_{i=1}^{n}\gamma_{ij}^{(t)}}{n}\]</span> For <span class="math inline">\(j = 1,2,3\)</span>. With that we have all the maximizing values of parameters of <span class="math inline">\(\theta\)</span>. This concludes the M-step which is to maxizime <span class="math inline">\(Q(\theta | \theta^{(t)})_\lambda\)</span> with respect to <span class="math inline">\(\theta\)</span>.</p>
+</section>
+<section id="b-1" class="level4">
+<h4 class="anchored" data-anchor-id="b-1">(b)</h4>
+<p>First we create a conditional probability function, analogous to <span class="math inline">\(\gamma_{ij}\)</span> as we will need to repeatedly create new conditional probabilities <span class="math inline">\(E[Z_{ij} = 1 | X = x, \theta^{(t)}]\)</span> for the iterations. We call the function <code>condpr</code>. It takes as input a vector with the current values of the <span class="math inline">\(p_j\)</span>’s, a vector with the current values of the <span class="math inline">\(\mu_j\)</span>’s, our current value of <span class="math inline">\(\sigma\)</span>, the vector with the data from <code>galaxies</code> and an index <span class="math inline">\(k\)</span>.</p>
+<p>The function runs a for-loop constructs a vector with <span class="math inline">\(\gamma_{ik}\)</span> on each entry for the fixed <code>k</code> and each value of <span class="math inline">\(i=1,..,n\)</span>. Afterwards, the function returns the vector of values of <span class="math inline">\(\gamma_{ik}\)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">load</span>(<span class="st">"galaxies.RData"</span>) </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  condpr <span class="ot">&lt;-</span> <span class="cf">function</span>(p, mu, sigma, data, k) { </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    gamma_var <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>      gamma_var[i] <span class="ot">&lt;-</span> (p[k] <span class="sc">*</span> <span class="fu">dnorm</span>(data[i], mu[k], sigma)) <span class="sc">/</span> (p[<span class="dv">1</span>]<span class="sc">*</span><span class="fu">dnorm</span>(data[i], mu[<span class="dv">1</span>], sigma) <span class="sc">+</span> p[<span class="dv">2</span>]<span class="sc">*</span> <span class="fu">dnorm</span>(data[i], mu[<span class="dv">2</span>], sigma) <span class="sc">+</span> p[<span class="dv">3</span>] <span class="sc">*</span> <span class="fu">dnorm</span>(data[i], mu[<span class="dv">3</span>], sigma))</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    }  </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(gamma_var)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We then create a function <code>em</code>, which performs the EM-Algorithm. The function takes as input some initial guesses for the parameters of <span class="math inline">\(\theta\)</span>. It then first takes the current iterations of <span class="math inline">\(\theta\)</span> for the initial parameters. It then constructs variables <code>gamma1</code>, <code>gamma2</code>, and <code>gamma3</code> as vectors with <span class="math inline">\(\gamma_{ij}\)</span> on the <span class="math inline">\(i\)</span>th column for <span class="math inline">\(i = 1,\cdots, n\)</span> and <span class="math inline">\(j = 1, 2, 3\)</span>. Using these variables we then construct new iterations for the parameters and bind in a new row to the matrix <span class="math inline">\(\theta\)</span>. It should be noted that our expression for the new iteration of <span class="math inline">\(\sigma\)</span> works for <span class="math inline">\((\sigma^2)^{(t)}\)</span>. Therefore, to create the next of <span class="math inline">\(\sigma\)</span> we need to take the squareroot of the new iteration of <span class="math inline">\((\sigma^2)^{(t+1)}\)</span>.</p>
+<p>Finally, we have a <code>if</code> statement which assess whether or not the difference between the new iteration of <span class="math inline">\(\theta\)</span> and the previous iteration differ within an exceptable error-tolerance. If the absolute difference between the iterations of <span class="math inline">\(\theta\)</span> is within a given tolerance, we break the for loop. Otherwise we start the loop again, this time using the newly-created iteration of <span class="math inline">\(\theta\)</span> to construct a new iteration. We then repeat the process until.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>  em <span class="ot">&lt;-</span> <span class="cf">function</span>(data, theta, M, N,eps) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N){</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      mut <span class="ot">&lt;-</span> <span class="fu">c</span>(theta[i,<span class="dv">1</span>],theta[i,<span class="dv">2</span>],theta[i,<span class="dv">3</span>])</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      sigmat <span class="ot">&lt;-</span> theta[i,<span class="dv">4</span>]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      pt <span class="ot">&lt;-</span> <span class="fu">c</span>(theta[i,<span class="dv">5</span>],theta[i,<span class="dv">6</span>],theta[i,<span class="dv">7</span>])</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>      gamma1 <span class="ot">&lt;-</span> <span class="fu">condpr</span>(pt,mut,sigmat,data,<span class="dv">1</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>      gamma2 <span class="ot">&lt;-</span> <span class="fu">condpr</span>(pt,mut,sigmat,data,<span class="dv">2</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>      gamma3 <span class="ot">&lt;-</span> <span class="fu">condpr</span>(pt,mut,sigmat,data,<span class="dv">3</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>      p1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(gamma1)<span class="sc">/</span>M</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      p2 <span class="ot">&lt;-</span> <span class="fu">sum</span>(gamma2)<span class="sc">/</span>M</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      p3 <span class="ot">&lt;-</span> <span class="fu">sum</span>(gamma3)<span class="sc">/</span>M</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>      mu1 <span class="ot">&lt;-</span> (<span class="fu">sum</span>(gamma1 <span class="sc">*</span> data)<span class="sc">/</span><span class="fu">sum</span>(gamma1))</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>      mu2 <span class="ot">&lt;-</span> (<span class="fu">sum</span>(gamma2 <span class="sc">*</span> data)<span class="sc">/</span><span class="fu">sum</span>(gamma2))</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>      mu3 <span class="ot">&lt;-</span> (<span class="fu">sum</span>(gamma3 <span class="sc">*</span> data)<span class="sc">/</span><span class="fu">sum</span>(gamma3))</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>      sigma <span class="ot">&lt;-</span> <span class="fu">sqrt</span>((<span class="fu">sum</span>(gamma1<span class="sc">*</span>(data<span class="sc">-</span>mu1)<span class="sc">^</span><span class="dv">2</span><span class="sc">+</span>gamma2<span class="sc">*</span>(data<span class="sc">-</span>mu2)<span class="sc">^</span><span class="dv">2</span><span class="sc">+</span>gamma3<span class="sc">*</span>(data<span class="sc">-</span>mu3)<span class="sc">^</span><span class="dv">2</span>))<span class="sc">/</span><span class="fu">sum</span>(gamma1<span class="sc">+</span>gamma2<span class="sc">+</span>gamma3))</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>      theta <span class="ot">&lt;-</span> <span class="fu">rbind</span>(theta, <span class="fu">c</span>(mu1,mu2,mu3,sigma,p1,p2,p3))</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="fu">all</span>(<span class="fu">abs</span>(theta[i <span class="sc">+</span> <span class="dv">1</span>,] <span class="sc">-</span> theta[i, ]) <span class="sc">&lt;</span> eps)) {</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(theta)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(galaxies)</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  p_var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.4</span>)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  mu_var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10000</span>, <span class="dv">20000</span>, <span class="dv">30000</span>)</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>  sigma_var <span class="ot">&lt;-</span> <span class="dv">5000</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>  theta1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(mu_var,sigma_var,p_var), <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  theta1 <span class="ot">&lt;-</span> <span class="fu">em</span>(galaxies,theta1,n,<span class="dv">50</span>,<span class="dv">10</span><span class="sc">^</span>(<span class="sc">-</span><span class="dv">5</span>))</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>  theta1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]     [,2]     [,3]     [,4]       [,5]      [,6]       [,7]
+ [1,] 10000.000 20000.00 30000.00 5000.000 0.30000000 0.3000000 0.40000000
+ [2,] 14422.190 20920.31 24183.10 3422.924 0.14496452 0.5935571 0.26147839
+ [3,] 12749.276 21179.16 23802.66 3234.256 0.12004919 0.6267375 0.25321333
+ [4,] 10955.551 21245.07 23675.21 2980.328 0.09861920 0.6540124 0.24736838
+ [5,] 10033.242 21197.43 23818.67 2831.538 0.08894543 0.6718405 0.23921411
+ [6,]  9839.929 21127.49 24134.92 2753.806 0.08681338 0.6857870 0.22739966
+ [7,]  9805.927 21076.10 24537.78 2677.149 0.08644770 0.7027757 0.21077658
+ [8,]  9791.631 21049.41 25041.20 2590.756 0.08631861 0.7248420 0.18883942
+ [9,]  9779.889 21050.30 25698.55 2492.125 0.08621484 0.7518237 0.16196142
+[10,]  9769.307 21081.42 26587.94 2380.903 0.08611399 0.7823742 0.13151178
+[11,]  9760.186 21142.08 27806.34 2260.960 0.08601738 0.8136824 0.10030027
+[12,]  9752.896 21219.52 29363.82 2144.942 0.08593193 0.8407290 0.07333907
+[13,]  9747.626 21290.98 30805.72 2079.527 0.08586559 0.8582571 0.05587732
+[14,]  9745.865 21352.09 31859.12 2079.168 0.08584299 0.8688839 0.04527314
+[15,]  9747.925 21388.75 32598.71 2080.696 0.08587075 0.8746714 0.03945780
+[16,]  9749.552 21400.47 32876.33 2079.257 0.08589268 0.8764870 0.03762034
+[17,]  9750.043 21402.76 32933.27 2078.841 0.08589930 0.8768374 0.03726335
+[18,]  9750.143 21403.13 32942.61 2078.770 0.08590066 0.8768940 0.03720538
+[19,]  9750.161 21403.19 32944.08 2078.759 0.08590089 0.8769028 0.03719630
+[20,]  9750.164 21403.20 32944.31 2078.757 0.08590093 0.8769042 0.03719489
+[21,]  9750.164 21403.20 32944.34 2078.757 0.08590094 0.8769044 0.03719467
+[22,]  9750.164 21403.20 32944.35 2078.757 0.08590094 0.8769044 0.03719463
+[23,]  9750.164 21403.20 32944.35 2078.757 0.08590094 0.8769044 0.03719463
+[24,]  9750.164 21403.20 32944.35 2078.757 0.08590094 0.8769044 0.03719463
+[25,]  9750.164 21403.20 32944.35 2078.757 0.08590094 0.8769044 0.03719463
+[26,]  9750.164 21403.20 32944.35 2078.757 0.08590094 0.8769044 0.03719463</code></pre>
+</div>
+</div>
+<p>We start the initial guess of <span class="math inline">\(\theta_1 = (10000, 20000, 30000, 5000, 0.3, 0.3, 0.4)\)</span> and run the algorithm. We assess converge by checking whether all the parameters differ from one iteration to another with an acceptable tolerance. Using <span class="math inline">\(\epsilon = 10^{-5}\)</span>, the algoritm converges after 26 iterations with our initial guess.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>  p_var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.4</span>, <span class="fl">0.1</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  mu_var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12000</span>, <span class="dv">18000</span>, <span class="dv">25000</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  sigma_var <span class="ot">&lt;-</span> <span class="dv">3000</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  theta2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(mu_var,sigma_var,p_var), <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  theta2 <span class="ot">&lt;-</span> <span class="fu">em</span>(galaxies,theta2,n,<span class="dv">50</span>,<span class="dv">10</span><span class="sc">^</span>(<span class="sc">-</span><span class="dv">5</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(theta2[<span class="fu">length</span>(theta2[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)],<span class="at">nrow =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1]    [,2]     [,3]     [,4]       [,5]      [,6]       [,7]
+[1,] 9750.164 21403.2 32944.35 2078.757 0.08590094 0.8769044 0.03719463</code></pre>
+</div>
+</div>
+<p>After trying with <span class="math inline">\(\theta_2 = (12000, 18000, 25000, 3000, 0.5, 0.4, 0.1)\)</span> we see a slightly faster rate of convergence as it converges after 23 iterations.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>  p_var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.1</span>, <span class="fl">0.3</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  mu_var <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">8000</span>, <span class="dv">15000</span>, <span class="dv">28000</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  sigma_var <span class="ot">&lt;-</span> <span class="dv">6000</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  theta3 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(mu_var,sigma_var,p_var), <span class="at">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  theta3 <span class="ot">&lt;-</span> <span class="fu">em</span>(galaxies,theta2,n,<span class="dv">50</span>,<span class="dv">10</span><span class="sc">^</span>(<span class="sc">-</span><span class="dv">5</span>))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(theta3[<span class="fu">length</span>(theta2[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)], <span class="at">nrow =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1]    [,2]     [,3]     [,4]       [,5]      [,6]       [,7]
+[1,] 9750.164 21403.2 32944.35 2078.757 0.08590094 0.8769044 0.03719463</code></pre>
+</div>
+</div>
+<p>We also tried with initial with the initial guess <span class="math inline">\(\theta_3 = (8000, 15000, 28000, 6000, 0.6, 0.1, 0.3)\)</span>. With these values the algoritm converged after 45 iterations. Significantly slower than the preceding two examples. Based on the final iteration in all three cases it appears more likely that observations are from the 2nd normal-distribution. This could help explain why the case with <code>theta3</code> converged slower as it had a very low starting guess for <span class="math inline">\(p_2\)</span>.</p>
+<p>Using our three result we construct the following matrix, which shows the absolute difference between the final iterations between each of the parameters in all three cases. The first row is the difference between <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span>, the second row is the difference between <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_3\)</span> and the final row is the difference between <span class="math inline">\(\theta_2\)</span> and <span class="math inline">\(\theta_3\)</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">abs</span>(theta1[<span class="fu">length</span>(theta1[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)] <span class="sc">-</span> theta2[<span class="fu">length</span>(theta2[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)]),</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">abs</span>(theta1[<span class="fu">length</span>(theta1[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)] <span class="sc">-</span> theta3[<span class="fu">length</span>(theta3[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)]),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">abs</span>(theta2[<span class="fu">length</span>(theta2[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)] <span class="sc">-</span> theta3[<span class="fu">length</span>(theta3[,<span class="dv">1</span>]),(<span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>)])), </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">nrow =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>             [,1]         [,2]         [,3]         [,4]         [,5] [,6] [,7]
+[1,] 4.018148e-09 2.315119e-09 1.892632e-12 3.056193e-07 1.838418e-12    0    0
+[2,] 1.227454e-08 5.427603e-14 4.018148e-09 2.315119e-09 1.892632e-12    0    0
+[3,] 3.056193e-07 1.838418e-12 1.227454e-08 5.427603e-14 0.000000e+00    0    0</code></pre>
+</div>
+</div>
+<p>Different starting values yields similar conclusions. That is, that there is evidence that the observed likelihood is multi-modal. This is because given the results, it is apparent that some observations are more likely to come from one distribution as opposed to the others.</p>
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-slide18" class="csl-entry" role="listitem">
+Characiejus, Vaidotas. 2023. <span>“Slides 18 - Normalising Constant, Bayesian Point Estimation.”</span>
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
