@@ -89,5 +89,3 @@ with open('Switch.csv') as switch_csv:
 
 
         print('Switch')
-
-
