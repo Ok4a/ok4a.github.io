@@ -25,7 +25,7 @@
 td {
   border: 1px solid #000;
   word-break: break-word;
-  vertical-align: bottom;
+  vertical-align: top;
   text-align: center;
 }
 #cont_td{
@@ -36,12 +36,11 @@ td {
   text-align: center;
 }
 #switch_td{
-  
   word-break: break-word;
   vertical-align: top;
   text-align: center;
 }
 
 img {
-    width: 150px;
+    height: 200px;
 }

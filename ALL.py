@@ -1,16 +1,16 @@
 import csv , operator
 
-tablewidth = 5
+tablewidth = 4
 
-sid ='id="switch_td"'
-cid ='id=cont_td'
+sid ='id ="switch_td"'
+cid ='id = cont_td'
 
 start_string = '<!DOCTYPE html> \n <html lang="en" dir="ltr">\n<link rel="stylesheet" href="style.css"> <head> <meta charset="utf-8"> </head>\n'
-topbar_string = '<table id="topbar"> <tr> <th colspan="3">Mine lister over brætspil, bøger og spil til Nintendo Switch</th> </tr> <tr><td><a href="boardgame.html">Boardgames</a></td><td ><a href="books.html">Books</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
+topbar_string = '<table id="topbar"> <tr> <th colspan="4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr><td><a href="boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
 
 #Boardgames
 with open('Boardgame.csv') as boardgame_csv:
-    with open('boardgame.html', 'w') as boardgame_html:
+    with open('boardgame.html', 'w', encoding='utf-8') as boardgame_html:
         csv_reader = csv.reader(boardgame_csv, delimiter=';')
         csv_reader = sorted(csv_reader, key=operator.itemgetter(0))
 
@@ -36,7 +36,7 @@ with open('Boardgame.csv') as boardgame_csv:
 
 #BOOKS
 with open('Books.csv') as book_csv:
-    with open('books.html', 'w') as book_html:
+    with open('books.html', 'w', encoding='utf-8') as book_html:
         csv_reader = csv.reader(book_csv, delimiter=';')
         csv_reader = sorted(csv_reader, key=operator.itemgetter(7))
         csv_reader = sorted(csv_reader, key=operator.itemgetter(2))
@@ -46,7 +46,7 @@ with open('Books.csv') as book_csv:
 
         book_html.write(f'{start_string} <title>Bøger</title>\n<body>')
         book_html.write(topbar_string)
-        book_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{tablewidth}">Books</th> </tr> \n \t <tr> \n')
+        book_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{tablewidth}">Bøger</th> </tr> \n \t <tr> \n')
         
         for row in csv_reader:
 
@@ -64,7 +64,7 @@ with open('Books.csv') as book_csv:
 
 #Switch games
 with open('Switch.csv') as switch_csv:
-    with open('switch.html', 'w') as switch_html:
+    with open('switch.html', 'w', encoding='utf-8') as switch_html:
         csv_reader = csv.reader(switch_csv, delimiter=';')
         csv_reader = sorted(csv_reader, key=operator.itemgetter(0))
 
@@ -81,7 +81,7 @@ with open('Switch.csv') as switch_csv:
                  switch_html.write(f'\t </tr> \n \t <tr>\n')
                  count = 0
 
-            switch_html.write(f'\t\t <td {sid}> \n \t\t\t  <table  id="innertable"><tr> <td {cid}><img src="{row[2]}"> </td></tr> <tr> <td {cid}>{row[0]}</td {sid}></tr></table></td> \n')
+            switch_html.write(f'\t\t <td > \n \t\t\t  <table  id="innertable"><tr> <td {cid}><img src="{row[2]}"> </td></tr> <tr> <td {cid}>{row[0]}</td></tr></table></td> \n')
             count += 1
 
 
@@ -89,3 +89,33 @@ with open('Switch.csv') as switch_csv:
 
 
         print('Switch')
+
+
+
+#Lego
+with open('Lego.csv') as lego_csv:
+    with open('lego.html', 'w',encoding='utf-8') as lego_html:
+        csv_reader = csv.reader(lego_csv, delimiter=';')
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(0))
+
+        count = 0
+
+
+
+        lego_html.write(f'{start_string} <title>Lego</title>\n<body>')
+        lego_html.write(topbar_string)
+        lego_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{tablewidth}">LEGO</th> </tr> \n \t <tr> \n')
+
+        for row in csv_reader:
+            if  count == tablewidth:
+                 lego_html.write(f'\t </tr> \n \t <tr>\n')
+                 count = 0
+
+            lego_html.write(f'\t\t <td> \n \t\t\t  <table  id="innertable"><tr> <td {cid}><img src="{row[2]}"> </td></tr> <tr> <td {cid}>{row[0]}<br>{row[1]}</td></tr></table></td> \n')
+            count += 1
+
+
+        lego_html.write('</tr>\n</table>')
+
+
+        print('Lego')
