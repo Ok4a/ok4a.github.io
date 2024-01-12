@@ -25,7 +25,7 @@
 td {
   border: 1px solid #000;
   word-break: break-word;
-  vertical-align: top;
+  vertical-align: bottom;
   text-align: center;
 }
 #cont_td{
@@ -42,5 +42,8 @@ td {
 }
 
 img {
-    height: 200px;
+  max-height: 250px;
+  max-width: 250px;
+
+    
 }
