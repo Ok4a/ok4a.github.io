@@ -102,7 +102,7 @@ with open('Lego.csv') as lego_csv:
 
 
 
-        lego_html.write(f'{start_string} <title>Lego</title>\n<body>')
+        lego_html.write(f'{start_string} <title>LEGO</title>\n<body>')
         lego_html.write(topbar_string)
         lego_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{tablewidth}">LEGO</th> </tr> \n \t <tr> \n')
 
