@@ -31,7 +31,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     csv_reader = sorted(csv_reader, key = lambda x: x[n])
       
 
-
             # writes first lines of html file
             html_file.write(f'{start_string} <title>{page_name}</title>\n<body>')
             html_file.write(topbar_string)
@@ -40,18 +39,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             count = 0 # counter for table width
             for row in csv_reader:
 
-
                 if  count == table_width:  # rests count and writes table new row to file
                     html_file.write(f'\t </tr> \n \t <tr>\n')
                     count = 0
 
                 # adds more display name info form column choosen by display_row_list
-                """display_name = row[0]
-                if display_row_list != []:
-                    display_name += "<br>"
-                    for o in display_row_list:
-                        display_name += " " + row[o]"""
-
                 display_name = ""
                 for o in display_row_list:
                     if o == "b":
@@ -80,8 +72,8 @@ def test(csv_name: str):
             type_set.add(row[3])
     return series_set, type_set
 
-"""
-series_set, type_set = test("books")
+
+"""series_set, type_set = test("books")
 for i in type_set:
     writeHtml(i, "books", html_name="test/"+i, sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[i])"""
 
