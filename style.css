@@ -35,15 +35,8 @@ td {
   vertical-align: bottom;
   text-align: center;
 }
-#switch_td{
-  word-break: break-word;
-  vertical-align: top;
-  text-align: center;
-}
 
 img {
   max-height: 250px;
   max-width: 250px;
-
-    
 }

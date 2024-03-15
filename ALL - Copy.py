@@ -2,6 +2,7 @@ import csv , operator
 
 table_width = 4
 
+sid ='id ="switch_td"'
 cid ='id = cont_td'
 
 start_string = '<!DOCTYPE html> \n <html lang="en" dir="ltr">\n<link rel="stylesheet" href="style.css"> <head> <meta charset="utf-8"> </head>\n'
@@ -15,23 +16,28 @@ def beginHtmlFile(html_file, page_name: str, top_bar: str, start_str: str) -> No
     print("test")
 
 
+
+
 #Boardgames
-name_of_page = "Brætspil"
 with open('Boardgame.csv') as boardgame_csv:
     with open('boardgame.html', 'w', encoding = 'utf-8') as boardgame_html:
         csv_reader = csv.reader(boardgame_csv, delimiter=';')
-        csv_reader = sorted(csv_reader, key=operator.itemgetter(0)) # sorting csv data based on first column (name of game)
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(0))
 
-        # writes first lines of html file
-        beginHtmlFile(boardgame_html, name_of_page, topbar_string, start_string)
-        
-        count = 0 # counter for table width
+        name_of_page = "Brætspil"
+
+        count = 0
+
+        boardgame_html.write(f'{start_string} <title>{name_of_page}</title>\n<body>')
+        boardgame_html.write(topbar_string)
+        boardgame_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{table_width}">{name_of_page}</th> </tr> \n \t <tr> \n')
+
         for row in csv_reader:
-            if  count == table_width:  # rests count and writes table new row to file
+            if  count == table_width:
                  boardgame_html.write(f'\t </tr> \n \t <tr>\n')
                  count = 0
-            # writing each object from the csv to the html
-            boardgame_html.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td {cid}><img src="{row[3]}"> </td></tr> <tr> <td {cid}>{row[0]}</td></tr></table></td> \n')
+
+            boardgame_html.write(f'\t\t <td> \n \t\t\t  <table  id="innertable"><tr> <td {cid}><img src="{row[3]}"> </td></tr> <tr> <td {cid}>{row[0]}</td></tr></table></td> \n')
             count += 1
 
         boardgame_html.write('</tr>\n</table>')
@@ -42,17 +48,19 @@ with open('Boardgame.csv') as boardgame_csv:
 
 
 #BOOKS
-name_of_page = "Bøger"
 with open('Books.csv') as book_csv:
-    with open('books.html', 'w', encoding = 'utf-8') as book_html:
+    with open('books.html', 'w', encoding='utf-8') as book_html:
         csv_reader = csv.reader(book_csv, delimiter=';')
-        csv_reader = sorted(csv_reader, key = operator.itemgetter(7)) # sorting csv data based on 8th column (order of series)
-        #csv_reader = sorted(csv_reader, key = operator.itemgetter(2)) # sorting csv data based on 3rd column (name of game)
-        csv_reader = sorted(csv_reader, key = operator.itemgetter(4)) # sorting csv data based on 5th column ()
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(7))
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(2))
+        csv_reader = sorted(csv_reader, key=operator.itemgetter(4))
 
-        # writes first lines of html file
-        beginHtmlFile(book_html, name_of_page, topbar_string, start_string)
+        # write first lines of html file
+        book_html.write(f'{start_string} <title>{name_of_page}</title>\n<body>')
+        book_html.write(topbar_string)
+        book_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{table_width}">{name_of_page}</th> </tr> \n \t <tr> \n')
         
+        name_of_page = "Bøger"
 
         count = 0 # counter for table width
         for row in csv_reader:
@@ -79,8 +87,14 @@ with open('Switch.csv') as switch_csv: # open csv file for read
         csv_reader = sorted(csv_reader, key=operator.itemgetter(0)) # sorting csv data based on first column (name of game)
 
         
-        # writes first lines of html file
-        beginHtmlFile(switch_html,name_of_page, topbar_string, start_string)
+        # write first lines of html file
+        switch_html.write(f'{start_string} <title>{name_of_page}</title>\n<body>')
+        switch_html.write(topbar_string)
+        switch_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{table_width}">{name_of_page}</th> </tr> \n \t <tr> \n')
+
+        
+
+        beginHtmlFile(switch_csv,name_of_page, topbar_string, start_string)
 
         count = 0 # counter for table width
         for row in csv_reader:
@@ -100,7 +114,6 @@ with open('Switch.csv') as switch_csv: # open csv file for read
 
 
 #Lego
-name_of_page = "LEGO"
 with open('Lego.csv') as lego_csv: # open csv file for read
     with open('lego.html', 'w', encoding = 'utf-8') as lego_html: # open html file for write
         csv_reader = csv.reader(lego_csv, delimiter = ';')
@@ -110,9 +123,10 @@ with open('Lego.csv') as lego_csv: # open csv file for read
         #lego_html.write(f'{start_string} <title>{name_of_page}</title>\n<body>')
         #lego_html.write(topbar_string)
         #lego_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{table_width}">{name_of_page}</th> </tr> \n \t <tr> \n')
-        
+        name_of_page = "Lego"
         beginHtmlFile(lego_html,name_of_page, topbar_string, start_string)
         
+
         count = 0 # counter for table width
         for row in csv_reader:
             if  count == table_width: # rests count and writes table new row to file
