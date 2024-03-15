@@ -34,6 +34,7 @@ with open('Boardgame.csv') as boardgame_csv:
         print('Boardgame')
 
 
+
 #BOOKS
 with open('Books.csv') as book_csv:
     with open('books.html', 'w', encoding='utf-8') as book_html:
