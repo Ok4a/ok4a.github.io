@@ -80,10 +80,10 @@ def test(csv_name: str):
             type_set.add(row[3])
     return series_set, type_set
 
-
+"""
 series_set, type_set = test("books")
 for i in type_set:
-    writeHtml(i, "books", html_name="test/"+i, sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[i])
+    writeHtml(i, "books", html_name="test/"+i, sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[i])"""
 
 #Boardgames
 writeHtml("Brætspil", "boardgame")
