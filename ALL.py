@@ -1,132 +1,98 @@
-import csv , operator
+import csv
 
-table_width = 4
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], table_width: int = 4, img_col: int = 1) -> None: 
+    """
+    page_name: name of the page
+    csv_name: name of the csv file without '.csv'
+    html_name: name of the html file without '.html', default html_name = csv_name
+    sort_list: the order which the csv file will be sorted by column index, default sorts by first column
+    int_sort: indicates which sorted column contain integers
+    
+    
+    table_width: how many column that will be created, default 4
+    img_col: index for which column contains image links, default 1
+    """
+    start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href="style.css"> <head> <meta charset = "utf-8"> </head>\n'
+    topbar_string = '<table id = "topbar"> <tr> <th colspan = "4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr> <td><a href = "boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
+    cid = 'id = cont_td'
 
-cid ='id = cont_td'
+    if html_name == None:
+        html_name = csv_name
 
-start_string = '<!DOCTYPE html> \n <html lang="en" dir="ltr">\n<link rel="stylesheet" href="style.css"> <head> <meta charset="utf-8"> </head>\n'
-topbar_string = '<table id="topbar"> <tr> <th colspan="4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr><td><a href="boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
+    with open(csv_name+'.csv') as csv_file:
+        with open(html_name+'.html', 'w', encoding = 'utf-8') as html_file:
+            csv_reader = csv.reader(csv_file, delimiter = ';')
+            
+            # sorts the csv file by column, order base on sort_list
+            for n in sort_list:
+                if n in int_sort: # sor by int
+                    csv_reader = sorted(csv_reader, key = lambda x: int(x[n]))
+                else:
+                    csv_reader = sorted(csv_reader, key = lambda x: x[n])
+      
 
 
-def beginHtmlFile(html_file, page_name: str, top_bar: str, start_str: str) -> None: 
-    html_file.write(f'{start_str} <title>{page_name}</title>\n<body>')
-    html_file.write(top_bar)
-    html_file.write(f'<table id="maintable">\n \t <tr> <th colspan="{table_width}">{page_name}</th> </tr> \n \t <tr> \n')
-    print("test")
+            # writes first lines of html file
+            html_file.write(f'{start_string} <title>{page_name}</title>\n<body>')
+            html_file.write(topbar_string)
+            html_file.write(f'<table id="maintable"> \n \t <tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n \t <tr> \n')
 
+            count = 0 # counter for table width
+            for row in csv_reader:
+
+
+                if  count == table_width:  # rests count and writes table new row to file
+                    html_file.write(f'\t </tr> \n \t <tr>\n')
+                    count = 0
+
+                # adds more display name info form column choosen by display_row_list
+                """display_name = row[0]
+                if display_row_list != []:
+                    display_name += "<br>"
+                    for o in display_row_list:
+                        display_name += " " + row[o]"""
+
+                display_name = ""
+                for o in display_row_list:
+                    if o == "b":
+                        display_name += "<br>"
+                    else:
+                        display_name += " " + row[o]
+                
+                    
+                # writing each object from the csv to the html
+                if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
+                    html_file.write(f'\t\t <td> \n \t\t\t  <table id = "innertable"><tr> <td {cid}><img src = "{row[img_col]}"> </td> </tr> <tr> <td {cid}> {display_name} </td> </tr> </table> </td> \n')
+                    count += 1
+                    
+            html_file.write('</tr>\n</table>')
+
+            print(page_name)
+
+
+def test(csv_name: str):
+    with open(csv_name+'.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter = ';')
+        series_set = set()
+        type_set = set()
+        for row in csv_reader:
+            series_set.add(row[2])
+            type_set.add(row[3])
+    return series_set, type_set
+
+
+series_set, type_set = test("books")
+for i in type_set:
+    writeHtml(i, "books", html_name="test/"+i, sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[i])
 
 #Boardgames
-name_of_page = "Brætspil"
-with open('Boardgame.csv') as boardgame_csv:
-    with open('boardgame.html', 'w', encoding = 'utf-8') as boardgame_html:
-        csv_reader = csv.reader(boardgame_csv, delimiter=';')
-        csv_reader = sorted(csv_reader, key=operator.itemgetter(0)) # sorting csv data based on first column (name of game)
-
-        # writes first lines of html file
-        beginHtmlFile(boardgame_html, name_of_page, topbar_string, start_string)
-        
-        count = 0 # counter for table width
-        for row in csv_reader:
-            if  count == table_width:  # rests count and writes table new row to file
-                 boardgame_html.write(f'\t </tr> \n \t <tr>\n')
-                 count = 0
-            # writing each object from the csv to the html
-            boardgame_html.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td {cid}><img src="{row[3]}"> </td></tr> <tr> <td {cid}>{row[0]}</td></tr></table></td> \n')
-            count += 1
-
-        boardgame_html.write('</tr>\n</table>')
-
-
-        print('Boardgame')
-
-
+writeHtml("Brætspil", "boardgame")
 
 #BOOKS
-name_of_page = "Bøger"
-with open('Books.csv') as book_csv:
-    with open('books.html', 'w', encoding = 'utf-8') as book_html:
-        csv_reader = csv.reader(book_csv, delimiter=';')
-        csv_reader = sorted(csv_reader, key = operator.itemgetter(7)) # sorting csv data based on 8th column (order of series)
-        #csv_reader = sorted(csv_reader, key = operator.itemgetter(2)) # sorting csv data based on 3rd column (name of game)
-        csv_reader = sorted(csv_reader, key = operator.itemgetter(4)) # sorting csv data based on 5th column ()
-
-        # writes first lines of html file
-        beginHtmlFile(book_html, name_of_page, topbar_string, start_string)
-        
-
-        count = 0 # counter for table width
-        for row in csv_reader:
-            if  count == table_width: # rests count and writes table new row to file
-                book_html.write(f'\t </tr> \n \t <tr>\n')
-                count = 0
-
-            # writing each object from the csv to the html
-            book_html.write(f'\t\t <td> \n \t\t\t  <table id="innertable"><tr> <td {cid}><img src="{row[6]}"> </td></tr> <tr> <td {cid}>{row[1]} <br>{row[5]} {row[4]} </td></tr></table></td> \n')
-            count += 1
-            
-        # ends html table
-        book_html.write('</tr>\n</table>')
-
-
-        print('Books')
-
+writeHtml("Bøger", "books" , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5])
 
 #Switch games
-name_of_page = "Switch Spil"        
-with open('Switch.csv') as switch_csv: # open csv file for read
-    with open('switch.html', 'w', encoding='utf-8') as switch_html: # open html file for write
-        csv_reader = csv.reader(switch_csv, delimiter=';')
-        csv_reader = sorted(csv_reader, key=operator.itemgetter(0)) # sorting csv data based on first column (name of game)
-
-        
-        # writes first lines of html file
-        beginHtmlFile(switch_html,name_of_page, topbar_string, start_string)
-
-        count = 0 # counter for table width
-        for row in csv_reader:
-            if  count == table_width: # rests count and writes table new row to file
-                 switch_html.write(f'\t </tr> \n \t <tr>\n')
-                 count = 0
-
-            # writing each object from the csv to the html
-            switch_html.write(f'\t\t <td > \n \t\t\t  <table  id="innertable"><tr> <td {cid}><img src="{row[2]}"> </td></tr> <tr> <td {cid}>{row[0]}</td></tr></table></td> \n')
-            count += 1
-
-        # ends html table
-        switch_html.write('</tr>\n</table>')
-
-
-        print('Switch')
-
+writeHtml("Switch Spil", "switch")
 
 #Lego
-name_of_page = "LEGO"
-with open('Lego.csv') as lego_csv: # open csv file for read
-    with open('lego.html', 'w', encoding = 'utf-8') as lego_html: # open html file for write
-        csv_reader = csv.reader(lego_csv, delimiter = ';')
-        csv_reader = sorted(csv_reader, key = operator.itemgetter(0)) # sorting csv data based on first column (name of lego set)
-
-        # write first lines of html file
-        #lego_html.write(f'{start_string} <title>{name_of_page}</title>\n<body>')
-        #lego_html.write(topbar_string)
-        #lego_html.write(f'<table id="maintable">\n \t <tr> <th colspan="{table_width}">{name_of_page}</th> </tr> \n \t <tr> \n')
-        
-        beginHtmlFile(lego_html,name_of_page, topbar_string, start_string)
-        
-        count = 0 # counter for table width
-        for row in csv_reader:
-            if  count == table_width: # rests count and writes table new row to file
-                 lego_html.write(f'\t </tr> \n \t <tr>\n')
-                 count = 0
-
-            # writing each object from the csv to the html
-            lego_html.write(f'\t\t <td> \n \t\t\t  <table  id="innertable"><tr> <td {cid}><img src="{row[2]}"> </td></tr> <tr> <td {cid}>{row[0]}<br>{row[1]}</td></tr></table></td> \n')
-            count += 1
-
-        # ends html table
-        lego_html.write('</tr>\n</table>')
-
-        print('Lego')
-
-
-
+writeHtml("LEGO", "lego", display_row_list=[0,"b",3])
