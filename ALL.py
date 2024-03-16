@@ -1,6 +1,6 @@
 import csv
 
-def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], table_width: int = 4, img_col: int = 1) -> None: 
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], table_width: int = 3, img_col: int = 1) -> None: 
     """
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
