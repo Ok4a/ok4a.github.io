@@ -176,6 +176,7 @@ body {
   padding-left: 45px; 
   padding-top: 100px;
   position: relative;
+  padding-bottom: 100px;
 }
 
 .grid > div{
