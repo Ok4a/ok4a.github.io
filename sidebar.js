@@ -1,7 +1,19 @@
 document.write('\
     <div id="mySidenav" class="sidenav">\
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>\
-        <a href="boardgame.html">Brætspil</a>\
+        \
+        <div class = "side_grid">\
+          <a href="boardgame.html">Brætspil</a>\
+          \
+          <button class="dropdown-btn">\
+            <i class="fa fa-caret-down" style="color: #63E6BE;"></i>\
+          </button>\
+          <div class="dropdown-container">\
+            <a href="base.html">Grund spil</a>\
+          </div>\
+        </div>\
+        \
+        \
         <div class = "side_grid">\
           <a href="books.html">Bøger</a>\
           \
@@ -14,8 +26,21 @@ document.write('\
             <a href="Novel.html">Novel</a>\
           </div>\
         </div>\
+        \
         <a href="lego.html">LEGO</a>\
-        <a href="switch.html">Switch</a>\
+        \
+        <div class = "side_grid">\
+          <a href="switch.html">Switch</a>\
+          \
+          <button class="dropdown-btn">\
+            <i class="fa fa-caret-down" style="color: #63E6BE;"></i>\
+          </button>\
+          <div class="dropdown-container">\
+            <a href="Mario.html">Mario</a>\
+            <a href="Pokémon.html">Pokémon</a>\
+            <a href="Zelda.html">Zelda</a>\
+          </div>\
+        </div>\
         \
     </div>\
     \
