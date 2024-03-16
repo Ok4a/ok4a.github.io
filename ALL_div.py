@@ -85,12 +85,14 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
 #Boardgames
 writeHtml("Brætspil", "boardgame")
 writeHtml("Grund Spil", "boardgame", html_name="base", display_type=["base"])
+boargame_series = getSeriesType("boardgame", col_index=2)
+for elem in boargame_series:
+    writeHtml(elem, "boardgame", html_name=elem, display_type=[elem])
 
 #BOOKS
 writeHtml("Bøger", "books" , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5])
 
 book_type = getSeriesType("books", 3)
-
 for elem in book_type:
     writeHtml(elem, "books", html_name=elem , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[elem])
 
