@@ -38,9 +38,10 @@ td {
   text-align: center;
 }*/
 
-img {
+
+img{
   max-height: 250px;
-  max-width: 250px;
+  max-width: 200px;
 }
 
 body {
@@ -104,14 +105,8 @@ body {
 
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-} 
 
-@media screen and (max-width: 800px) {
-  .top_bar > h1{color: aqua;}
-} 
+
 
 /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
 .dropdown-container {
@@ -192,4 +187,12 @@ body {
   width: 265px;
   padding-top: 15px;  
 }
+
+
+@media only screen and (max-width: 500px) {
+
+  .top_bar > h1{color: aqua;};
+  .grid > div{width: 200px;};
+   .img{display: none};
+} 
 
