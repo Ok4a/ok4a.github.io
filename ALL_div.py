@@ -38,7 +38,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             html_file.write(f'{start_string}<title>{page_name}</title>\n<body>\n')
             html_file.write(side_bar_string)
             #html_file.write(f'\n\t<table id="maintable"> \n \t\t<tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n\t\t<tr> \n')
-            html_file.write(f'\t<div class = "grid">\n\t\t<h1>{page_name}</h1>\n')
+            html_file.write(f'\t<div class="top_bar"><h1>{page_name}</h1></div> \n<div class = "grid">\n\t\t\n')
 
             count = 0 # counter for table width
             for row in csv_reader:
@@ -85,7 +85,7 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
 #Boardgames
 writeHtml("Brætspil", "boardgame")
 writeHtml("Grund Spil", "boardgame", html_name="base", display_type=["base"])
-boargame_series = getSeriesType("boardgame", col_index=2)
+boargame_series = getSeriesType("boardgame", 2)
 for elem in boargame_series:
     writeHtml(elem, "boardgame", html_name=elem, display_type=[elem])
 
@@ -94,11 +94,11 @@ writeHtml("Bøger", "books" , sort_list=[6,3,5], int_sort=[6], display_row_list=
 
 book_type = getSeriesType("books", 3)
 for elem in book_type:
-    writeHtml(elem, "books", html_name=elem , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[elem])
+    writeHtml(elem, "books", html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list=[0,"b",4,5], display_type = [elem])
 
 book_series = getSeriesType("books", 2)
 for elem in book_series:
-    writeHtml(elem, "books", html_name=elem , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[elem])
+    writeHtml(elem, "books", html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list = [0,"b",4,5], display_type = [elem])
 
 #Switch games
 writeHtml("Switch Spil", "switch")
@@ -109,3 +109,7 @@ for elem in switch_series:
 
 #Lego
 writeHtml("LEGO", "lego", display_row_list=[0,"b",3])
+
+lego_series = getSeriesType("lego", 2)
+for elem in lego_series:
+    writeHtml(elem, "lego", html_name = elem , display_row_list = [0,"b",3], display_type = [elem])
