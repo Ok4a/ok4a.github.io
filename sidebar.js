@@ -5,6 +5,14 @@ document.write('\
         <a href="books.html">Books</a>\
         <a href="lego.html">LEGO</a>\
         <a href="switch.html">Switch</a>\
+        <button class="dropdown-btn">Dropdown \
+        <i class="fa-solid fa-caret-down" style="color: #63E6BE;"></i>\
+        </button>\
+        <div class="dropdown-container">\
+            <a href="#">Link 1</a>\
+            <a href="#">Link 2</a>\
+            <a href="#">Link 3</a>\
+        </div>\
     </div>\
     \
     <!-- Use any element to open the sidenav -->\
@@ -20,13 +28,18 @@ document.write('\
         }\
         </script>\
 ');
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
 
-if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-    // true for mobile device
-    document.write("mobile device");
-    window.location.href = "http://www.w3schools.com";
-  }else{
-    // false for not mobile device
-    document.write("not mobile device");
-  }
-  
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}

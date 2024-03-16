@@ -34,7 +34,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             # writes first lines of html file
             html_file.write(f'{start_string} <title>{page_name}</title>\n<body>')
             html_file.write(topbar_string)
-            html_file.write(f'<table id="maintable"> \n \t <tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n \t <tr> \n')
+            html_file.write(f'\n\t<table id="maintable"> \n \t <tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n \t <tr> \n')
 
             count = 0 # counter for table width
             for row in csv_reader:
