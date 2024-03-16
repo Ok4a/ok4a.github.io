@@ -109,6 +109,10 @@ body {
   .sidenav a {font-size: 18px;}
 } 
 
+@media screen and (max-width: 20cm) {
+  .top_bar > h1{color: aqua;}
+} 
+
 /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
 .dropdown-container {
   display: none;
