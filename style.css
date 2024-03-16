@@ -40,8 +40,13 @@ td {
 
 
 img{
-  max-height: 250px;
-  max-width: 140px;
+  width: auto;
+  height: auto;
+  max-height: 250px;  
+  max-width: 250px;
+  
+
+
 }
 
 body {
@@ -184,15 +189,13 @@ body {
   word-break: break-word;
   vertical-align: bottom;
   text-align: center;
-  width: 265px;
-  padding-top: 15px;  
+  width: 250px;
+  padding-top: 15px;
+  padding: 10px;
 }
 
 
-@media only screen and (max-width: 414px) {
-
+@media screen and (max-width: 450px) {
   .top_bar > h1{color: aqua;};
-  .grid > div{width: 150px;};
-   .img{display: none};
 } 
 
