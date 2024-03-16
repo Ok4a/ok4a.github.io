@@ -132,7 +132,28 @@ body {
   color: white;
 }
 
-.grid{
+.side_grid{
   display: grid;
   grid-template-columns: 83% 17%;
+}
+
+.open_nav{
+  font-size:40px;
+  cursor:pointer;
+  position:fixed;
+  padding-top: 0px;
+}
+
+.grid{
+  display: block;
+  grid-template-columns: 33% 33% 33%;
+  margin: auto;
+  width: 90%;
+  
+}
+
+.grid_element{
+  display: inline-block;
+  padding: 10px;
+  width: 250px;
 }

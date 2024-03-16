@@ -1,5 +1,5 @@
 import csv
-# v 2
+# v 3?
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], table_width: int = 4, img_col: int = 1) -> None: 
     """
     page_name: name of the page
@@ -14,10 +14,10 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     """
 
     start_string = '<!DOCTYPE html> \n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href="style.css"> <head><meta charset = "utf-8"> </head>\n<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">\n'
-    side_bar_string = '\t<script src="sidebar.js"></script>'
-    topbar_string = '<table id = "topbar"> <tr> <th colspan = "4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr> <td><a href = "boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
-    
+    side_bar_string = '\t<script src="sidebar.js"></script>\n'
+       
     cid = 'id = cont_td'
+    colour_list = ["#FFF4A3","#FFC0C7","#D9EEE1","#4f35c4"]
 
     if html_name == None:
         html_name = csv_name
@@ -37,15 +37,15 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             # writes first lines of html file
             html_file.write(f'{start_string}<title>{page_name}</title>\n<body>\n')
             html_file.write(side_bar_string)
-            
-            html_file.write(f'\n\t<table id="maintable"> \n \t\t<tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n\t\t<tr> \n')
+            #html_file.write(f'\n\t<table id="maintable"> \n \t\t<tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n\t\t<tr> \n')
+            html_file.write('\t<div class = "grid">\n')
 
             count = 0 # counter for table width
             for row in csv_reader:
 
-                if  count == table_width:  # rests count and writes table new row to file
+                """if  count == table_width:  # rests count and writes table new row to file
                     html_file.write(f'\t </tr> \n<tr>\n')
-                    count = 0
+                    count = 0"""
 
                 # adds more display name info form column choosen by display_row_list
                 display_name = ""
@@ -58,10 +58,10 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t <td> \n \t\t\t  <table id = "innertable"><tr> <td {cid}><img src = "{row[img_col]}"> </td> </tr> <tr> <td {cid}> {display_name} </td> </tr> </table> </td> \n')
+                    html_file.write(f'\t\t<div class = "grid_element" style="background-color:{colour_list[count%4]}"> <table id = "innertable"><tr> <td {cid}><img src = "{row[img_col]}"> </td> </tr> <tr> <td {cid}> {display_name} </td> </tr> </table></div>\n')
                     count += 1
                     
-            html_file.write('\t\t</tr>\n\t</table>\n</body>')
+            html_file.write('\t</div>\n</body>')
 
             print(page_name)
 
@@ -77,9 +77,6 @@ def getSeriesType(csv_name: str):
     return series_set, type_set
 
 
-"""series_set, type_set = test("books")
-for i in type_set:
-    writeHtml(i, "books", html_name="test/"+i, sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[i])"""
 
 #Boardgames
 writeHtml("Brætspil", "boardgame")

@@ -2,7 +2,7 @@ document.write('\
     <div id="mySidenav" class="sidenav">\
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>\
         <a href="boardgame.html">Brætspil</a>\
-        <div class = "grid">\
+        <div class = "side_grid">\
           <a href="books.html">Bøger</a>\
           \
           <button class="dropdown-btn">\
@@ -20,7 +20,7 @@ document.write('\
     </div>\
     \
     <!-- Use any element to open the sidenav -->\
-    <span style="font-size:25px;cursor:pointer" onclick="openNav()">&#9776; Nav Bar</span>\
+    <span class = "open_nav" onclick="openNav()" position:fixed;>&#9776;</span>\
 ');
 
 function openNav() {
