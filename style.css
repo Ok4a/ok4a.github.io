@@ -146,14 +146,20 @@ body {
 
 .grid{
   display: block;
-  grid-template-columns: 33% 33% 33%;
-  margin: auto;
-  width: 90%;
-  
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+  padding-left: 20px; 
+  position: relative;
 }
 
 .grid_element{
   display: inline-block;
-  padding: 10px;
-  width: 250px;
+  padding-top: 15px;
+  margin: 0px;
+  border-radius: 0%;
+  width: 265px;
+  border: solid 1px black;
+  border-spacing: 0px;
 }

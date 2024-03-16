@@ -58,7 +58,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t<div class = "grid_element" style="background-color:{colour_list[count%4]}"> <table id = "innertable"><tr> <td {cid}><img src = "{row[img_col]}"> </td> </tr> <tr> <td {cid}> {display_name} </td> </tr> </table></div>\n')
+                    html_file.write(f'\t\t<div class = "grid_element" > <table id = "innertable"><tr> <td {cid}><img src = "{row[img_col]}"> </td> </tr> <tr> <td {cid}> {display_name} </td> </tr> </table></div>\n')
+                    #style="background-color:{colour_list[count%4]}"
                     count += 1
                     
             html_file.write('\t</div>\n</body>')
