@@ -41,7 +41,7 @@ td {
 
 img{
   max-height: 250px;
-  max-width: 200px;
+  max-width: 140px;
 }
 
 body {
@@ -189,10 +189,10 @@ body {
 }
 
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 414px) {
 
   .top_bar > h1{color: aqua;};
-  .grid > div{width: 200px;};
+  .grid > div{width: 150px;};
    .img{display: none};
 } 
 
