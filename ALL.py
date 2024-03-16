@@ -1,6 +1,6 @@
 import csv
-
-def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], table_width: int = 3, img_col: int = 1) -> None: 
+# v 2
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], table_width: int = 4, img_col: int = 1) -> None: 
     """
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -12,8 +12,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     table_width: how many column that will be created, default 4
     img_col: index for which column contains image links, default 1
     """
-    start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href="style.css"> <head> <meta charset = "utf-8"> </head>\n'
-    topbar_string = '<script src="sidebar.js"></script> <table id = "topbar"> <tr> <th colspan = "4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr> <td><a href = "boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
+
+    start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href="style.css"> <head> <meta charset = "utf-8"> </head>\n <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">\n'
+    side_bar_string = '<script src="sidebar.js"></script>'
+    topbar_string = '<table id = "topbar"> <tr> <th colspan = "4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr> <td><a href = "boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
+    
     cid = 'id = cont_td'
 
     if html_name == None:
@@ -33,7 +36,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
 
             # writes first lines of html file
             html_file.write(f'{start_string} <title>{page_name}</title>\n<body>')
-            html_file.write(topbar_string)
+            html_file.write(side_bar_string)
             html_file.write(f'\n\t<table id="maintable"> \n \t <tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n \t <tr> \n')
 
             count = 0 # counter for table width
@@ -62,7 +65,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             print(page_name)
 
 
-def test(csv_name: str):
+def getSeriesType(csv_name: str):
     with open(csv_name+'.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter = ';')
         series_set = set()
@@ -82,6 +85,10 @@ writeHtml("Brætspil", "boardgame")
 
 #BOOKS
 writeHtml("Bøger", "books" , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5])
+
+book_series, book_type = getSeriesType("books")
+for elem in book_type:
+    writeHtml(elem, "books", html_name=elem , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5], display_type=[elem])
 
 #Switch games
 writeHtml("Switch Spil", "switch")
