@@ -109,7 +109,7 @@ body {
   .sidenav a {font-size: 18px;}
 } 
 
-@media screen and (min-width: 20cm) {
+@media screen and (max-width: 500px) {
   .top_bar > h1{color: aqua;}
 } 
 
