@@ -13,7 +13,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     img_col: index for which column contains image links, default 1
     """
     start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href="style.css"> <head> <meta charset = "utf-8"> </head>\n'
-    topbar_string = '<table id = "topbar"> <tr> <th colspan = "4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr> <td><a href = "boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
+    topbar_string = '<script src="sidebar.js"></script> <table id = "topbar"> <tr> <th colspan = "4">Mine lister over brætspil, bøger, LEGO og spil til Nintendo Switch</th> </tr> <tr> <td><a href = "boardgame.html">Brætspil</a></td><td ><a href="books.html">Bøger</a></td><td ><a href="lego.html">LEGO</a></td><td><a href="switch.html">Nintendo Switch</a></td></tr> </table>'
     cid = 'id = cont_td'
 
     if html_name == None:

@@ -1,14 +1,14 @@
 document.write('\
     <div id="mySidenav" class="sidenav">\
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>\
-        <a href="boardgame.html">About</a>\
-        <a href="#">Services</a>\
-        <a href="#">Clients</a>\
-        <a href="#">Contact</a>\
+        <a href="boardgame.html">boardgame</a>\
+        <a href="books.html">Books</a>\
+        <a href="lego.html">LEGO</a>\
+        <a href="switch.html">Switch</a>\
     </div>\
     \
     <!-- Use any element to open the sidenav -->\
-    <span onclick="openNav()">open</span>\
+    <span style="font-size:25px;cursor:pointer" onclick="openNav()">&#9776; Nav Bar</span>\
 \
     <script>\
         function openNav() {\
