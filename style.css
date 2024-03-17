@@ -124,7 +124,8 @@ body {
 
 /* Optional: Style the caret down icon */
 .fa-caret-down {
-  float: auto;
+  float:left;
+  padding-right: 8px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -186,11 +187,10 @@ body {
 }
 
 .grid > div{
-  display: block;
   display: inline-block;
   font-size: 18px;
   word-break: break-word;
-  
+  vertical-align: bottom;
   text-align: center;
   width: 250px;
   padding-top: 15px;
