@@ -49,7 +49,18 @@ document.write('\
 ');
 
 function openNav() {
-  document.getElementById("mySidenav").style.width = "250px";
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+    // true for mobile device
+    document.getElementById("mySidenav").style.width = "100%";
+
+  }else{
+    // false for not mobile device
+    document.getElementById("mySidenav").style.width = "250px";
+  }
+  
+
+
+  
 }
   
 function closeNav() {

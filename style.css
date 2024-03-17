@@ -106,6 +106,7 @@ body {
 }
 
 .closebtn{
+  position: relative;
 }
 
 
@@ -197,5 +198,8 @@ body {
 
 @media screen and (max-width: 450px) {
   .top_bar > h1{color: aqua;};
+  .sidenav a, .dropdown-btn { font-size: 30px;
+
+  }
 } 
 
