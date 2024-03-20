@@ -45,13 +45,14 @@ document.write('\
     \
     <script src="https://kit.fontawesome.com/81245a9c23.js" crossorigin="anonymous"></script>\
     <!-- Use any element to open the sidenav -->\
-    <span class = "open_nav" onclick=" navVal= navClick(navVal)" position:fixed;>&#9776;</span>\
+    <span class = "open_nav" onclick="navVal= navClick(navVal)" position:fixed;><i id = "menuIcon" class="fa-solid fa-bars"></i></span>\
 ');
 
 
 
 var navVal = 0;
 function navClick(value) {
+
   if (value == 0){
     value = 1;
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
@@ -66,6 +67,9 @@ function navClick(value) {
     document.getElementById("mySidenav").style.width = "0";
     value = 0;
   }
+  var test = document.getElementById("menuIcon");
+  test.classList.toggle("fa-bars-staggered");
+  console.log(test);
   return value
 }
 
@@ -89,6 +93,7 @@ for (i = 0; i < dropdown.length; i++) {
     icon.classList.toggle("fa-caret-down");
   });
 }
+
 
 /*    this.classList.toggle("fa-minus-circle");
     (this).find('test').toggleClass('fa-plus-circle fa-minus-circle');    test.toggleClass("fa-minus-circle");*/

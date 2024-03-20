@@ -119,6 +119,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   color: #63E6BE;
+  text-align: center;
 }
 /* Style the sidenav links and the dropdown button */
 .sidenav a, .dropdown-btn {
@@ -141,6 +142,8 @@ body {
 
 .dropdown-btn{
   padding-left: 20px;
+  line-height: 65px;
+  text-align: center;
 }
 
 /* Add an active class to the active dropdown button */
@@ -189,6 +192,6 @@ body {
 
 @media screen and (max-width: 800px) {
   .top_bar > h1{color: aqua;};
-  .sidenav a, .dropdown-btn { font-size: 60px;}
+  .sidenav a, .dropdown-btn  {font-size: 60px;}
 } 
 
