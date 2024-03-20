@@ -1,4 +1,4 @@
-/*from older version that used tables
+/*from older version that used tables <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 #maintable {
   font-family: Arial, Helvetica, sans-serif;
   border-spacing: 0px;
@@ -30,7 +30,7 @@ td {
   vertical-align: bottom;
   text-align: center;
 }
-#cont_td{
+#cont_td{ 
   border: 0px;
   font-size: 18px;
   word-break: break-word;
@@ -44,16 +44,11 @@ img{
   height: auto;
   max-height: 250px;  
   max-width: 250px;
-  
-
-
 }
 
 body {
   font-family: "Lato", sans-serif;
 }
-
-
 
 .top_bar{
   width: 100%;
@@ -67,7 +62,6 @@ body {
 }
 
 .top_bar > h1{
-
   color: white;
 }
 
@@ -84,7 +78,6 @@ body {
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 60px; /* Place content 60px from the top */
   transition: 0.2s; /* 0.2 second transition effect to slide in the sidenav */
-
 }
 
 
@@ -105,10 +98,6 @@ body {
   padding-top: 20px;
 }
 
-.closebtn{
-  position: absolute;
-  color: white
-}
 
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -123,13 +112,13 @@ body {
 }
 
 /* Optional: Style the caret down icon */
-.fa-caret-down {
+.fa-caret-down, .fa-caret-up {
   float:left;
-  padding-right: 8px;
+  padding-right: -5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  
+  color: #63E6BE;
 }
 /* Style the sidenav links and the dropdown button */
 .sidenav a, .dropdown-btn {
@@ -162,7 +151,7 @@ body {
 
 .side_grid{
   display: grid;
-  grid-template-columns: 83% 17%;
+  grid-template-columns: 75% 25%;
 }
 
 .open_nav{
@@ -170,7 +159,7 @@ body {
   cursor: pointer;
   position: fixed;
   padding-left: 10px;
-  z-index: 2;
+  z-index: 4;
   color: #FFF;
   padding-top: 10px;
 }
@@ -198,10 +187,8 @@ body {
 }
 
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 800px) {
   .top_bar > h1{color: aqua;};
-  .sidenav a, .dropdown-btn { font-size: 100px;
-
-  }
+  .sidenav a, .dropdown-btn { font-size: 60px;}
 } 
 
