@@ -190,7 +190,7 @@ body {
 }
 
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
   .top_bar > h1{color: aqua;};
   .sidenav a, .dropdown-btn  {font-size: 60px;}
 } 
