@@ -20,7 +20,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     if html_name == None:
         html_name = csv_name
 
-
+    # replaces space with underscore for the html file
     if ' ' in html_name:
         html_name = html_name.replace(' ', '_')
 
@@ -54,31 +54,37 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                         else:
                             displayed_name += ' ' + row[o]
 
-                # finds the index of 'vol.' in display_name, if it exist it add a line break before. made for book sites
+                # finds the first index of 'vol.' in display_name, if it exist it add a line break before. made for book sites
                 vol_index = displayed_name.find('vol.')
                 if vol_index != -1:
                     displayed_name = displayed_name[:(vol_index - 1)] + '<br>' + displayed_name[vol_index:]
 
+                # finds the last index of ':' in display_name, if it exist it add a line break before.
                 colon_index = displayed_name.rfind(':')
                 if colon_index != -1:
                     displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
 
+                # replaces space with underscore for the html file
                 sub_list_ref = row[2]
                 if ' ' in sub_list_ref:
                     sub_list_ref = sub_list_ref.replace(' ', '_')
 
                 # img stuff
                 img_path = row[0]
+                # replaces space with underscore in the image name
                 if ' ' in img_path:
                     img_path = img_path.replace(' ', '_')
                 
+                # removes all intances from element of remove_str_list from imag_path
                 remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
-                for s in remove_str_list:
-                    if s in img_path:
-                        img_path = img_path.replace(s, '') 
+                for string in remove_str_list:
+                    if string in img_path:
+                        img_path = img_path.replace(string, '') 
 
+                
                 img_path = 'list_img/'+img_path+'.jpg' 
 
+                # checks if the image is already downloaded, if not downloads it
                 if  not pathlib.Path(img_path).is_file():
                     img_data = requests.get(row[1]).content
                     with open(img_path, 'wb') as handler:
