@@ -1,6 +1,6 @@
 import csv
 # v 3?
-def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], table_width: int = 4, img_col: int = 1) -> None: 
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], img_col: int = 1) -> None: 
     """
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -16,7 +16,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     start_string = '<!DOCTYPE html> \n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href="../style.css"> <head><meta charset = "utf-8" name="viewport" content="width=device-width,initial-scale=0.6"> </head>\n\n'
     side_bar_string = '\t<script src="../sidebar.js"></script>\n'
        
-
     colour_list = ["#FFF4A3","#FFC0C7","#D9EEE1","#4f35c4"]
 
     if html_name == None:
@@ -43,32 +42,28 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             count = 0 # counter for table width
             for row in csv_reader:
 
-                """if  count == table_width:  # rests count and writes table new row to file
-                    html_file.write(f'\t </tr> \n<tr>\n')
-                    count = 0"""
-
                 # adds more display name info from column choosen by display_row_list
-                display_name = ""
+                displayed_name = ""
                 for o in display_row_list:
                     if o == "b":
-                        display_name += "<br>"
+                        displayed_name += "<br>"
                     else:
-                        display_name += " " + row[o]
+                        displayed_name += " " + row[o]
 
                 # finds the index of "vol." in display_name, if it exist it add a line break before. made for book sites
-                vol_index = display_name.find("vol.")
+                vol_index = displayed_name.find("vol.")
                 if vol_index != -1:
-                    display_name = display_name[:vol_index] + "<br>" + display_name[vol_index:]
+                    displayed_name = displayed_name[:vol_index] + "<br>" + displayed_name[vol_index:]
 
 
-                colon_index = display_name.rfind(":")
+                colon_index = displayed_name.rfind(":")
                 if colon_index != -1:
-                    display_name = display_name[:colon_index+1] + "<br>" + display_name[colon_index+1:]
+                    displayed_name = displayed_name[:colon_index+1] + "<br>" + displayed_name[colon_index+1:]
 
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t<div> <a href="{row[2]}.html"><img src = "{row[img_col]}"></a> <br>{display_name}</div>\n')
+                    html_file.write(f'\t\t<div> <a href="{row[2]}.html"><img src = "{row[img_col]}"></a> <br>{displayed_name}</div>\n')
 
                     #style="background-color:{colour_list[count%4]}"
                     count += 1
