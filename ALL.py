@@ -1,6 +1,6 @@
 import csv, requests,  pathlib
 # v 3
-def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], img_col: int = 1) -> None: 
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_entry_list: list = [0], img_col: int = 1) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -39,20 +39,20 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             # writes first lines of html file
             html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
 
-            for row in csv_reader:
+            for entry in csv_reader:
                 # adds more display name info from column choosen by display_row_list
                 new_line = True
                 displayed_name = ''
-                for o in display_row_list:
+                for o in display_entry_list:
                     if o == 'b':
                         displayed_name += '<br>'
                         new_line = True
                     else:
                         if new_line:
-                            displayed_name += row[o]
+                            displayed_name += entry[o]
                             new_line = False
                         else:
-                            displayed_name += ' ' + row[o]
+                            displayed_name += ' ' + entry[o]
 
                 # finds the first index of 'vol.' in display_name, if it exist it add a line break before. made for book sites
                 vol_index = displayed_name.find('vol.')
@@ -65,12 +65,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
 
                 # replaces space with underscore for the html file
-                sub_list_ref = row[2]
+                sub_list_ref = entry[2]
                 if ' ' in sub_list_ref:
                     sub_list_ref = sub_list_ref.replace(' ', '_')
 
                 # img stuff
-                img_path = row[0]
+                img_path = entry[0]
                 # replaces space with underscore in the image name
                 if ' ' in img_path:
                     img_path = img_path.replace(' ', '_')
@@ -82,16 +82,16 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                         img_path = img_path.replace(string, '') 
 
                 
-                img_path = 'list_img/'+img_path+'.jpg' 
+                img_path = 'list_img/' + img_path + '.jpg' 
 
                 # checks if the image is already downloaded, if not downloads it
                 if  not pathlib.Path(img_path).is_file():
-                    img_data = requests.get(row[1]).content
+                    img_data = requests.get(entry[img_col]).content
                     with open(img_path, 'wb') as handler:
                         handler.write(img_data) 
 
                 # writing each object from the csv to the html
-                if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
+                if entry[2] in display_type or entry[3] in display_type or display_type == []: # only wirte cell if type indicated
                     html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "../{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
@@ -106,10 +106,10 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
         attribute_set = set()
         non_unique_set = set()
 
-        for row in csv_reader:
-            if row[col_index] in attribute_set:
-                non_unique_set.add(row[col_index])
-            attribute_set.add(row[col_index])
+        for entry in csv_reader:
+            if entry[col_index] in attribute_set:
+                non_unique_set.add(entry[col_index])
+            attribute_set.add(entry[col_index])
             
     if non_unique:
         return non_unique_set
@@ -119,39 +119,54 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
 
 #Boardgames
 csv_file = 'boardgame'
+
+# makes main boardgame html file
 writeHtml('Brætspil', csv_file)
+
+# makes a html file for only base games
 writeHtml('Grund Spil', csv_file, html_name = 'base', display_type = ['base'])
 
+# makes a html file for each boardgame series
 boargame_series = getSeriesType(csv_file, 2)
-for elem in boargame_series:
-    writeHtml(elem, csv_file, html_name = elem, display_type=[elem])
+for entry in boargame_series:
+    writeHtml(entry, csv_file, html_name = entry, display_type=[entry])
 
 #BOOKS
 csv_file = 'books'
-writeHtml('Bøger', csv_file, sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5])
 
+# make main book html file
+writeHtml('Bøger', csv_file, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5])
+
+# makes html file for each type of book
 book_type = getSeriesType(csv_file, 3)
-for elem in book_type:
-    writeHtml(elem, csv_file, html_name = elem, sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
+for entry in book_type:
+    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
 
+# makes html file for each book series
 book_series = getSeriesType(csv_file, 2)
-for elem in book_series:
-    writeHtml(elem, csv_file, html_name = elem, sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
+for entry in book_series:
+    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
 
 
 #Switch games
 csv_file = 'switch'
+
+# make main switch game html
 writeHtml('Switch Spil', csv_file)
 
+# make a html for each switch series
 switch_series = getSeriesType(csv_file, 2)
-for elem in switch_series:
-    writeHtml(elem, csv_file, html_name = elem, display_type = [elem])
+for entry in switch_series:
+    writeHtml(entry, csv_file, html_name = entry, display_type = [entry])
 
 
 #LEGO
 csv_file = 'lego'
-writeHtml('LEGO', csv_file, display_row_list=[0, 'b', 3])
 
+# makes main html file for LEGO
+writeHtml('LEGO', csv_file, display_entry_list=[0, 'b', 3])
+
+# makes a html file for each LEGO series
 lego_series = getSeriesType(csv_file, 2)
-for elem in lego_series:
-    writeHtml(elem, csv_file, html_name = elem, display_row_list = [0, 'b', 3], display_type = [elem])
+for entry in lego_series:
+    writeHtml(entry, csv_file, html_name = entry, display_entry_list = [0, 'b', 3], display_type = [entry])
