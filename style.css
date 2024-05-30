@@ -16,7 +16,7 @@ body{
 .top_bar{
   width: 100%;
   height: 80px;
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   text-align: center;
@@ -27,7 +27,7 @@ body{
 .home{
   font-size: 40px;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   z-index: 4;
   color: #FFF;
   right:  25px;
@@ -39,7 +39,7 @@ body{
 .open_nav{
   font-size: 40px;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   left:  25px;
   top: 18px;
   z-index: 4;
@@ -80,7 +80,6 @@ body{
   width: 200px;
   padding-top: 20px;
 }
-
 
 /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
 .dropdown-container{
