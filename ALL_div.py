@@ -21,6 +21,10 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     if html_name == None:
         html_name = csv_name
 
+
+    if " " in html_name:
+        html_name = html_name.replace(" ", "_")
+
     with open(csv_name + '.csv') as csv_file:
         with open("html_lists/" + html_name + '.html', 'w', encoding = 'utf-8') as html_file:
             csv_reader = csv.reader(csv_file, delimiter = ';')
@@ -60,10 +64,15 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                 if colon_index != -1:
                     displayed_name = displayed_name[:colon_index+1] + "<br>" + displayed_name[colon_index+1:]
 
+
+                sub_list = row[2]
+                if " " in sub_list:
+                    sub_list = sub_list.replace(" ", "_")
+
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t<div> <a href="{row[2]}.html"><img src = "{row[img_col]}"></a> <br>{displayed_name}</div>\n')
+                    html_file.write(f'\t\t<div> <a href="{sub_list}.html"><img src = "{row[img_col]}"></a> <br>{displayed_name}</div>\n')
 
                     #style="background-color:{colour_list[count%4]}"
                     count += 1
