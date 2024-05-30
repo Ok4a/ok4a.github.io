@@ -38,14 +38,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
       
 
             # writes first lines of html file
-            html_file.write(f'{start_string}<title>{page_name}</title>\n<body>\n')
+            html_file.write(f'{start_string} <title> {page_name} </title> \n <body> \n')
             html_file.write(side_bar_string)
-            #html_file.write(f'\n\t<table id="maintable"> \n \t\t<tr> <th colspan = "{table_width}"> {page_name} </th> </tr> \n\t\t<tr> \n')
-            html_file.write(f'\t<div class="top_bar"><h1>{page_name}</h1></div> \n<div class = "grid">\n\t\t\n')
+            html_file.write(f'\t <div class = "top_bar"> <h1> {page_name} </h1> </div> \n <div class = "grid"> \n\t\t\n')
 
             count = 0 # counter for table width
             for row in csv_reader:
-
                 # adds more display name info from column choosen by display_row_list
                 displayed_name = ""
                 for o in display_row_list:
@@ -72,7 +70,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t<div> <a href="{sub_list}.html"><img src = "{row[img_col]}"></a> <br>{displayed_name}</div>\n')
+                    html_file.write(f'\t\t<div> <a href="{sub_list}.html"> <img src = "{row[img_col]}"> </a> <br>{displayed_name}</div>\n')
 
                     #style="background-color:{colour_list[count%4]}"
                     count += 1
