@@ -82,7 +82,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                         img_path = img_path.replace(string, '') 
 
                 
-                img_path = 'list_img/' + img_path + '.jpg' 
+                img_path = 'list_img/' + img_path + '_'+ entry[3] +'.jpg' 
 
                 # checks if the image is already downloaded, if not downloads it
                 if  not pathlib.Path(img_path).is_file():
@@ -91,7 +91,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                         handler.write(img_data) 
 
                 # writing each object from the csv to the html
-                if entry[2] in display_type or entry[3] in display_type or display_type == []: # only wirte cell if type indicated
+                if entry[2] in display_type or entry[3] in display_type or display_type == []: # only write cell if type indicated
                     html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "../{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
@@ -100,7 +100,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             print(page_name)
 
 
-def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
+def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False) -> set:
     with open(csv_name + '.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter = ';')
         attribute_set = set()
