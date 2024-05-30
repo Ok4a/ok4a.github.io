@@ -37,10 +37,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
       
 
             # writes first lines of html file
-            html_file.write(f'{start_string} <title> {page_name} </title> \n <body> \n {side_bar_string}')
-            html_file.write(f'\t <div class = "top_bar"> <h1> {page_name} </h1> </div> \n <div class = "grid"> \n \t \t \n')
+            html_file.write(f'{start_string} <title> {page_name} </title> \n <body> \n {side_bar_string} \t <div class = "top_bar"> <h1> {page_name} </h1> </div> \n <div class = "grid"> \n \t \t \n')
 
-            count = 0 # counter for table width
             for row in csv_reader:
                 # adds more display name info from column choosen by display_row_list
                 displayed_name = ''
@@ -55,23 +53,17 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                 if vol_index != -1:
                     displayed_name = displayed_name[:vol_index] + '<br>' + displayed_name[vol_index:]
 
-
                 colon_index = displayed_name.rfind(':')
                 if colon_index != -1:
                     displayed_name = displayed_name[:colon_index+1] + '<br>' + displayed_name[colon_index+1:]
 
-
                 sub_list = row[2]
                 if ' ' in sub_list:
                     sub_list = sub_list.replace(' ', '_')
-
-                    
+ 
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
                     html_file.write(f'\t \t <div class = "grid_element"> <a href = "{sub_list}.html"> <img src = "{row[img_col]}"> </a> <br> {displayed_name} </div> \n')
-
-                    
-                    # count += 1
                     
             html_file.write('\t </div> \n </body>')
 
