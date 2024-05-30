@@ -13,10 +13,10 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     img_col: index for which column contains image links, default 1
     """
 
-    start_string = '<!DOCTYPE html> \n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href="../style.css"> <head><meta charset = "utf-8" name="viewport" content="width=device-width,initial-scale=0.6"> </head>\n\n'
-    side_bar_string = '\t<script src="../sidebar.js"></script>\n'
+    start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr"> \n <link rel = "stylesheet" href = "../style.css"> <head> <meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6"> </head>\n\n'
+    side_bar_string = '\t <script src = "../sidebar.js"> </script> \n'
        
-    colour_list = ["#FFF4A3","#FFC0C7","#D9EEE1","#4f35c4"]
+    colour_list = ["#FFF4A3", "#FFC0C7", "#D9EEE1"," #4f35c4"]
 
     if html_name == None:
         html_name = csv_name
