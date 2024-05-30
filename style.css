@@ -54,15 +54,29 @@ body{
   width: 100%;
   position: fixed;
   text-align: center;
-  padding-top: 10px;
+  /* padding-top: 10px; */
   z-index: 1;
   background-color: #111;
-  margin-top: -10px;
+  /* background-color: green; */
+  margin-top: -8px;
   margin-left: -8px;
+  height: 80px;
 }
 
 .top_bar > h1{
   color: white;
+}
+
+
+.open_nav{
+  font-size: 40px;
+  cursor: pointer;
+  position: fixed;
+  padding-left: 17px;
+  z-index: 4;
+  color: #FFF;
+  padding-top: 10px;
+  /* background-color: blue; */
 }
 
 
@@ -76,10 +90,14 @@ body{
   left: 0;
   background-color: #111; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
-  padding-top: 60px; /* Place content 60px from the top */
+  padding-top: 90px; /* Place content 60px from the top */
   transition: 0.2s; /* 0.2 second transition effect to slide in the sidenav */
 }
 
+.side_grid{
+  display: grid;
+  grid-template-columns: 75% 25%;
+}
 
 
 /* When you mouse over the navigation links, change their color */
@@ -111,16 +129,7 @@ body{
   padding-left: 12px;
 }
 
-/* Optional: Style the caret down icon */
-.fa-caret-down, .fa-caret-up {
-  float:left;
-  padding-right: -5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #63E6BE;
-  text-align: center;
-}
+
 /* Style the sidenav links and the dropdown button */
 .sidenav a, .dropdown-btn {
   font-family: Arial, Helvetica, sans-serif;
@@ -132,40 +141,41 @@ body{
   border: none;
   background: none;
   width: 100%;
-  text-align: left;
+  /* text-align: left; */
   cursor: pointer;
   outline: none;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
 }
-
 .dropdown-btn{
-  padding-left: 20px;
-  line-height: 65px;
+  padding: 6px 8px 6px 8px;
+  /* line-height: 65px; */
+  padding-right: -5px;
   text-align: center;
 }
 
-/* Add an active class to the active dropdown button */
-.active{
-  background-color: green;
+
+/* Optional: Style the caret down icon */
+.fa-caret-down, .fa-caret-up {
+  padding-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: white;
 }
 
-.side_grid{
-  display: grid;
-  grid-template-columns: 75% 25%;
+
+/* Add an active class to the active dropdown button */
+.active{
+  /* background-color: green; */
+  background-color: #262626;
+  color: white;
+  text-align: center;
 }
 
-.open_nav{
-  font-size: 40px;
-  cursor: pointer;
-  position: fixed;
-  padding-left: 10px;
-  z-index: 4;
-  color: #FFF;
-  padding-top: 10px;
-}
+
+
 
 .grid{
   display: block;

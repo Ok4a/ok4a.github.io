@@ -1,51 +1,43 @@
 document.write('\
-    <div id="mySidenav" class="sidenav">\
-        <div style="padding: 15px;"></div>\
+    <div id = "mySidenav" class = "sidenav">\
         <div class = "side_grid">\
-          <a href="boardgame.html">Brætspil</a>\
-          \
-          <button class="dropdown-btn">\
-              <i class="fa-solid fa-caret-down"></i>\
+          <a href = "boardgame.html">Brætspil</a>\
+          <button class = "dropdown-btn">\
+              <i class = "fa-solid fa-caret-down"></i>\
           </button>\
-          <div class="dropdown-container">\
-            <a href="base.html">Grund spil</a>\
+          <div class = "dropdown-container">\
+            <a href = "base.html">Grund spil</a>\
           </div>\
         </div>\
-        \
-        \
         <div class = "side_grid">\
-          <a href="books.html">Bøger</a>\
-          \
-          <button class="dropdown-btn">\
-            <i class="fa-solid fa-caret-down"></i>\
+          <a href = "books.html">Bøger</a>\
+          <button class = "dropdown-btn">\
+            <i class = "fa-solid fa-caret-down"></i>\
           </button>\
-          <div class="dropdown-container">\
-            <a href="Comic.html">Comic</a>\
-            <a href="Manga.html">Manga</a>\
-            <a href="Novel.html">Novel</a>\
+          <div class = "dropdown-container">\
+            <a href = "Comic.html">Comic</a>\
+            <a href = "Manga.html">Manga</a>\
+            <a href = "Novel.html">Novel</a>\
           </div>\
         </div>\
-        \
-        <a href="lego.html">LEGO</a>\
-        \
+        <a href = "lego.html">LEGO</a>\
         <div class = "side_grid">\
-          <a href="switch.html">Switch</a>\
-          \
-          <button class="dropdown-btn">\
-          <i class="fa-solid fa-caret-down"></i>\
+          <a href = "switch.html">Switch</a>\
+          <button class = "dropdown-btn">\
+          <i class = "fa-solid fa-caret-down"></i>\
           </button>\
-          <div class="dropdown-container">\
-            <a href="Mario.html">Mario</a>\
-            <a href="Pokémon.html">Pokémon</a>\
-            <a href="Zelda.html">Zelda</a>\
+          <div class = "dropdown-container">\
+            <a href = "Mario.html">Mario</a>\
+            <a href = "Pokémon.html">Pokémon</a>\
+            <a href = "Zelda.html">Zelda</a>\
           </div>\
         </div>\
         \
     </div>\
     \
-    <script src="https://kit.fontawesome.com/81245a9c23.js" crossorigin="anonymous"></script>\
+    <script src = "https://kit.fontawesome.com/81245a9c23.js" crossorigin = "anonymous"></script>\
     <!-- Use any element to open the sidenav -->\
-    <span class = "open_nav" onclick="navVal= navClick(navVal)" position:fixed;><i id = "menuIcon" class="fa-solid fa-bars"></i></span>\
+    <span class = "open_nav" onclick = "navVal = navClick(navVal)" position: fixed;> <i id = "menuIcon" class = "fa-solid fa-bars"> </i> </span>\
 ');
 
 
@@ -67,9 +59,9 @@ function navClick(value) {
     document.getElementById("mySidenav").style.width = "0";
     value = 0;
   }
-  var test = document.getElementById("menuIcon");
-  test.classList.toggle("fa-bars-staggered");
-  console.log(test);
+  var menu_icon = document.getElementById("menuIcon");
+  menu_icon.classList.toggle("fa-bars-staggered");
+
   return value
 }
 
@@ -83,11 +75,14 @@ for (i = 0; i < dropdown.length; i++) {
     
     this.classList.toggle("active");
     var dropdownContent = this.nextElementSibling;
+
     if (dropdownContent.style.display === "block") {
       dropdownContent.style.display = "none";
+
     } else {
       dropdownContent.style.display = "block";
     }
+
     var icon = this.children[0];
     icon.classList.toggle("fa-caret-up");
     icon.classList.toggle("fa-caret-down");
