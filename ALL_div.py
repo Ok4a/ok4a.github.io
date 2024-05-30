@@ -37,31 +37,31 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
       
 
             # writes first lines of html file
-            html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar"><h1>{page_name}</h1></div>\n\t<div class = "grid">\n')
+            html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
 
             for row in csv_reader:
                 # adds more display name info from column choosen by display_row_list
-                first = True
+                new_line = True
                 displayed_name = ''
                 for o in display_row_list:
                     if o == 'b':
                         displayed_name += '<br>'
-                        first = True
+                        new_line = True
                     else:
-                        if first:
+                        if new_line:
                             displayed_name += row[o]
-                            first = False
+                            new_line = False
                         else:
                             displayed_name += ' ' + row[o]
 
                 # finds the index of 'vol.' in display_name, if it exist it add a line break before. made for book sites
                 vol_index = displayed_name.find('vol.')
                 if vol_index != -1:
-                    displayed_name = displayed_name[:vol_index-1] + '<br>' + displayed_name[vol_index:]
+                    displayed_name = displayed_name[:(vol_index - 1)] + '<br>' + displayed_name[vol_index:]
 
                 colon_index = displayed_name.rfind(':')
                 if colon_index != -1:
-                    displayed_name = displayed_name[:colon_index+1] + '<br>' + displayed_name[colon_index+2:]
+                    displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
 
                 sub_list_ref = row[2]
                 if ' ' in sub_list_ref:
@@ -69,7 +69,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
  
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t<div class = "grid_element">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{row[img_col]}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a>\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div> \n')
+                    html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{row[img_col]}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div> \n')
                     
             html_file.write('\t </div> \n </body>')
 
@@ -81,10 +81,12 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
         csv_reader = csv.reader(csv_file, delimiter = ';')
         attribute_set = set()
         non_unique_set = set()
+
         for row in csv_reader:
             if row[col_index] in attribute_set:
                 non_unique_set.add(row[col_index])
             attribute_set.add(row[col_index])
+            
     if non_unique:
         return non_unique_set
     else:

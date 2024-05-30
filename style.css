@@ -73,9 +73,10 @@ body{
   cursor: pointer;
   position: fixed;
   padding-left: 17px;
+  padding-top: 8px;
   z-index: 4;
   color: #FFF;
-  padding-top: 10px;
+
   /* background-color: blue; */
 }
 
@@ -175,8 +176,6 @@ body{
 }
 
 
-
-
 .grid{
   display: block;
   max-width: fit-content;
@@ -189,7 +188,7 @@ body{
   text-align: center;
 }
 
-.grid_element{
+.grid_entry{
   display: inline-block;
   font-size: 18px;
   word-break: break-word;
