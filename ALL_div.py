@@ -59,6 +59,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                 vol_index = display_name.find("vol.")
                 if vol_index != -1:
                     display_name = display_name[:vol_index] + "<br>" + display_name[vol_index:]
+
+
+                colon_index = display_name.rfind(":")
+                if colon_index != -1:
+                    display_name = display_name[:colon_index+1] + "<br>" + display_name[colon_index+1:]
+
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
@@ -68,7 +74,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     count += 1
                     
             html_file.write('\t</div>\n</body>')
-            
+
             print(page_name)
 
 
