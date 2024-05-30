@@ -1,5 +1,5 @@
 import csv
-# v 3?
+# v 3
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], img_col: int = 1) -> None: 
     """
     page_name: name of the page
@@ -7,12 +7,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     html_name: name of the html file without '.html', default html_name = csv_name
     sort_list: the order which the csv file will be sorted by column index, default sorts by first column
     int_sort: indicates which sorted column contain integers
-    
-    
-    table_width: how many column that will be created, default 4
+    display_type: will only add elements from the csv file to the html file if csv element column 3 or 4 is in display_type. Will add all elements if empty
+    display_row_list: a list of the columns the displayed name will be, a 'b' in the list will make a line break between the former and next column in the list
     img_col: index for which column contains image links, default 1
     """
-
+    
     start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr"> \n <link rel = "stylesheet" href = "../style.css"> <head> <meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6"> </head> \n \n'
     side_bar_string = '\t <script src = "../sidebar.js"> </script> \n'
        
@@ -113,7 +112,7 @@ for elem in book_type:
 
 book_series = getSeriesType(csv_file, 2)
 for elem in book_series:
-    writeHtml(elem, csv_file, html_name = elem, sort_list = [6,3,5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
+    writeHtml(elem, csv_file, html_name = elem, sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
 
 
 #Switch games
