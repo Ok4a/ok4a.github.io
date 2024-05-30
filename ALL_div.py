@@ -30,7 +30,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
             
             # sorts the csv file by column, order base on sort_list
             for n in sort_list:
-                if n in int_sort: # sor by int
+                if n in int_sort: # sort by int
                     csv_reader = sorted(csv_reader, key = lambda x: int(x[n]))
                 else:
                     csv_reader = sorted(csv_reader, key = lambda x: x[n])
