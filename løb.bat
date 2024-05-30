@@ -1,3 +1,3 @@
 echo off
-python ALL.py %*
+python ALL_div.py %*
 pause

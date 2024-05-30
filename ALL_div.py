@@ -22,8 +22,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     if html_name == None:
         html_name = csv_name
 
-    with open(csv_name+'.csv') as csv_file:
-        with open("html_lists/"+html_name+'.html', 'w', encoding = 'utf-8') as html_file:
+    with open(csv_name + '.csv') as csv_file:
+        with open("html_lists/" + html_name + '.html', 'w', encoding = 'utf-8') as html_file:
             csv_reader = csv.reader(csv_file, delimiter = ';')
             
             # sorts the csv file by column, order base on sort_list
@@ -47,14 +47,18 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     html_file.write(f'\t </tr> \n<tr>\n')
                     count = 0"""
 
-                # adds more display name info form column choosen by display_row_list
+                # adds more display name info from column choosen by display_row_list
                 display_name = ""
                 for o in display_row_list:
                     if o == "b":
                         display_name += "<br>"
                     else:
                         display_name += " " + row[o]
-                
+
+                # finds the index of "vol." in display_name, if it exist it add a line break before. made for book sites
+                vol_index = display_name.find("vol.")
+                if vol_index != -1:
+                    display_name = display_name[:vol_index] + "<br>" + display_name[vol_index:]
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
@@ -64,12 +68,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     count += 1
                     
             html_file.write('\t</div>\n</body>')
-
+            
             print(page_name)
 
 
 def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
-    with open(csv_name+'.csv') as csv_file:
+    with open(csv_name + '.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter = ';')
         attribute_set = set()
         non_unique_set = set()
@@ -84,32 +88,33 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
 
 #Boardgames
 writeHtml("Brætspil", "boardgame")
-writeHtml("Grund Spil", "boardgame", html_name="base", display_type=["base"])
+writeHtml("Grund Spil", "boardgame", html_name = "base", display_type = ["base"])
+
 boargame_series = getSeriesType("boardgame", 2)
 for elem in boargame_series:
     writeHtml(elem, "boardgame", html_name=elem, display_type=[elem])
 
 #BOOKS
-writeHtml("Bøger", "books" , sort_list=[6,3,5], int_sort=[6], display_row_list=[0,"b",4,5])
+writeHtml("Bøger", "books" , sort_list = [6, 3, 5], int_sort = [6], display_row_list=[0, "b", 4, 5])
 
 book_type = getSeriesType("books", 3)
 for elem in book_type:
-    writeHtml(elem, "books", html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list=[0,"b",4,5], display_type = [elem])
+    writeHtml(elem, "books", html_name = elem , sort_list = [6, 3, 5], int_sort = [6], display_row_list=[0, "b", 4, 5], display_type = [elem])
 
 book_series = getSeriesType("books", 2)
 for elem in book_series:
-    writeHtml(elem, "books", html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list = [0,"b",4,5], display_type = [elem])
+    writeHtml(elem, "books", html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list = [0, "b", 4, 5], display_type = [elem])
 
 #Switch games
 writeHtml("Switch Spil", "switch")
 
 switch_series = getSeriesType("switch", 2)
 for elem in switch_series:
-    writeHtml(elem, "switch", html_name = elem, display_type=[elem])
+    writeHtml(elem, "switch", html_name = elem, display_type = [elem])
 
 #Lego
-writeHtml("LEGO", "lego", display_row_list=[0,"b",3])
+writeHtml("LEGO", "lego", display_row_list=[0, "b", 3])
 
 lego_series = getSeriesType("lego", 2)
 for elem in lego_series:
-    writeHtml(elem, "lego", html_name = elem , display_row_list = [0,"b",3], display_type = [elem])
+    writeHtml(elem, "lego", html_name = elem , display_row_list = [0, "b", 3], display_type = [elem])
