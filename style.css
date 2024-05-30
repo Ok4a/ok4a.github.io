@@ -1,44 +1,3 @@
-/*from older version that used tables <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-#maintable {
-  font-family: Arial, Helvetica, sans-serif;
-  border-spacing: 0px;
-  table-layout: fixed;
-  width: 1250px;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  font-size: 40px;
-}
-
-#innertable {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#topbar{
-  width: 1250px;
-  font-family: Arial, Helvetica, sans-serif;
-  margin-left: auto;
-  margin-right: auto;
-  table-layout: fixed;
-  border-collapse: collapse;
-}
-
-td {
-  border: 1px solid #000;
-  word-break: break-word;
-  vertical-align: bottom;
-  text-align: center;
-}
-#cont_td{ 
-  border: 0px;
-  font-size: 18px;
-  word-break: break-word;
-  vertical-align: bottom;
-  text-align: center;
-}*/
-
-
 img{
   width: auto;
   height: auto;
@@ -47,17 +6,15 @@ img{
 }
 
 body{
-  font-family: "Lato", sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .top_bar{
   width: 100%;
   position: fixed;
   text-align: center;
-  /* padding-top: 10px; */
   z-index: 1;
   background-color: #111;
-  /* background-color: green; */
   margin-top: -8px;
   margin-left: -8px;
   height: 80px;
@@ -82,7 +39,7 @@ body{
 
 
 /* The side navigation menu */
- .sidenav {
+ .sidenav{
   height: 100%; /* 100% Full-height */
   width: 0; /* 0 width - change this with JavaScript */
   position: fixed; /* Stay in place */
@@ -102,12 +59,12 @@ body{
 
 
 /* When you mouse over the navigation links, change their color */
-.sidenav a:hover, .dropdown-btn:hover  {
+.sidenav a:hover, .dropdown-btn:hover{
   color: #f1f1f1;
 }
 
 /* Position and style the close button (top right corner) */
-.sidenav .closebtn {
+.sidenav .closebtn{
   position: absolute;
   top: 0;
   right: 25px;
@@ -124,7 +81,7 @@ body{
 
 
 /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-.dropdown-container {
+.dropdown-container{
   display: none;
   background-color: #262626;
   padding-left: 12px;
@@ -132,8 +89,7 @@ body{
 
 
 /* Style the sidenav links and the dropdown button */
-.sidenav a, .dropdown-btn {
-  font-family: Arial, Helvetica, sans-serif;
+.sidenav a, .dropdown-btn{
   padding: 6px 8px 6px 16px;
   text-decoration: none;
   font-size: 20px;
@@ -142,23 +98,20 @@ body{
   border: none;
   background: none;
   width: 100%;
-  /* text-align: left; */
   cursor: pointer;
   outline: none;
   white-space: nowrap;
   overflow: hidden;
-  /* text-overflow: ellipsis; */
 }
 .dropdown-btn{
   padding: 6px 8px 6px 8px;
-  /* line-height: 65px; */
-  padding-right: -5px;
+  /* padding-right: -5px; */
   text-align: center;
 }
 
 
 /* Optional: Style the caret down icon */
-.fa-caret-down, .fa-caret-up {
+.fa-caret-down, .fa-caret-up{
   padding-top: 3px;
   white-space: nowrap;
   overflow: hidden;
@@ -169,8 +122,7 @@ body{
 
 /* Add an active class to the active dropdown button */
 .active{
-  /* background-color: green; */
-  background-color: #262626;
+  /* background-color: #262626; */
   color: white;
   text-align: center;
 }
@@ -184,7 +136,6 @@ body{
   padding-top: 100px;
   position: relative;
   padding-bottom: 100px;
-  /* background-color: green; */
   text-align: center;
 }
 
@@ -197,11 +148,10 @@ body{
   width: 250px;
   padding: 10px;
   padding-top: 15px;
-  /* background-color: yellowgreen; */
 }
 
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 900px){
   .top_bar > h1{color: aqua}
   .sidenav a, .dropdown-btn{font-size: 40px}
 }
