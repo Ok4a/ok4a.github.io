@@ -79,8 +79,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
 
                 img_path = 'list_img/'+img_path+'.jpg' 
 
-                # img_path_check = pathlib.Path(img_path)
-
                 if  not pathlib.Path(img_path).is_file():
                     img_data = requests.get(row[1]).content
                     with open(img_path, 'wb') as handler:
