@@ -12,8 +12,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     img_col: index for which column contains image links, default 1
     '''
     
-    start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr"> \n <link rel = "stylesheet" href = "../style.css"> <head> <meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6"> </head> \n \n'
-    side_bar_string = '\t <script src = "../sidebar.js"> </script> \n'
+    start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
+    side_bar_string = '\t<script src = "../sidebar.js"></script>\n'
        
     # colour_list = ['#FFF4A3', '#FFC0C7', '#D9EEE1', '#4f35c4']
 
@@ -37,33 +37,39 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
       
 
             # writes first lines of html file
-            html_file.write(f'{start_string} <title> {page_name} </title> \n <body> \n {side_bar_string} \t <div class = "top_bar"> <h1> {page_name} </h1> </div> \n <div class = "grid"> \n \t \t \n')
+            html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar"><h1>{page_name}</h1></div>\n\t<div class = "grid">\n')
 
             for row in csv_reader:
                 # adds more display name info from column choosen by display_row_list
+                first = True
                 displayed_name = ''
                 for o in display_row_list:
                     if o == 'b':
                         displayed_name += '<br>'
+                        first = True
                     else:
-                        displayed_name += ' ' + row[o]
+                        if first:
+                            displayed_name += row[o]
+                            first = False
+                        else:
+                            displayed_name += ' ' + row[o]
 
                 # finds the index of 'vol.' in display_name, if it exist it add a line break before. made for book sites
                 vol_index = displayed_name.find('vol.')
                 if vol_index != -1:
-                    displayed_name = displayed_name[:vol_index] + '<br>' + displayed_name[vol_index:]
+                    displayed_name = displayed_name[:vol_index-1] + '<br>' + displayed_name[vol_index:]
 
                 colon_index = displayed_name.rfind(':')
                 if colon_index != -1:
-                    displayed_name = displayed_name[:colon_index+1] + '<br>' + displayed_name[colon_index+1:]
+                    displayed_name = displayed_name[:colon_index+1] + '<br>' + displayed_name[colon_index+2:]
 
-                sub_list = row[2]
-                if ' ' in sub_list:
-                    sub_list = sub_list.replace(' ', '_')
+                sub_list_ref = row[2]
+                if ' ' in sub_list_ref:
+                    sub_list_ref = sub_list_ref.replace(' ', '_')
  
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t \t <div class = "grid_element"> <a href = "{sub_list}.html"> <img src = "{row[img_col]}"> </a> <br> {displayed_name} </div> \n')
+                    html_file.write(f'\t\t<div class = "grid_element">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{row[img_col]}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a>\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div> \n')
                     
             html_file.write('\t </div> \n </body>')
 
