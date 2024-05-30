@@ -1,4 +1,4 @@
-import csv
+import csv, requests,  pathlib
 # v 3
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], img_col: int = 1) -> None: 
     '''
@@ -66,10 +66,29 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                 sub_list_ref = row[2]
                 if ' ' in sub_list_ref:
                     sub_list_ref = sub_list_ref.replace(' ', '_')
- 
+
+                # img stuff
+                img_path = row[0]
+                if ' ' in img_path:
+                    img_path = img_path.replace(' ', '_')
+                
+                remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
+                for s in remove_str_list:
+                    if s in img_path:
+                        img_path = img_path.replace(s, '') 
+
+                img_path = 'list_img/'+img_path+'.jpg' 
+
+                # img_path_check = pathlib.Path(img_path)
+
+                if  not pathlib.Path(img_path).is_file():
+                    img_data = requests.get(row[1]).content
+                    with open(img_path, 'wb') as handler:
+                        handler.write(img_data) 
+
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{row[img_col]}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
+                    html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "../{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
                     
             html_file.write('\t</div>\n</body>')
 
