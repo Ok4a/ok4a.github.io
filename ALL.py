@@ -93,7 +93,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
                     html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "../{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
-                    
+
+            # ends html file        
             html_file.write('\t</div>\n</body>')
 
             print(page_name)
@@ -146,7 +147,8 @@ switch_series = getSeriesType(csv_file, 2)
 for elem in switch_series:
     writeHtml(elem, csv_file, html_name = elem, display_type = [elem])
 
-#Lego
+
+#LEGO
 csv_file = 'lego'
 writeHtml('LEGO', csv_file, display_row_list=[0, 'b', 3])
 
