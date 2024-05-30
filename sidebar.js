@@ -1,20 +1,20 @@
 document.write('\
-    <div id = "mySidenav" class = "sidenav">\
+    <div id = "side_nav_id" class = "side_nav">\
         <div class = "side_grid">\
           <a href = "boardgame.html">Brætspil</a>\
-          <button class = "dropdown-btn">\
+          <button class = "dropdown_btn">\
               <i class = "fa-solid fa-caret-down"></i>\
           </button>\
-          <div class = "dropdown-container">\
+          <div class = "dropdown_container">\
             <a href = "base.html">Grund spil</a>\
           </div>\
         </div>\
         <div class = "side_grid">\
           <a href = "books.html">Bøger</a>\
-          <button class = "dropdown-btn">\
+          <button class = "dropdown_btn">\
             <i class = "fa-solid fa-caret-down"></i>\
           </button>\
-          <div class = "dropdown-container">\
+          <div class = "dropdown_container">\
             <a href = "Comic.html">Comic</a>\
             <a href = "Manga.html">Manga</a>\
             <a href = "Novel.html">Novel</a>\
@@ -23,10 +23,10 @@ document.write('\
         <a href = "lego.html">LEGO</a>\
         <div class = "side_grid">\
           <a href = "switch.html">Switch</a>\
-          <button class = "dropdown-btn">\
+          <button class = "dropdown_btn">\
           <i class = "fa-solid fa-caret-down"></i>\
           </button>\
-          <div class = "dropdown-container">\
+          <div class = "dropdown_container">\
             <a href = "Mario.html">Mario</a>\
             <a href = "Pokémon.html">Pokémon</a>\
             <a href = "Zelda.html">Zelda</a>\
@@ -36,7 +36,7 @@ document.write('\
     </div>\
     \
     <script src = "https://kit.fontawesome.com/81245a9c23.js" crossorigin = "anonymous"></script>\
-    <!-- Use any element to open the sidenav -->\
+    <!-- Use any element to open the side_nav -->\
     <span class = "open_nav" onclick = "nav_val = navClick(nav_val)" position: fixed;> <i id = "nav_icon" class = "fa-solid fa-bars"></i></span>\
     <span class = "home"><a href = "index.html"><i class = "fa-solid fa-house"></i></a></span>\
 ');
@@ -50,14 +50,14 @@ function navClick(value) {
     value = 1;
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
       // true for mobile device
-      document.getElementById("mySidenav").style.width = "100%";
+      document.getElementById("side_nav_id").style.width = "100%";
   
     }else{
       // false for not mobile device
-      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("side_nav_id").style.width = "250px";
     }  
   } else {
-    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("side_nav_id").style.width = "0";
     value = 0;
   }
   var menu_icon = document.getElementById("nav_icon");
@@ -68,7 +68,7 @@ function navClick(value) {
 
 
 /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
-var dropdown = document.getElementsByClassName("dropdown-btn");
+var dropdown = document.getElementsByClassName("dropdown_btn");
 var i;
 
 for (i = 0; i < dropdown.length; i++) {
