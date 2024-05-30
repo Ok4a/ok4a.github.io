@@ -94,34 +94,39 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
         return attribute_set
 
 #Boardgames
-writeHtml('Brætspil', 'boardgame')
-writeHtml('Grund Spil', 'boardgame', html_name = 'base', display_type = ['base'])
+csv_file = 'boardgame'
+writeHtml('Brætspil', csv_file)
+writeHtml('Grund Spil', csv_file, html_name = 'base', display_type = ['base'])
 
-boargame_series = getSeriesType('boardgame', 2)
+boargame_series = getSeriesType(csv_file, 2)
 for elem in boargame_series:
-    writeHtml(elem, 'boardgame', html_name=elem, display_type=[elem])
+    writeHtml(elem, csv_file, html_name = elem, display_type=[elem])
 
 #BOOKS
-writeHtml('Bøger', 'books' , sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5])
+csv_file = 'books'
+writeHtml('Bøger', csv_file, sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5])
 
-book_type = getSeriesType('books', 3)
+book_type = getSeriesType(csv_file, 3)
 for elem in book_type:
-    writeHtml(elem, 'books', html_name = elem , sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
+    writeHtml(elem, csv_file, html_name = elem, sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
 
-book_series = getSeriesType('books', 2)
+book_series = getSeriesType(csv_file, 2)
 for elem in book_series:
-    writeHtml(elem, 'books', html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
+    writeHtml(elem, csv_file, html_name = elem, sort_list = [6,3,5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
+
 
 #Switch games
-writeHtml('Switch Spil', 'switch')
+csv_file = 'switch'
+writeHtml('Switch Spil', csv_file)
 
-switch_series = getSeriesType('switch', 2)
+switch_series = getSeriesType(csv_file, 2)
 for elem in switch_series:
-    writeHtml(elem, 'switch', html_name = elem, display_type = [elem])
+    writeHtml(elem, csv_file, html_name = elem, display_type = [elem])
 
 #Lego
-writeHtml('LEGO', 'lego', display_row_list=[0, 'b', 3])
+csv_file = 'lego'
+writeHtml('LEGO', csv_file, display_row_list=[0, 'b', 3])
 
-lego_series = getSeriesType('lego', 2)
+lego_series = getSeriesType(csv_file, 2)
 for elem in lego_series:
-    writeHtml(elem, 'lego', html_name = elem , display_row_list = [0, 'b', 3], display_type = [elem])
+    writeHtml(elem, csv_file, html_name = elem, display_row_list = [0, 'b', 3], display_type = [elem])
