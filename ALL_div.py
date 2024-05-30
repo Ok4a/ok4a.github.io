@@ -1,7 +1,7 @@
 import csv
 # v 3
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_row_list: list = [0], img_col: int = 1) -> None: 
-    """
+    '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
     html_name: name of the html file without '.html', default html_name = csv_name
@@ -10,12 +10,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     display_type: will only add elements from the csv file to the html file if csv element column 3 or 4 is in display_type. Will add all elements if empty
     display_row_list: a list of the columns the displayed name will be, a 'b' in the list will make a line break between the former and next column in the list
     img_col: index for which column contains image links, default 1
-    """
+    '''
     
     start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr"> \n <link rel = "stylesheet" href = "../style.css"> <head> <meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6"> </head> \n \n'
     side_bar_string = '\t <script src = "../sidebar.js"> </script> \n'
        
-    colour_list = ['#FFF4A3', '#FFC0C7', '#D9EEE1', '#4f35c4']
+    # colour_list = ['#FFF4A3', '#FFC0C7', '#D9EEE1', '#4f35c4']
 
     if html_name == None:
         html_name = csv_name
@@ -68,10 +68,10 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t \t <div> <a href = "{sub_list}.html"> <img src = "{row[img_col]}"> </a> <br> {displayed_name} </div> \n')
+                    html_file.write(f'\t \t <div class = "grid_element"> <a href = "{sub_list}.html"> <img src = "{row[img_col]}"> </a> <br> {displayed_name} </div> \n')
 
-                    #style="background-color:{colour_list[count%4]}"
-                    count += 1
+                    
+                    # count += 1
                     
             html_file.write('\t </div> \n </body>')
 

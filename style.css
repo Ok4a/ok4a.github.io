@@ -46,7 +46,7 @@ img{
   max-width: 250px;
 }
 
-body {
+body{
   font-family: "Lato", sans-serif;
 }
 
@@ -147,7 +147,7 @@ body {
 }
 
 /* Add an active class to the active dropdown button */
-.active {
+.active{
   background-color: green;
   color: white;
 }
@@ -172,26 +172,27 @@ body {
   max-width: fit-content;
   margin: auto;
   width: 90%;
-  padding-left: 45px; 
   padding-top: 100px;
   position: relative;
   padding-bottom: 100px;
+  /* background-color: green; */
+  text-align: center;
 }
 
-.grid > div{
+.grid_element{
   display: inline-block;
   font-size: 18px;
   word-break: break-word;
   vertical-align: bottom;
   text-align: center;
   width: 250px;
-  padding-top: 15px;
   padding: 10px;
+  padding-top: 15px;
+  /* background-color: yellowgreen; */
 }
 
 
 @media screen and (max-width: 900px) {
-  .top_bar > h1{color: aqua;};
-  .sidenav a, .dropdown-btn  {font-size: 60px;}
-} 
-
+  .top_bar > h1{color: aqua}
+  .sidenav a, .dropdown-btn{font-size: 40px}
+}
