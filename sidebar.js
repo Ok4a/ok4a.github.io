@@ -37,12 +37,13 @@ document.write('\
     \
     <script src = "https://kit.fontawesome.com/81245a9c23.js" crossorigin = "anonymous"></script>\
     <!-- Use any element to open the sidenav -->\
-    <span class = "open_nav" onclick = "navVal = navClick(navVal)" position: fixed;> <i id = "menuIcon" class = "fa-solid fa-bars"> </i> </span>\
+    <span class = "open_nav" onclick = "nav_val = navClick(nav_val)" position: fixed;> <i id = "nav_icon" class = "fa-solid fa-bars"></i></span>\
+    <span class = "home"><a href = "index.html"><i class = "fa-solid fa-house"></i></a></span>\
 ');
 
 
 
-var navVal = 0;
+var nav_val = 0;
 function navClick(value) {
 
   if (value == 0){
@@ -59,7 +60,7 @@ function navClick(value) {
     document.getElementById("mySidenav").style.width = "0";
     value = 0;
   }
-  var menu_icon = document.getElementById("menuIcon");
+  var menu_icon = document.getElementById("nav_icon");
   menu_icon.classList.toggle("fa-bars-staggered");
 
   return value
