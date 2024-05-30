@@ -92,6 +92,7 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
         return non_unique_set
     else:
         return attribute_set
+    
 
 #Boardgames
 csv_file = 'boardgame'
