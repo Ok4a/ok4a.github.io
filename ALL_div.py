@@ -13,20 +13,20 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     img_col: index for which column contains image links, default 1
     """
 
-    start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr"> \n <link rel = "stylesheet" href = "../style.css"> <head> <meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6"> </head>\n\n'
+    start_string = '<!DOCTYPE html> \n <html lang = "en" dir = "ltr"> \n <link rel = "stylesheet" href = "../style.css"> <head> <meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6"> </head> \n \n'
     side_bar_string = '\t <script src = "../sidebar.js"> </script> \n'
        
-    colour_list = ["#FFF4A3", "#FFC0C7", "#D9EEE1"," #4f35c4"]
+    colour_list = ['#FFF4A3', '#FFC0C7', '#D9EEE1', '#4f35c4']
 
     if html_name == None:
         html_name = csv_name
 
 
-    if " " in html_name:
-        html_name = html_name.replace(" ", "_")
+    if ' ' in html_name:
+        html_name = html_name.replace(' ', '_')
 
     with open(csv_name + '.csv') as csv_file:
-        with open("html_lists/" + html_name + '.html', 'w', encoding = 'utf-8') as html_file:
+        with open('html_lists/' + html_name + '.html', 'w', encoding = 'utf-8') as html_file:
             csv_reader = csv.reader(csv_file, delimiter = ';')
             
             # sorts the csv file by column, order base on sort_list
@@ -38,44 +38,43 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
       
 
             # writes first lines of html file
-            html_file.write(f'{start_string} <title> {page_name} </title> \n <body> \n')
-            html_file.write(side_bar_string)
-            html_file.write(f'\t <div class = "top_bar"> <h1> {page_name} </h1> </div> \n <div class = "grid"> \n\t\t\n')
+            html_file.write(f'{start_string} <title> {page_name} </title> \n <body> \n {side_bar_string}')
+            html_file.write(f'\t <div class = "top_bar"> <h1> {page_name} </h1> </div> \n <div class = "grid"> \n \t \t \n')
 
             count = 0 # counter for table width
             for row in csv_reader:
                 # adds more display name info from column choosen by display_row_list
-                displayed_name = ""
+                displayed_name = ''
                 for o in display_row_list:
-                    if o == "b":
-                        displayed_name += "<br>"
+                    if o == 'b':
+                        displayed_name += '<br>'
                     else:
-                        displayed_name += " " + row[o]
+                        displayed_name += ' ' + row[o]
 
-                # finds the index of "vol." in display_name, if it exist it add a line break before. made for book sites
-                vol_index = displayed_name.find("vol.")
+                # finds the index of 'vol.' in display_name, if it exist it add a line break before. made for book sites
+                vol_index = displayed_name.find('vol.')
                 if vol_index != -1:
-                    displayed_name = displayed_name[:vol_index] + "<br>" + displayed_name[vol_index:]
+                    displayed_name = displayed_name[:vol_index] + '<br>' + displayed_name[vol_index:]
 
 
-                colon_index = displayed_name.rfind(":")
+                colon_index = displayed_name.rfind(':')
                 if colon_index != -1:
-                    displayed_name = displayed_name[:colon_index+1] + "<br>" + displayed_name[colon_index+1:]
+                    displayed_name = displayed_name[:colon_index+1] + '<br>' + displayed_name[colon_index+1:]
 
 
                 sub_list = row[2]
-                if " " in sub_list:
-                    sub_list = sub_list.replace(" ", "_")
+                if ' ' in sub_list:
+                    sub_list = sub_list.replace(' ', '_')
 
                     
                 # writing each object from the csv to the html
                 if row[2] in display_type or row[3] in display_type or display_type == []: # only wirte cell if type indicated
-                    html_file.write(f'\t\t<div> <a href="{sub_list}.html"> <img src = "{row[img_col]}"> </a> <br>{displayed_name}</div>\n')
+                    html_file.write(f'\t \t <div> <a href = "{sub_list}.html"> <img src = "{row[img_col]}"> </a> <br> {displayed_name} </div> \n')
 
                     #style="background-color:{colour_list[count%4]}"
                     count += 1
                     
-            html_file.write('\t</div>\n</body>')
+            html_file.write('\t </div> \n </body>')
 
             print(page_name)
 
@@ -95,34 +94,34 @@ def getSeriesType(csv_name: str, col_index: list, non_unique: bool = False):
         return attribute_set
 
 #Boardgames
-writeHtml("Brætspil", "boardgame")
-writeHtml("Grund Spil", "boardgame", html_name = "base", display_type = ["base"])
+writeHtml('Brætspil', 'boardgame')
+writeHtml('Grund Spil', 'boardgame', html_name = 'base', display_type = ['base'])
 
-boargame_series = getSeriesType("boardgame", 2)
+boargame_series = getSeriesType('boardgame', 2)
 for elem in boargame_series:
-    writeHtml(elem, "boardgame", html_name=elem, display_type=[elem])
+    writeHtml(elem, 'boardgame', html_name=elem, display_type=[elem])
 
 #BOOKS
-writeHtml("Bøger", "books" , sort_list = [6, 3, 5], int_sort = [6], display_row_list=[0, "b", 4, 5])
+writeHtml('Bøger', 'books' , sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5])
 
-book_type = getSeriesType("books", 3)
+book_type = getSeriesType('books', 3)
 for elem in book_type:
-    writeHtml(elem, "books", html_name = elem , sort_list = [6, 3, 5], int_sort = [6], display_row_list=[0, "b", 4, 5], display_type = [elem])
+    writeHtml(elem, 'books', html_name = elem , sort_list = [6, 3, 5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
 
-book_series = getSeriesType("books", 2)
+book_series = getSeriesType('books', 2)
 for elem in book_series:
-    writeHtml(elem, "books", html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list = [0, "b", 4, 5], display_type = [elem])
+    writeHtml(elem, 'books', html_name=elem , sort_list = [6,3,5], int_sort = [6], display_row_list = [0, 'b', 4, 5], display_type = [elem])
 
 #Switch games
-writeHtml("Switch Spil", "switch")
+writeHtml('Switch Spil', 'switch')
 
-switch_series = getSeriesType("switch", 2)
+switch_series = getSeriesType('switch', 2)
 for elem in switch_series:
-    writeHtml(elem, "switch", html_name = elem, display_type = [elem])
+    writeHtml(elem, 'switch', html_name = elem, display_type = [elem])
 
 #Lego
-writeHtml("LEGO", "lego", display_row_list=[0, "b", 3])
+writeHtml('LEGO', 'lego', display_row_list=[0, 'b', 3])
 
-lego_series = getSeriesType("lego", 2)
+lego_series = getSeriesType('lego', 2)
 for elem in lego_series:
-    writeHtml(elem, "lego", html_name = elem , display_row_list = [0, "b", 3], display_type = [elem])
+    writeHtml(elem, 'lego', html_name = elem , display_row_list = [0, 'b', 3], display_type = [elem])
