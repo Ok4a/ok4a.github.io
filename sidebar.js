@@ -18,7 +18,7 @@ document.write('\
             <a href = "Comic.html">Comic</a>\
             <a href = "Manga.html">Manga</a>\
             <a href = "Math.html">Math</a>\
-            <a href = "Novel.html">Novel</a>\
+            <a href = "Roman.html">Roman</a>\
           </div>\
         </div>\
         <a href = "lego.html">LEGO</a>\
