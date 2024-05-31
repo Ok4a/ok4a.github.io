@@ -135,10 +135,10 @@ body{
   display: block;
   max-width: fit-content;
   margin: auto;
-  width: 90%;
   position: relative;
   top: 85px;
   padding-bottom: 90px;
+  width: 90%;
   text-align: center;
 }
 
