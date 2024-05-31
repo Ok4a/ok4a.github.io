@@ -83,7 +83,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                         if string in img_path:
                             img_path = img_path.replace(string, '') 
 
-                    
                     img_path = 'list_img/' + img_path + '_'+ entry[3] +'.jpg' 
 
                     # checks if the image is already downloaded, if not downloads it
