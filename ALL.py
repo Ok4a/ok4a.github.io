@@ -141,7 +141,7 @@ for entry in boargame_series:
 csv_file = 'books'
 
 # make main book html file
-writeHtml('Bøger', csv_file, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], force_download=True)
+writeHtml('Bøger', csv_file, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5])
 
 # makes html file for each type of book
 book_type = getSeriesType(csv_file, 3)
