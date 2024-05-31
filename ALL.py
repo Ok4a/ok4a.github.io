@@ -71,7 +71,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                 if ' ' in sub_list_ref:
                     sub_list_ref = sub_list_ref.replace(' ', '_')
 
-                # img stuff
+                # image stuff
                 if download_image or force_download:
                     img_path = entry[0]
                     # replaces space with underscore in the image name
