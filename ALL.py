@@ -1,6 +1,6 @@
 import csv, requests,  pathlib
 # v 3
-def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_entry_list: list = [0], img_col: int = 1, download_image: bool = True, force_download: bool = False) -> None: 
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], include_type: list = [], exclude_type: list = [], display_entry_list: list = [0], img_col: int = 1, download_image: bool = True, force_download: bool = False) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -97,7 +97,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
 
 
                 # writing each object from the csv to the html
-                if entry[2] in display_type or entry[3] in display_type or display_type == []: # only write cell if type indicated
+                if (entry[2] in include_type or entry[3] in include_type or include_type == []) and (entry[2] not in exclude_type or entry[3] not in exclude_type): # only write cell if type indicated
                     html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
@@ -130,28 +130,28 @@ csv_file = 'boardgame'
 writeHtml('Brætspil', csv_file)
 
 # makes a html file for only base games
-writeHtml('Grund Spil', csv_file, html_name = 'base', display_type = ['base'])
+writeHtml('Grund Spil', csv_file, html_name = 'base', include_type = ['base'])
 
 # makes a html file for each boardgame series
 boargame_series = getSeriesType(csv_file, 2)
 for entry in boargame_series:
-    writeHtml(entry, csv_file, html_name = entry, display_type=[entry])
+    writeHtml(entry, csv_file, html_name = entry, include_type=[entry])
 
 #BOOKS
 csv_file = 'books'
 
 # make main book html file
-writeHtml('Bøger', csv_file, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5])
+writeHtml('Bøger', csv_file, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], exclude_type=["Math"])
 
 # makes html file for each type of book
 book_type = getSeriesType(csv_file, 3)
 for entry in book_type:
-    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
+    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], include_type = [entry])
 
 # makes html file for each book series
 book_series = getSeriesType(csv_file, 2)
 for entry in book_series:
-    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
+    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], include_type = [entry])
 
 
 #Switch games
@@ -163,7 +163,7 @@ writeHtml('Switch Spil', csv_file)
 # make a html for each switch series
 switch_series = getSeriesType(csv_file, 2)
 for entry in switch_series:
-    writeHtml(entry, csv_file, html_name = entry, display_type = [entry])
+    writeHtml(entry, csv_file, html_name = entry, include_type = [entry])
 
 
 #LEGO
@@ -175,4 +175,4 @@ writeHtml('LEGO', csv_file, display_entry_list=[0, 'b', 3])
 # makes a html file for each LEGO series
 lego_series = getSeriesType(csv_file, 2)
 for entry in lego_series:
-    writeHtml(entry, csv_file, html_name = entry, display_entry_list = [0, 'b', 3], display_type = [entry])
+    writeHtml(entry, csv_file, html_name = entry, display_entry_list = [0, 'b', 3], include_type = [entry])
