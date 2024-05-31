@@ -18,6 +18,7 @@ document.write('\
             <a href = "Comic.html">Comic</a>\
             <a href = "Manga.html">Manga</a>\
             <a href = "Novel.html">Novel</a>\
+            <a href = "Math.html">Math</a>\
           </div>\
         </div>\
         <a href = "lego.html">LEGO</a>\
