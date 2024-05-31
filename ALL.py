@@ -141,17 +141,17 @@ for entry in boargame_series:
 csv_file = 'books'
 
 # make main book html file
-writeHtml('Bøger', csv_file, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5])
+writeHtml('Bøger', csv_file, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5])
 
 # makes html file for each type of book
 book_type = getSeriesType(csv_file, 3)
 for entry in book_type:
-    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
+    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
 
 # makes html file for each book series
 book_series = getSeriesType(csv_file, 2)
 for entry in book_series:
-    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 3, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
+    writeHtml(entry, csv_file, html_name = entry, sort_list = [6, 2, 5], int_sort = [6], display_entry_list = [0, 'b', 4, 5], display_type = [entry])
 
 
 #Switch games
