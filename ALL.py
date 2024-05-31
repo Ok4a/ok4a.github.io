@@ -1,6 +1,6 @@
 import csv, requests,  pathlib
 # v 3
-def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_entry_list: list = [0], img_col: int = 1) -> None: 
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: list = [0], int_sort = [], display_type: list = [], display_entry_list: list = [0], img_col: int = 1, download_image: bool = True) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -10,6 +10,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
     display_type: will only add elements from the csv file to the html file if csv element column 3 or 4 is in display_type. Will add all elements if empty
     display_row_list: a list of the columns the displayed name will be, a 'b' in the list will make a line break between the former and next column in the list
     img_col: index for which column contains image links, default 1
+    download_image: bool that determins if the image probided should be download to local storage or it should use the url for the image data, default True
     '''
     
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
@@ -70,29 +71,34 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
                     sub_list_ref = sub_list_ref.replace(' ', '_')
 
                 # img stuff
-                img_path = entry[0]
-                # replaces space with underscore in the image name
-                if ' ' in img_path:
-                    img_path = img_path.replace(' ', '_')
-                
-                # removes all intances from element of remove_str_list from imag_path
-                remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
-                for string in remove_str_list:
-                    if string in img_path:
-                        img_path = img_path.replace(string, '') 
+                if download_image:
+                    img_path = entry[0]
+                    # replaces space with underscore in the image name
+                    if ' ' in img_path:
+                        img_path = img_path.replace(' ', '_')
+                    
+                    # removes all intances from element of remove_str_list from imag_path
+                    remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
+                    for string in remove_str_list:
+                        if string in img_path:
+                            img_path = img_path.replace(string, '') 
 
-                
-                img_path = 'list_img/' + img_path + '_'+ entry[3] +'.jpg' 
+                    
+                    img_path = 'list_img/' + img_path + '_'+ entry[3] +'.jpg' 
 
-                # checks if the image is already downloaded, if not downloads it
-                if  not pathlib.Path(img_path).is_file():
-                    img_data = requests.get(entry[img_col]).content
-                    with open(img_path, 'wb') as handler:
-                        handler.write(img_data) 
+                    # checks if the image is already downloaded, if not downloads it
+                    if  not pathlib.Path(img_path).is_file():
+                        img_data = requests.get(entry[img_col]).content
+                        with open(img_path, 'wb') as handler:
+                            handler.write(img_data)
+                    img_path = "../" + img_path
+                else:
+                    img_path = entry[1]
+
 
                 # writing each object from the csv to the html
                 if entry[2] in display_type or entry[3] in display_type or display_type == []: # only write cell if type indicated
-                    html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "../{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
+                    html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
             html_file.write('\t</div>\n</body>')
