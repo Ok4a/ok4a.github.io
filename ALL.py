@@ -41,7 +41,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_list: 
       
 
             # writes first lines of html file
-            html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
+            html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">
+                            \n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
 
             for entry in csv_reader:
                 # adds more display name info from column choosen by display_row_list
