@@ -140,6 +140,7 @@ body{
   padding-bottom: 90px;
   width: 90%;
   text-align: center;
+  
 }
 
 .grid_entry{
@@ -147,12 +148,11 @@ body{
   font-size: 18px;
   word-break: break-word;
   vertical-align: bottom;
-  text-align: center;
+  /* text-align: center; */
   width: 250px;
   padding: 10px;
   padding-top: 15px;
 }
-
 
 @media screen and (max-width: 900px){
   .top_bar > h1{color: aqua}
