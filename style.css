@@ -136,9 +136,9 @@ body{
   max-width: fit-content;
   margin: auto;
   width: 90%;
-  padding-top: 100px;
   position: relative;
-  padding-bottom: 100px;
+  top: 85px;
+  padding-bottom: 90px;
   text-align: center;
 }
 
