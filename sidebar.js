@@ -78,7 +78,7 @@ for (i = 0; i < dropdown.length; i++) {
     this.classList.toggle('active');
     var dropdownContent = this.nextElementSibling;
 
-    if (dropdownContent.style.display === block) {
+    if (dropdownContent.style.display === 'block') {
       dropdownContent.style.display = 'none';
 
     } else {
