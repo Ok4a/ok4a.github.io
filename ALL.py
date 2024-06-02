@@ -1,7 +1,7 @@
 import csv, requests,  pathlib
 # v 3.3
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_list: list = ['name'], int_sort = [], in_exclude_index: list = ['series', 'type'], include: set = set(), 
-              exclude: set = set(), display_entry_name_list: list = ['name'], download_image: bool = True, force_download: bool = False) -> None: 
+              exclude: set = set(), displayed_entry_name_list: list = ['name'], download_image: bool = True, force_download: bool = False) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -9,9 +9,9 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     sort_order_list: the order which the csv file will be sorted, indecated by dict keys, default sorts only by key 'name'
     int_sort: indicates which dict key should be sorted as int
     in_exclude_index: list of dict keys that include and exlude will look at, default ['series', 'type']
-    include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_index. Will add all elements if empty, default set()
+    include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_index, will add all elements if empty, default set()
     exclude: will not add element from csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_index, default set()
-    display_entry_name_list: a list of the columns the displayed name will be, a 'break' in the list will make a line break between the former and next column in the list
+    displayed_entry_name_list: a list of the columns the displayed name will be, a 'break' in the list will make a line break between the former and next column in the list
     download_image: bool that determins if the image probided should be download to local storage or it should use the url for the image data, default True
     force_download: bool that force the function to download the image even if download image is False and if the image is already downloaded, default False
     '''
@@ -27,17 +27,17 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     if ' ' in html_name:
         html_name = html_name.replace(' ', '_')
 
-    with open(csv_name + '.csv') as csv_file:
-        with open('html_lists/' + html_name + '.html', 'w', encoding = 'utf-8') as html_file:
+    with open(csv_name + '.csv', mode = 'r') as csv_file:
+        with open('html_lists/' + html_name + '.html', mode = 'w', encoding = 'utf-8') as html_file:
 
             csv_dict = csv.DictReader(csv_file, delimiter = ';')
             
             # sorts the csv file by column, order base on sort_order_list
-            for n in sort_order_list:
-                if n in int_sort or n == "series_number": # sort by int
-                    csv_dict = sorted(csv_dict, key = lambda x: int(x[n]))
+            for key in sort_order_list:
+                if key in int_sort or key == "series_number": # sort by int
+                    csv_dict = sorted(csv_dict, key = lambda x: int(x[key]))
                 else:
-                    csv_dict = sorted(csv_dict, key = lambda x: x[n])
+                    csv_dict = sorted(csv_dict, key = lambda x: x[key])
       
 
             # writes first lines of html file
@@ -47,11 +47,13 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                 # adds more display name info from column choosen by display_row_list
                 is_new_line = True
                 displayed_name = ''
-                for o in display_entry_name_list:
+                for o in displayed_entry_name_list:
+                    # should it make a line break in the displayed name
                     if o == 'break':
                         displayed_name += '<br>'
                         is_new_line = True
                     else:
+                        # is it starting a new line
                         if is_new_line:
                             displayed_name += entry[o]
                             is_new_line = False
@@ -73,7 +75,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                 if ' ' in sub_list_ref:
                     sub_list_ref = sub_list_ref.replace(' ', '_')
 
-                # image stuff
+                # should it download the image or not
                 if download_image or force_download:
                     img_path = entry['name']
                     # replaces space with underscore in the image name
@@ -86,14 +88,15 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         if string in img_path:
                             img_path = img_path.replace(string, '') 
 
-                    img_path = 'list_img/' + img_path + '_'+ entry["type"] +'.jpg' 
+                    img_path = 'list_img/' + img_path + '_'+ entry['type'] +'.jpg' 
 
                     # checks if the image is already downloaded, if not downloads it
                     if  not pathlib.Path(img_path).is_file() or force_download:
                         img_data = requests.get(entry['image']).content
-                        with open(img_path, 'wb') as handler:
-                            handler.write(img_data)
-                    img_path = "../" + img_path
+                        with open(img_path, mode = 'wb') as img_file:
+                            img_file.write(img_data)
+
+                    img_path = '../' + img_path
                 else:
                     img_path = entry['image']
 
@@ -105,7 +108,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
 
                 # writing each object from the csv to the html
-                if (include_intersection_len != 0 or len(include) == 0) and (exclude_intersection_len  == 0): # only write cell if type indicated
+                if (include_intersection_len != 0 or len(include) == 0) and (exclude_intersection_len  == 0):
                     html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
@@ -151,17 +154,17 @@ for series in boargame_series:
 csv_file = 'books'
 
 # # make main book html file
-writeHtml('Bøger', csv_file, sort_order_list = ['series_number', 'series', 'last_name'], display_entry_name_list = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math'})
+writeHtml('Bøger', csv_file, sort_order_list = ['series_number', 'series', 'last_name'], displayed_entry_name_list = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math'})
 
 # makes html file for each type of book
 book_type = getSeriesType(csv_file, 'type')[0]
 for series in book_type:
-    writeHtml(series, csv_file, html_name = series, sort_order_list = ['series_number', 'series', 'last_name'], display_entry_name_list = ['name', 'break', 'first_name', 'last_name'], include = {series})
+    writeHtml(series, csv_file, html_name = series, sort_order_list = ['series_number', 'series', 'last_name'], displayed_entry_name_list = ['name', 'break', 'first_name', 'last_name'], include = {series})
 
 # makes html file for each book series
 book_series = getSeriesType(csv_file, 'series')[0]
 for series in book_series:
-    writeHtml(series, csv_file, html_name = series, sort_order_list = ['series_number', 'series', 'last_name'], display_entry_name_list = ['name', 'break', 'first_name', 'last_name'], include = {series})
+    writeHtml(series, csv_file, html_name = series, sort_order_list = ['series_number', 'series', 'last_name'], displayed_entry_name_list = ['name', 'break', 'first_name', 'last_name'], include = {series})
 
 
 # Switch games
@@ -180,9 +183,9 @@ for series in switch_series:
 csv_file = 'lego'
 
 # makes main html file for LEGO
-writeHtml('LEGO', csv_file, display_entry_name_list = ['name', 'break', 'number'])
+writeHtml('LEGO', csv_file, displayed_entry_name_list = ['name', 'break', 'number'])
 
 # makes a html file for each LEGO series
 lego_series = getSeriesType(csv_file, 'series')[0]
 for series in lego_series:
-    writeHtml(series, csv_file, html_name = series, display_entry_name_list = ['name', 'break', 'number'], include = {series})
+    writeHtml(series, csv_file, html_name = series, displayed_entry_name_list = ['name', 'break', 'number'], include = {series})
