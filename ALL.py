@@ -30,7 +30,9 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     if not os.path.exists('html_lists'):
         os.makedirs('html_lists')
 
+    # opens the csv file
     with open(csv_name + '.csv', mode = 'r') as csv_file:
+        # opens/creates the html file
         with open('html_lists/' + html_name + '.html', mode = 'w', encoding = 'utf-8') as html_file:
 
             csv_dict = csv.DictReader(csv_file, delimiter = ';')
