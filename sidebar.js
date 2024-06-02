@@ -51,18 +51,18 @@ function navClick(value) {
     value = 1;
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
       // true for mobile device
-      document.getElementById("side_nav_id").style.width = "100%";
+      document.getElementById('side_nav_id').style.width = '100%';
   
     }else{
       // false for not mobile device
-      document.getElementById("side_nav_id").style.width = "250px";
+      document.getElementById('side_nav_id').style.width = '250px';
     }  
   } else {
-    document.getElementById("side_nav_id").style.width = "0";
+    document.getElementById('side_nav_id').style.width = '0';
     value = 0;
   }
-  var menu_icon = document.getElementById("nav_icon");
-  menu_icon.classList.toggle("fa-bars-staggered");
+  var menu_icon = document.getElementById('nav_icon');
+  menu_icon.classList.toggle('fa-bars-staggered');
 
   return value
 }
