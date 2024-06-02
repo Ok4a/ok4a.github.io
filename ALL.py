@@ -165,7 +165,7 @@ for series in boargame_series:
 csv_file = 'books'
 
 # # make main book html file
-writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math'})
+writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math', 'Digt'})
 
 # makes html file for each type of book
 book_type = getAttributes(csv_file, 'type')[0]
