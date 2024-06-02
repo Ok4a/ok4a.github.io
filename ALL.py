@@ -32,7 +32,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
     # opens the csv file
     with open(csv_name + '.csv', mode = 'r') as csv_file:
-        
+
         # opens/creates the html file
         with open('html_lists/' + html_name + '.html', mode = 'w', encoding = 'utf-8') as html_file:
             
@@ -128,7 +128,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             print(page_name)
 
 
-def getSeriesType(csv_name: str, dict_key: int) -> set:
+def getAttributes(csv_name: str, dict_key: int) -> set:
     '''
     csv_name:
     dict_key:
@@ -156,7 +156,7 @@ writeHtml('Brætspil', csv_file)
 writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'})
 
 # makes a html file for each boardgame series
-boargame_series = getSeriesType(csv_file, 'series')[0]
+boargame_series = getAttributes(csv_file, 'series')[0]
 for series in boargame_series:
     writeHtml(series, csv_file, html_name = series, include = {series})
 
@@ -168,12 +168,12 @@ csv_file = 'books'
 writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math'})
 
 # makes html file for each type of book
-book_type = getSeriesType(csv_file, 'type')[0]
+book_type = getAttributes(csv_file, 'type')[0]
 for series in book_type:
     writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series})
 
 # makes html file for each book series
-book_series = getSeriesType(csv_file, 'series')[0]
+book_series = getAttributes(csv_file, 'series')[0]
 for series in book_series:
     writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series})
 
@@ -185,7 +185,7 @@ csv_file = 'switch'
 writeHtml('Switch Spil', csv_file)
 
 # make a html for each switch series
-switch_series = getSeriesType(csv_file, 'series')[0]
+switch_series = getAttributes(csv_file, 'series')[0]
 for series in switch_series:
     writeHtml(series, csv_file, html_name = series, include = {series})
 
@@ -197,6 +197,6 @@ csv_file = 'lego'
 writeHtml('LEGO', csv_file, displayed_entry_name_keys = ['name', 'break', 'number'])
 
 # makes a html file for each LEGO series
-lego_series = getSeriesType(csv_file, 'series')[0]
+lego_series = getAttributes(csv_file, 'series')[0]
 for series in lego_series:
     writeHtml(series, csv_file, html_name = series, displayed_entry_name_keys = ['name', 'break', 'number'], include = {series})
