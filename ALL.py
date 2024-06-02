@@ -51,75 +51,75 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
 
             for entry in csv_dict:
-                # adds more display name info from column choosen by displayed_entry_name_keys
-                is_new_line = True
-                displayed_name = ''
-                for o in displayed_entry_name_keys:
-                    # should it make a line break in the displayed name
-                    if o == 'break':
-                        displayed_name += '<br>'
-                        is_new_line = True
-
-                    else:
-                        # is it starting a new line
-                        if is_new_line:
-                            displayed_name += entry[o]
-                            is_new_line = False
-
-                        else:
-                            displayed_name += ' ' + entry[o]
-
-
-                # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
-                vol_index = displayed_name.find('vol.')
-                if vol_index != -1:
-                    displayed_name = displayed_name[:(vol_index - 1)] + '<br>' + displayed_name[vol_index:]
-
-                # finds the last index of ':' in display_name, if it exist it add a line break after.
-                colon_index = displayed_name.rfind(':')
-                if colon_index != -1:
-                    displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
-
-                # replaces space with underscore for the html file
-                sub_list_ref = entry['series'].replace(' ', '_')
-
-
-                # should it download the image or not
-                if download_image or force_download:
-                    # replaces space with underscore in the image name
-                    img_path = entry['name'].replace(' ', '_')
-
-                    # removes all intances from element of remove_str_list from img_path
-                    remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
-                    for string in remove_str_list:
-                        img_path = img_path.replace(string, '') 
-
-                    img_path = 'list_img/' + img_path + '_' + entry['type'] + '.jpg'
-
-                    # if the folder for the images does not exits, creates it
-                    if not os.path.exists('list_img'):
-                        os.makedirs('list_img')                    
-
-                    # checks if the image is already downloaded, if not downloads it
-                    if  not pathlib.Path(img_path).is_file() or force_download:
-                        # gets image data from url
-                        img_data = requests.get(entry['image']).content
-                        with open(img_path, mode = 'wb') as img_file:
-                            img_file.write(img_data)
-
-                    img_path = '../' + img_path
-                else:
-                    img_path = entry['image']
-
 
                 # check if the entry shall be included or exluded
                 type_set = set(entry[key] for key in in_exclude_keys)
                 include_intersection_len = len(include.intersection(type_set))
                 exclude_intersection_len = len(exclude.intersection(type_set))
-
-
-                # writing each object from the csv to the html
                 if (len(include) == 0 or include_intersection_len != 0) and (exclude_intersection_len  == 0):
+
+                    # adds more display name info from column choosen by displayed_entry_name_keys
+                    is_new_line = True
+                    displayed_name = ''
+                    for key in displayed_entry_name_keys:
+                        # should it make a line break in the displayed name
+                        if key == 'break':
+                            displayed_name += '<br>'
+                            is_new_line = True
+
+                        else:
+                            # is it starting a new line
+                            if is_new_line:
+                                displayed_name += entry[key]
+                                is_new_line = False
+
+                            else:
+                                displayed_name += ' ' + entry[key]
+
+
+                    # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
+                    vol_index = displayed_name.find('vol.')
+                    if vol_index != -1:
+                        displayed_name = displayed_name[:(vol_index - 1)] + '<br>' + displayed_name[vol_index:]
+
+                    # finds the last index of ':' in display_name, if it exist it add a line break after.
+                    colon_index = displayed_name.rfind(':')
+                    if colon_index != -1:
+                        displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
+
+                    # replaces space with underscore for the html file
+                    sub_list_ref = entry['series'].replace(' ', '_')
+
+
+                    # should it download the image or not
+                    if download_image or force_download:
+                        # replaces space with underscore in the image name
+                        img_path = entry['name'].replace(' ', '_')
+
+                        # removes all intances from element of remove_str_list from img_path
+                        remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
+                        for string in remove_str_list:
+                            img_path = img_path.replace(string, '') 
+
+                        img_path = 'list_img/' + img_path + '_' + entry['type'] + '.jpg'
+
+                        # if the folder for the images does not exits, creates it
+                        if not os.path.exists('list_img'):
+                            os.makedirs('list_img')                    
+
+                        # checks if the image is already downloaded, if not downloads it
+                        if  not pathlib.Path(img_path).is_file() or force_download:
+                            # gets image data from url
+                            img_data = requests.get(entry['image']).content
+                            with open(img_path, mode = 'wb') as img_file:
+                                img_file.write(img_data)
+
+                        img_path = '../' + img_path
+                    else:
+                        img_path = entry['image']
+
+
+                    # writes the element from the csv file
                     html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
