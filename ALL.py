@@ -32,9 +32,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
     # opens the csv file
     with open(csv_name + '.csv', mode = 'r') as csv_file:
+        
         # opens/creates the html file
         with open('html_lists/' + html_name + '.html', mode = 'w', encoding = 'utf-8') as html_file:
-
+            
+            # reads the csv as a dict with keys from first row (header)
             csv_dict = csv.DictReader(csv_file, delimiter = ';')
             
             # sorts the csv file by column, order base on sort_order_list
