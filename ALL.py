@@ -92,7 +92,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     for string in remove_str_list:
                         img_path = img_path.replace(string, '') 
 
-                    img_path = 'list_img/' + img_path + '_' + entry['type'] +'.jpg'
+                    img_path = 'list_img/' + img_path + '_' + entry['type'] + '.jpg'
 
                     # if the folder for the images does not exits, creates it
                     if not os.path.exists('list_img'):
@@ -100,6 +100,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
                     # checks if the image is already downloaded, if not downloads it
                     if  not pathlib.Path(img_path).is_file() or force_download:
+                        # gets image data from url
                         img_data = requests.get(entry['image']).content
                         with open(img_path, mode = 'wb') as img_file:
                             img_file.write(img_data)
