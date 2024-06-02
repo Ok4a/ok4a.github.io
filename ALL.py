@@ -24,8 +24,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
         html_name = csv_name
 
     # replaces space with underscore for the html file
-    if ' ' in html_name:
-        html_name = html_name.replace(' ', '_')
+    html_name = html_name.replace(' ', '_')
 
     with open(csv_name + '.csv', mode = 'r') as csv_file:
         with open('html_lists/' + html_name + '.html', mode = 'w', encoding = 'utf-8') as html_file:
@@ -71,22 +70,18 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
 
                 # replaces space with underscore for the html file
-                sub_list_ref = entry['series']
-                if ' ' in sub_list_ref:
-                    sub_list_ref = sub_list_ref.replace(' ', '_')
+                sub_list_ref = entry['series'].replace(' ', '_')
+
 
                 # should it download the image or not
                 if download_image or force_download:
-                    img_path = entry['name']
                     # replaces space with underscore in the image name
-                    if ' ' in img_path:
-                        img_path = img_path.replace(' ', '_')
-                    
+                    img_path = entry['name'].replace(' ', '_')
+
                     # removes all intances from element of remove_str_list from img_path
                     remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
                     for string in remove_str_list:
-                        if string in img_path:
-                            img_path = img_path.replace(string, '') 
+                        img_path = img_path.replace(string, '') 
 
                     img_path = 'list_img/' + img_path + '_' + entry['type'] +'.jpg' 
 
