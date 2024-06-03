@@ -22,6 +22,8 @@ document.write('\
           </div>\
         </div>\
         <a href = "lego.html">LEGO</a>\
+        <a href = "switch.html">Switch</a>\
+        <!--\
         <div class = "side_grid">\
           <a href = "switch.html">Switch</a>\
           <button class = "dropdown_btn">\
@@ -29,10 +31,9 @@ document.write('\
           </button>\
           <div class = "dropdown_container">\
             <a href = "Mario.html">Mario</a>\
-            <a href = "Pokémon.html">Pokémon</a>\
             <a href = "Zelda.html">Zelda</a>\
           </div>\
-        </div>\
+        </div>-->\
         \
     </div>\
     \
