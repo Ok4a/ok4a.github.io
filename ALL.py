@@ -133,7 +133,7 @@ def getAttributes(csv_name: str, dict_key: int) -> set:
     csv_name:
     dict_key:
     '''
-    with open(csv_name + '.csv') as csv_file:
+    with open('CSV/' + csv_name + '.csv') as csv_file:
         csv_dict = csv.DictReader(csv_file, delimiter = ';')
         attribute_set = set()
         non_unique_set = set()
