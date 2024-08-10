@@ -17,7 +17,6 @@ document.write('\
           <div class = "dropdown_container">\
             <a href = "Comic.html">Comic</a>\
             <a href = "Manga.html">Manga</a>\
-            <a href = "Math.html">Math</a>\
             <a href = "Roman.html">Roman</a>\
           </div>\
         </div>\
