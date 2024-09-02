@@ -1,7 +1,8 @@
 import csv, requests,  pathlib, os
-# v 3.3
+from collections import defaultdict
+# v 3.4
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
-              exclude: set = set(), displayed_entry_name_keys: list = ['name'], download_image: bool = True, force_download: bool = False) -> None: 
+              exclude: set = set(), only_first_in_series: bool = False, displayed_entry_name_keys: list = ['name'], download_image: bool = True, force_download: bool = False) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -11,6 +12,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     in_exclude_keys: list of dict keys that include and exlude will look at, default ['series', 'type']
     include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, will add all elements if empty, default set()
     exclude: will not add element from csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, default set()
+    only_first_in_series:
     displayed_entry_name_keys: a list of the columns the displayed name will be, a 'break' in the list will make a line break between the former and next key in the list
     download_image: bool that determins if the image probided should be download to local storage or it should use the url for the image data, default True
     force_download: bool that force the function to download the image even if download image is False and if the image is already downloaded, default False
@@ -19,7 +21,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
     side_bar_string = '\t<script src = "../sidebar.js"></script>\n'
 
-    include
     if html_name == None:
         html_name = csv_name
 
@@ -29,6 +30,9 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     # if the folder for html files does not exits creates it
     if not os.path.exists('html_lists'):
         os.makedirs('html_lists')
+
+
+    counts_dict = getAttributeCount(csv_name, "series")
 
     # opens the csv file
     with open('CSV/' + csv_name + '.csv', mode = 'r') as csv_file:
@@ -56,6 +60,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                 type_set = set(entry[key] for key in in_exclude_keys)
                 include_intersection_len = len(include.intersection(type_set))
                 exclude_intersection_len = len(exclude.intersection(type_set))
+
                 if (len(include) == 0 or include_intersection_len != 0) and (exclude_intersection_len  == 0):
 
                     # adds more display name info from column choosen by displayed_entry_name_keys
@@ -89,6 +94,26 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
                     # replaces space with underscore for the html file
                     sub_list_ref = entry['series'].replace(' ', '_')
+
+
+                    number_of_entris_in_series = counts_dict[entry['series']]
+
+                    if number_of_entris_in_series != 1 and only_first_in_series:
+
+                        if entry['type'] == 'Manga' and vol_index != -1:
+
+                            if int(entry['series_number']) == 1:
+                                displayed_name = displayed_name[:(vol_index + 9)] + ' - ' + str(number_of_entris_in_series) + displayed_name[(vol_index + 9):] 
+
+                            else:
+                                continue
+
+                        # elif csv_name == 'boardgame':
+                        #     if entry['type'] == 'base':
+                        #         displayed_name += '<br> +' + str(number_of_entris_in_series-1) + ' expansion'
+                        #     else:
+                        #         continue
+
 
 
                     # should it download the image or not
@@ -128,7 +153,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             print(page_name)
 
 
-def getAttributes(csv_name: str, dict_key: int) -> set:
+def getAttributes(csv_name: str, dict_key: str) -> set:
     '''
     csv_name:
     dict_key:
@@ -144,6 +169,19 @@ def getAttributes(csv_name: str, dict_key: int) -> set:
             attribute_set.add(entry[dict_key])
 
     return [attribute_set, non_unique_set]
+
+
+def getAttributeCount(csv_name: str, dict_key: str ) -> dict:
+    '''
+    '''
+    with open('CSV/' + csv_name + '.csv') as csv_file:
+        csv_dict = csv.DictReader(csv_file, delimiter = ';')
+        series_count = defaultdict(int)
+
+        for entry in csv_dict:
+            series_count[entry[dict_key]] += 1
+
+    return series_count
 
 
 # # Boardgames
@@ -165,7 +203,7 @@ for series in boargame_series:
 csv_file = 'books'
 
 # # make main book html file
-writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math', 'Digt'})
+writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math', 'Digt'}, only_first_in_series = True)
 
 # makes html file for each type of book
 book_type = getAttributes(csv_file, 'type')[0]
