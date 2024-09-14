@@ -209,13 +209,13 @@ def getAttributeCount(csv_name: str, dict_key: str) -> dict:
     return series_count
 
 
-# # Boardgames
+# Boardgames
 csv_file = 'boardgame'
 
-# # makes main boardgame html file
+# makes main boardgame html file
 writeHtml('Brætspil', csv_file, needed_breaks = 1)
 
-# # makes a html file for only base games
+# makes a html file for only base games
 writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 1)
 
 # makes a html file for each boardgame series
@@ -227,7 +227,7 @@ for series in boargame_series:
 # Books
 csv_file = 'books'
 
-# # make main book html file
+# make main book html file
 writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math', 'Digt'}, only_first_in_series = True)
 
 # makes html file for each type of book
