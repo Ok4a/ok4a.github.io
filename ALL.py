@@ -1,8 +1,8 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
-# v 3.4.1
+# v 3.5
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
-              exclude: set = set(), only_first_in_series: bool = False, displayed_entry_name_keys: list = ['name'], download_image: bool = True, force_download: bool = False) -> None: 
+              exclude: set = set(), only_first_in_series: bool = False, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -14,6 +14,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     exclude: will not add element from csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, default set()
     only_first_in_series:
     displayed_entry_name_keys: a list of the columns the displayed name will be, a 'break' in the list will make a line break between the former and next key in the list
+    needed_breaks:
     download_image: bool that determins if the image probided should be download to local storage or it should use the url for the image data, default True
     force_download: bool that force the function to download the image even if download image is False and if the image is already downloaded, default False
     '''
@@ -61,7 +62,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                 include_intersection_len = len(include.intersection(type_set))
                 exclude_intersection_len = len(exclude.intersection(type_set))
 
-                if (len(include) == 0 or include_intersection_len != 0) and (exclude_intersection_len  == 0):
+                if (len(include) == 0 or include_intersection_len != 0) and exclude_intersection_len  == 0:
 
                     # adds more display name info from column choosen by displayed_entry_name_keys
                     is_new_line = True
@@ -92,20 +93,42 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     if colon_index != -1:
                         displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
 
-                    # replaces space with underscore for the html file
-                    sub_list_ref = entry['series'].replace(' ', '_')
-
 
                     number_of_entries_in_series = counts_dict[entry['series']]
 
-                    if number_of_entries_in_series != 1 and only_first_in_series and vol_index != -1:
-
-                        if int(entry['series_number']) == 1:
-                            last_break_index = displayed_name.rfind('<br>')
-                            displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:] 
+                    break_count = displayed_name.count('<br>')
+                    if break_count == 1 and 'series_number' in entry.keys() :
+                        first_break_index = displayed_name.find('<br>')
+                        if number_of_entries_in_series != 1 and entry['series'] != 'All You Need is Kill':
+                            displayed_name = displayed_name[:first_break_index] + '<br>#' + entry['series_number'] + displayed_name[first_break_index:]
                         else:
-                            continue
+                            displayed_name = displayed_name[:first_break_index] + '<br>' + displayed_name[first_break_index:]
+                    
 
+                    if number_of_entries_in_series != 1 and only_first_in_series:
+                        if vol_index != -1:
+                            if int(entry['series_number']) == 1:
+                                last_break_index = displayed_name.rfind('<br>')
+                                displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:] 
+                            else:
+                                continue
+                        elif displayed_name.count('#') != 0:
+                            if int(entry['series_number']) == 1:
+                                number_index = displayed_name.find('#')
+                                displayed_name = displayed_name[:(number_index + 2)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
+                            else:
+                                continue
+
+
+
+                    # adds more breaks to the displayed name if neeeded, for alignment of images
+                    while needed_breaks > break_count:
+                        displayed_name += '<br>'
+                        break_count = displayed_name.count('<br>')
+                        
+
+                    # replaces space with underscore for the html file
+                    sub_list_ref = entry['series'].replace(' ', '_')
 
                     # should it download the image or not
                     if download_image or force_download:
@@ -162,7 +185,7 @@ def getAttributes(csv_name: str, dict_key: str) -> set:
     return [attribute_set, non_unique_set]
 
 
-def getAttributeCount(csv_name: str, dict_key: str ) -> dict:
+def getAttributeCount(csv_name: str, dict_key: str) -> dict:
     '''
     '''
     with open('CSV/' + csv_name + '.csv') as csv_file:
@@ -170,6 +193,7 @@ def getAttributeCount(csv_name: str, dict_key: str ) -> dict:
         series_count = defaultdict(int)
 
         for entry in csv_dict:
+            
             series_count[entry[dict_key]] += 1
 
     return series_count
@@ -179,15 +203,15 @@ def getAttributeCount(csv_name: str, dict_key: str ) -> dict:
 csv_file = 'boardgame'
 
 # # makes main boardgame html file
-writeHtml('Brætspil', csv_file)
+writeHtml('Brætspil', csv_file, needed_breaks = 2)
 
 # # makes a html file for only base games
-writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'})
+writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 2)
 
 # makes a html file for each boardgame series
 boargame_series = getAttributes(csv_file, 'series')[0]
 for series in boargame_series:
-    writeHtml(series, csv_file, html_name = series, include = {series})
+    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 2)
 
 
 # Books
@@ -211,12 +235,12 @@ for series in book_series:
 csv_file = 'switch'
 
 # make main switch game html
-writeHtml('Switch Spil', csv_file)
+writeHtml('Switch Spil', csv_file, needed_breaks = 2)
 
 # make a html for each switch series
 switch_series = getAttributes(csv_file, 'series')[0]
 for series in switch_series:
-    writeHtml(series, csv_file, html_name = series, include = {series})
+    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 2)
 
 
 # LEGO
