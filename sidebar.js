@@ -76,16 +76,12 @@ function compressClick(){
   compress_toggle_var.classList.toggle('fa-toggle-on');
   compress_toggle_var.classList.toggle('fa-toggle-off');
 
-  
-
-
   var compressed_elements = document.getElementsByName('compressed');
-
   for(var i = 0; i < compressed_elements.length; i++){
     compressed_elements[i].classList.toggle('hide_entry');
   }
 
-  noncompressed_elements = document.getElementsByName('noncompressed');
+  var noncompressed_elements = document.getElementsByName('noncompressed');
   for(var i = 0; i < noncompressed_elements.length; i++){
     noncompressed_elements[i].classList.toggle('hide_entry');
   }
@@ -93,7 +89,6 @@ function compressClick(){
 
 
 function showCompressToggle(){
-  console.log("show toggle")
   var compress_toggle = document.getElementById('compress_toggle');
   compress_toggle.style.display = 'block';
 }
@@ -101,9 +96,7 @@ function showCompressToggle(){
 
 function load_done(){
   if (compressed_entries){
-    
     showCompressToggle();
-    console.log("hat")
   }
   if (uncompress_on_load){
     compressClick();
@@ -135,5 +128,3 @@ for (i = 0; i < dropdown.length; i++) {
     icon.classList.toggle('fa-caret-down');
   });
 }
-
-
