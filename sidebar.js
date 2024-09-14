@@ -71,10 +71,12 @@ function navClick(value) {
 
 // compress or uncompress entries
 function compressClick(){
-  var toggle_icon = document.getElementById('compress_toggle');
-  toggle_icon.classList.toggle('fa-toggle-on');
-  toggle_icon.classList.toggle('fa-toggle-off');
-  // toggle_icon.style.display = 'none'
+  console.log("compress");
+  var compress_toggle_var = document.getElementById('compress_toggle');
+  compress_toggle_var.classList.toggle('fa-toggle-on');
+  compress_toggle_var.classList.toggle('fa-toggle-off');
+
+  
 
 
   var compressed_elements = document.getElementsByName('compressed');
@@ -88,18 +90,27 @@ function compressClick(){
     noncompressed_elements[i].classList.toggle('hide_entry');
   }
 }
-if (compress_on_load){
-  window.onload = compressClick;
+
+
+function showCompressToggle(){
+  console.log("show toggle")
+  var compress_toggle = document.getElementById('compress_toggle');
+  compress_toggle.style.display = 'block';
 }
 
-//
-function hideCompressToggle(){
-  var toggle_icon = document.getElementById('compress_toggle');
-  toggle_icon.style.display = 'none'
+
+function load_done(){
+  if (compressed_entries){
+    
+    showCompressToggle();
+    console.log("hat")
+  }
+  if (uncompress_on_load){
+    compressClick();
+  }
 }
-if (!compressed_entries){
-  window.onload = hideCompressToggle;
-}
+
+window.onload = load_done;
 
 
 /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */

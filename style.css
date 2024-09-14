@@ -43,6 +43,9 @@ body{
   right:  25px;
   bottom: 18px;
 }
+.compress > i{
+  display: none;
+}
 
 
 

@@ -20,10 +20,10 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     '''
     
 
-    if not start_compressed:
-        compress_on_load = 'compress_on_load = true;'
+    if start_compressed:
+        uncompress_on_load = 'uncompress_on_load = false;'
     else:
-        compress_on_load = 'compress_on_load = false;'
+        uncompress_on_load = 'uncompress_on_load = true;'
 
     if compress_series_entries:
         compressed_entries = 'compressed_entries = true;'
@@ -32,7 +32,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     
 
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
-    side_bar_string = '\t<script>\n\t\t' + compressed_entries + '\n\t\t'  + compress_on_load + '\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
+    side_bar_string = '\t<script>\n\t\t' + compressed_entries + '\n\t\t'  + uncompress_on_load + '\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
 
     if html_name == None:
         html_name = csv_name
@@ -67,7 +67,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             # writes first lines of html file
             html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
             i = 0
-            compress_on_load = True
+            first_entry_stuff = True
             # for entry in csv_dict:
             while i < len(csv_dict):
                 entry = csv_dict[i]
@@ -133,7 +133,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
                     if number_of_entries_in_series != 1 and compress_series_entries:
                         
-                        if int(entry['series_number']) == 1 and compress_on_load: # if the entry uses 'vol' as the series counter
+                        if int(entry['series_number']) == 1 and first_entry_stuff: # if the entry uses 'vol' as the series counter
                             if vol_index != -1: # if it is the first in its series
                                 last_break_index = displayed_name.rfind('<br>')
                                 displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:]
@@ -142,12 +142,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                 number_index = displayed_name.find('#')
                                 displayed_name = displayed_name[:(number_index + 2)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
                             compress_id = 'name = "compressed"'
-                            compress_on_load = False
+                            first_entry_stuff = False
                             i -= 1 
                         else: # skip other entries in a series
                             compress_id = 'name = noncompressed'
                             hide_class = 'hide_entry'
-                            compress_on_load = True
+                            first_entry_stuff = True
 
 
                     # adds more breaks to the displayed name if neeeded, for alignment of images
