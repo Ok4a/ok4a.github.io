@@ -1,4 +1,4 @@
-import csv, requests,  pathlib, os
+import csv, requests, pathlib, os
 from collections import defaultdict
 # v 3.4.1
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
@@ -105,6 +105,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                             displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:] 
                         else:
                             continue
+
 
                     # should it download the image or not
                     if download_image or force_download:
