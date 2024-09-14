@@ -1,6 +1,6 @@
 import csv, requests,  pathlib, os
 from collections import defaultdict
-# v 3.4
+# v 3.4.1
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), only_first_in_series: bool = False, displayed_entry_name_keys: list = ['name'], download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -96,25 +96,15 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     sub_list_ref = entry['series'].replace(' ', '_')
 
 
-                    number_of_entris_in_series = counts_dict[entry['series']]
+                    number_of_entries_in_series = counts_dict[entry['series']]
 
-                    if number_of_entris_in_series != 1 and only_first_in_series:
+                    if number_of_entries_in_series != 1 and only_first_in_series and vol_index != -1:
 
-                        if entry['type'] == 'Manga' and vol_index != -1:
-
-                            if int(entry['series_number']) == 1:
-                                displayed_name = displayed_name[:(vol_index + 9)] + ' - ' + str(number_of_entris_in_series) + displayed_name[(vol_index + 9):] 
-
-                            else:
-                                continue
-
-                        # elif csv_name == 'boardgame':
-                        #     if entry['type'] == 'base':
-                        #         displayed_name += '<br> +' + str(number_of_entris_in_series-1) + ' expansion'
-                        #     else:
-                        #         continue
-
-
+                        if int(entry['series_number']) == 1:
+                            last_break_index = displayed_name.rfind('<br>')
+                            displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:] 
+                        else:
+                            continue
 
                     # should it download the image or not
                     if download_image or force_download:
