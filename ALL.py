@@ -12,7 +12,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     in_exclude_keys: list of dict keys that include and exlude will look at, default ['series', 'type']
     include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, will add all elements if empty, default set()
     exclude: will not add element from csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, default set()
-    only_first_in_series:
+    only_first_in_series: if set to True, compress entries with more than one entry in its series, default False
     displayed_entry_name_keys: a list of the columns the displayed name will be, a 'break' in the list will make a line break between the former and next key in the list
     needed_breaks:
     download_image: bool that determins if the image probided should be download to local storage or it should use the url for the image data, default True
@@ -32,7 +32,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     if not os.path.exists('html_lists'):
         os.makedirs('html_lists')
 
-
+    # gets the number of entires om each series
     counts_dict = getAttributeCount(csv_name, "series")
 
     # opens the csv file
@@ -94,36 +94,45 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
 
 
+                    # the number of entries in the series of the current entry
                     number_of_entries_in_series = counts_dict[entry['series']]
 
+                    # how many line breaks in the displayed name
                     break_count = displayed_name.count('<br>')
-                    if break_count == 1 and 'series_number' in entry.keys() :
+
+                    # adds the number the current entry is in its series, used mainly for books
+                    if break_count == 1 and 'series_number' in entry.keys():
+                        # index for the first html line break
                         first_break_index = displayed_name.find('<br>')
+
+                        # adds the number of the series if there is more than one the entry in it
                         if number_of_entries_in_series != 1 and entry['series'] != 'All You Need is Kill':
                             displayed_name = displayed_name[:first_break_index] + '<br>#' + entry['series_number'] + displayed_name[first_break_index:]
-                        else:
+                        
+                        else: # adds line break if the entry is the only in its series
                             displayed_name = displayed_name[:first_break_index] + '<br>' + displayed_name[first_break_index:]
                     
-
+                    # compress entries if there is more than one entry in its series and if only_first_in_series is True
                     if number_of_entries_in_series != 1 and only_first_in_series:
-                        if vol_index != -1:
-                            if int(entry['series_number']) == 1:
+                        
+                        if vol_index != -1: # if the entry uses 'vol' as the series counter
+                            if int(entry['series_number']) == 1: # if it is the first in its series
                                 last_break_index = displayed_name.rfind('<br>')
                                 displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:] 
-                            else:
+                            else: # skip other entries in a series
                                 continue
-                        elif displayed_name.count('#') != 0:
-                            if int(entry['series_number']) == 1:
+                        
+                        elif displayed_name.count('#') != 0: # if the entry uses '#' as the series counter
+                            if int(entry['series_number']) == 1: # if it is the first in its series
                                 number_index = displayed_name.find('#')
                                 displayed_name = displayed_name[:(number_index + 2)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
-                            else:
+                            else: # skip other entries in a series
                                 continue
-
 
 
                     # adds more breaks to the displayed name if neeeded, for alignment of images
                     while needed_breaks > break_count:
-                        displayed_name += '<br>'
+                        displayed_name += '<br>⠀'
                         break_count = displayed_name.count('<br>')
                         
 
@@ -169,8 +178,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
 def getAttributes(csv_name: str, dict_key: str) -> set:
     '''
-    csv_name:
-    dict_key:
+    csv_name: the name of the csv file without .csv
+    dict_key: wich column of the csv file that will be looked at
     '''
     with open('CSV/' + csv_name + '.csv') as csv_file:
         csv_dict = csv.DictReader(csv_file, delimiter = ';')
@@ -187,13 +196,14 @@ def getAttributes(csv_name: str, dict_key: str) -> set:
 
 def getAttributeCount(csv_name: str, dict_key: str) -> dict:
     '''
+    csv_name: the name of the csv file without .csv
+    dict_key: wich column of the csv file that will be looked at
     '''
     with open('CSV/' + csv_name + '.csv') as csv_file:
         csv_dict = csv.DictReader(csv_file, delimiter = ';')
         series_count = defaultdict(int)
 
         for entry in csv_dict:
-            
             series_count[entry[dict_key]] += 1
 
     return series_count
@@ -203,15 +213,15 @@ def getAttributeCount(csv_name: str, dict_key: str) -> dict:
 csv_file = 'boardgame'
 
 # # makes main boardgame html file
-writeHtml('Brætspil', csv_file, needed_breaks = 2)
+writeHtml('Brætspil', csv_file, needed_breaks = 1)
 
 # # makes a html file for only base games
-writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 2)
+writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 1)
 
 # makes a html file for each boardgame series
 boargame_series = getAttributes(csv_file, 'series')[0]
 for series in boargame_series:
-    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 2)
+    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 1)
 
 
 # Books
@@ -235,12 +245,12 @@ for series in book_series:
 csv_file = 'switch'
 
 # make main switch game html
-writeHtml('Switch Spil', csv_file, needed_breaks = 2)
+writeHtml('Switch Spil', csv_file, needed_breaks = 1)
 
 # make a html for each switch series
 switch_series = getAttributes(csv_file, 'series')[0]
 for series in switch_series:
-    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 2)
+    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 1)
 
 
 # LEGO
