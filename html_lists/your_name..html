@@ -8,12 +8,25 @@
 <title>your name.</title>
 
 <body>
+	<script>
+		compressed_entries = true;
+		compress_on_load = true;
+	</script>
 	<script src = "../sidebar.js"></script>
 	<div class = "top_bar">
 		<h1>your name.</h1>
 	</div>
 	<div class = "grid">
-		<div class = "grid_entry">
+		<div class = "grid_entry " name = "compressed">
+			<a href = "your_name..html">
+				<img src = "../list_img/your_name_vol_1_Manga.jpg">
+			</a>
+			<br>
+			<a class = "entry_name">
+				your name.<br>vol. 1 ‒ 3<br>M. Shinkai
+			</a>
+		</div>
+		<div class = "grid_entry hide_entry" name = noncompressed>
 			<a href = "your_name..html">
 				<img src = "../list_img/your_name_vol_1_Manga.jpg">
 			</a>
@@ -22,7 +35,7 @@
 				your name.<br>vol. 1<br>M. Shinkai
 			</a>
 		</div>
-		<div class = "grid_entry">
+		<div class = "grid_entry hide_entry" name = noncompressed>
 			<a href = "your_name..html">
 				<img src = "../list_img/your_name_vol_2_Manga.jpg">
 			</a>
@@ -31,7 +44,7 @@
 				your name.<br>vol. 2<br>M. Shinkai
 			</a>
 		</div>
-		<div class = "grid_entry">
+		<div class = "grid_entry hide_entry" name = noncompressed>
 			<a href = "your_name..html">
 				<img src = "../list_img/your_name_vol_3_Manga.jpg">
 			</a>

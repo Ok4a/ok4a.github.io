@@ -38,17 +38,18 @@ document.write('\
     \
     <script src = "https://kit.fontawesome.com/81245a9c23.js" crossorigin = "anonymous"></script>\
     <!-- Use any element to open the side_nav -->\
-    <span class = "open_nav" onclick = "nav_val = navClick(nav_val)" position: fixed;> <i id = "nav_icon" class = "fa-solid fa-bars"></i></span>\
+    <span class = "open_nav" onclick = "nav_bool = navClick(nav_bool)" position: fixed;> <i id = "nav_icon" class = "fa-solid fa-bars"></i></span>\
+    <span class = "compress" onclick = "compressClick()"><i id = "compress_toggle" class="fa-solid fa-toggle-on"></i></span>\
     <span class = "home"><a href = "index.html"><i class = "fa-solid fa-house"></i></a></span>\
 ');
 
 
 
-var nav_val = 0;
+var nav_bool = true;
 function navClick(value) {
 
-  if (value == 0){
-    value = 1;
+  if (value){
+    value = false;
     if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
       // true for mobile device
       document.getElementById('side_nav_id').style.width = '100%';
@@ -59,12 +60,45 @@ function navClick(value) {
     }  
   } else {
     document.getElementById('side_nav_id').style.width = '0';
-    value = 0;
+    value = true;
   }
   var menu_icon = document.getElementById('nav_icon');
   menu_icon.classList.toggle('fa-bars-staggered');
 
   return value
+}
+
+
+// compress or uncompress entries
+function compressClick(){
+  var toggle_icon = document.getElementById('compress_toggle');
+  toggle_icon.classList.toggle('fa-toggle-on');
+  toggle_icon.classList.toggle('fa-toggle-off');
+  // toggle_icon.style.display = 'none'
+
+
+  var compressed_elements = document.getElementsByName('compressed');
+
+  for(var i = 0; i < compressed_elements.length; i++){
+    compressed_elements[i].classList.toggle('hide_entry');
+  }
+
+  noncompressed_elements = document.getElementsByName('noncompressed');
+  for(var i = 0; i < noncompressed_elements.length; i++){
+    noncompressed_elements[i].classList.toggle('hide_entry');
+  }
+}
+if (compress_on_load){
+  window.onload = compressClick;
+}
+
+//
+function hideCompressToggle(){
+  var toggle_icon = document.getElementById('compress_toggle');
+  toggle_icon.style.display = 'none'
+}
+if (!compressed_entries){
+  window.onload = hideCompressToggle;
 }
 
 
@@ -90,3 +124,5 @@ for (i = 0; i < dropdown.length; i++) {
     icon.classList.toggle('fa-caret-down');
   });
 }
+
+

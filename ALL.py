@@ -1,8 +1,8 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
-# v 3.5
+# v 3.6
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
-              exclude: set = set(), only_first_in_series: bool = False, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
+              exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
@@ -12,15 +12,27 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     in_exclude_keys: list of dict keys that include and exlude will look at, default ['series', 'type']
     include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, will add all elements if empty, default set()
     exclude: will not add element from csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, default set()
-    only_first_in_series: if set to True, compress entries with more than one entry in its series, default False
+    compress_series_entries: if set to True, compress entries with more than one entry in its series, default False
     displayed_entry_name_keys: a list of the columns the displayed name will be, a 'break' in the list will make a line break between the former and next key in the list
     needed_breaks:
     download_image: bool that determins if the image probided should be download to local storage or it should use the url for the image data, default True
     force_download: bool that force the function to download the image even if download image is False and if the image is already downloaded, default False
     '''
     
+
+    if not start_compressed:
+        compress_on_load = 'compress_on_load = true;'
+    else:
+        compress_on_load = 'compress_on_load = false;'
+
+    if compress_series_entries:
+        compressed_entries = 'compressed_entries = true;'
+    else:
+        compressed_entries = 'compressed_entries = false;'
+    
+
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
-    side_bar_string = '\t<script src = "../sidebar.js"></script>\n'
+    side_bar_string = '\t<script>\n\t\t' + compressed_entries + '\n\t\t'  + compress_on_load + '\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
 
     if html_name == None:
         html_name = csv_name
@@ -54,8 +66,14 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
             # writes first lines of html file
             html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
-
-            for entry in csv_dict:
+            i = 0
+            compress_on_load = True
+            # for entry in csv_dict:
+            while i < len(csv_dict):
+                entry = csv_dict[i]
+                i += 1
+                compress_id = ''
+                hide_class = ''
 
                 # check if the entry shall be included or exluded
                 type_set = set(entry[key] for key in in_exclude_keys)
@@ -113,21 +131,23 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                             displayed_name = displayed_name[:first_break_index] + '<br>' + displayed_name[first_break_index:]
                     
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
-                    if number_of_entries_in_series != 1 and only_first_in_series:
+                    if number_of_entries_in_series != 1 and compress_series_entries:
                         
-                        if vol_index != -1: # if the entry uses 'vol' as the series counter
-                            if int(entry['series_number']) == 1: # if it is the first in its series
+                        if int(entry['series_number']) == 1 and compress_on_load: # if the entry uses 'vol' as the series counter
+                            if vol_index != -1: # if it is the first in its series
                                 last_break_index = displayed_name.rfind('<br>')
-                                displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:] 
-                            else: # skip other entries in a series
-                                continue
-                        
-                        elif displayed_name.count('#') != 0: # if the entry uses '#' as the series counter
-                            if int(entry['series_number']) == 1: # if it is the first in its series
+                                displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:]
+    
+                            elif displayed_name.count('#') != 0:
                                 number_index = displayed_name.find('#')
                                 displayed_name = displayed_name[:(number_index + 2)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
-                            else: # skip other entries in a series
-                                continue
+                            compress_id = 'name = "compressed"'
+                            compress_on_load = False
+                            i -= 1 
+                        else: # skip other entries in a series
+                            compress_id = 'name = noncompressed'
+                            hide_class = 'hide_entry'
+                            compress_on_load = True
 
 
                     # adds more breaks to the displayed name if neeeded, for alignment of images
@@ -168,7 +188,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
 
                     # writes the element from the csv file
-                    html_file.write(f'\t\t<div class = "grid_entry">\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
+                    html_file.write(f'\t\t<div class = "grid_entry {hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
             html_file.write('\t</div>\n</body>')
@@ -228,17 +248,17 @@ for series in boargame_series:
 csv_file = 'books'
 
 # make main book html file
-writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math', 'Digt'}, only_first_in_series = True)
+writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math', 'Digt'}, compress_series_entries = True)
 
 # makes html file for each type of book
 book_type = getAttributes(csv_file, 'type')[0]
 for series in book_type:
-    writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series})
+    writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True)
 
 # makes html file for each book series
 book_series = getAttributes(csv_file, 'series')[0]
 for series in book_series:
-    writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series})
+    writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True, start_compressed = False)
 
 
 # Switch games

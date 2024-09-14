@@ -34,6 +34,16 @@ body{
   top: 18px;
 }
 
+.compress{
+  font-size: 40px;
+  cursor: pointer;
+  position: fixed;
+  z-index: 4;
+  color: #000;
+  right:  25px;
+  bottom: 18px;
+}
+
 
 
 .open_nav{
@@ -153,6 +163,12 @@ body{
   padding: 10px;
   padding-top: 15px;
 }
+
+.hide_entry{
+  display: none;
+}
+
+
 
 @media screen and (max-width: 900px){
   .top_bar > h1{color: aqua}

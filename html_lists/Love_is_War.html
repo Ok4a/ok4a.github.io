@@ -8,12 +8,25 @@
 <title>Love is War</title>
 
 <body>
+	<script>
+		compressed_entries = true;
+		compress_on_load = true;
+	</script>
 	<script src = "../sidebar.js"></script>
 	<div class = "top_bar">
 		<h1>Love is War</h1>
 	</div>
 	<div class = "grid">
-		<div class = "grid_entry">
+		<div class = "grid_entry " name = "compressed">
+			<a href = "Love_is_War.html">
+				<img src = "../list_img/Love_is_War_vol_1_Manga.jpg">
+			</a>
+			<br>
+			<a class = "entry_name">
+				Love is War<br>vol. 1 ‒ 2<br>A. Akasaka
+			</a>
+		</div>
+		<div class = "grid_entry hide_entry" name = noncompressed>
 			<a href = "Love_is_War.html">
 				<img src = "../list_img/Love_is_War_vol_1_Manga.jpg">
 			</a>
@@ -22,7 +35,7 @@
 				Love is War<br>vol. 1<br>A. Akasaka
 			</a>
 		</div>
-		<div class = "grid_entry">
+		<div class = "grid_entry hide_entry" name = noncompressed>
 			<a href = "Love_is_War.html">
 				<img src = "../list_img/Love_is_War_vol_2_Manga.jpg">
 			</a>
