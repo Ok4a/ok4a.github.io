@@ -4,4 +4,4 @@ dst = 'copy of data'
 
 copy_tree(src, dst)
 
-print('\nData copyed')
+print('\nData copyed\n')
