@@ -1,6 +1,6 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
-# v 3.6
+# v 3.6.1
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -39,6 +39,9 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     else:
         html_name += '_' + csv_name
 
+
+    remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
+
     # replaces space with underscore for the html file
     html_name = html_name.replace(' ', '_')
 
@@ -70,6 +73,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
             i = 0
             first_entry_stuff = True
+            
             # for entry in csv_dict:
             while i < len(csv_dict):
                 entry = csv_dict[i]
@@ -142,11 +146,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                             if int(entry['series_number']) == 1 and first_entry_stuff: # if the entry uses 'vol' as the series counter
                                 if vol_index != -1: # if it is the first in its series
                                     last_break_index = displayed_name.rfind('<br>')
-                                    displayed_name = displayed_name[:(vol_index + 9)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[last_break_index:]
+                                    displayed_name = displayed_name[:(vol_index + 9)] + ' - ' + str(number_of_entries_in_series) + displayed_name[last_break_index:]
         
                                 elif displayed_name.count('#') != 0:
                                     number_index = displayed_name.find('#')
-                                    displayed_name = displayed_name[:(number_index + 2)] + ' ‒ ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
+                                    displayed_name = displayed_name[:(number_index + 2)] + ' - ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
                                 compress_id = 'name = "compressed"'
                                 first_entry_stuff = False
                                 i -= 1 
@@ -156,7 +160,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                 hide_class = 'hide_entry'
                                 first_entry_stuff = True
 
-
+                        # boardgame compression
                         elif 'base_game' in entry.keys():
                             if len(entry['base_game']) != 0:
                             #in number_of_entries_in_series.keys():
@@ -193,7 +197,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         img_path = entry['name'].replace(' ', '_')
 
                         # removes all intances from element of remove_str_list from img_path
-                        remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
+                        
                         for string in remove_str_list:
                             img_path = img_path.replace(string, '') 
 

@@ -37,7 +37,6 @@ document.write('\
     </div>\
     \
     <script src = "https://kit.fontawesome.com/81245a9c23.js" crossorigin = "anonymous"></script>\
-    <!-- Use any element to open the side_nav -->\
     <span class = "open_nav" onclick = "nav_bool = navClick(nav_bool)" position: fixed;> <i id = "nav_icon" class = "fa-solid fa-bars"></i></span>\
     <span class = "compress" onclick = "compressClick()"><i id = "compress_toggle" class="fa-solid fa-toggle-on"></i></span>\
     <span class = "home"><a href = "index.html"><i class = "fa-solid fa-house"></i></a></span>\
