@@ -95,7 +95,7 @@ function showCompressToggle(){
 
 
 function load_done(){
-  if (compressed_entries && document.getElementsByClassName('grid_entry').length > 1){
+  if (compressed_entries && document.getElementsByName('noncompressed').length > 0){
     showCompressToggle();
   }
   if (uncompress_on_load){
