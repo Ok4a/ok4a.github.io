@@ -70,7 +70,6 @@ function navClick(value) {
 
 // compress or uncompress entries
 function compressClick(){
-  console.log("compress");
   var compress_toggle_var = document.getElementById('compress_toggle');
   compress_toggle_var.classList.toggle('fa-toggle-on');
   compress_toggle_var.classList.toggle('fa-toggle-off');
@@ -94,7 +93,8 @@ function showCompressToggle(){
 
 
 function load_done(){
-  if (compressed_entries){
+  console.log(document.getElementsByClassName('grid_entry').length);
+  if (compressed_entries && document.getElementsByClassName('grid_entry').length > 1){
     showCompressToggle();
   }
   if (uncompress_on_load){
