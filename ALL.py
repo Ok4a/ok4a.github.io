@@ -1,6 +1,6 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
-# v 3.6.1
+# v 3.6.2
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -52,6 +52,9 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     # gets the number of entires om each series
     counts_dict = getAttributeCount(csv_name, "series")
 
+    if csv_name == 'boardgame':
+        number_of_entries_in_series = getAttributeCount(csv_name, 'base_game')
+
     # opens the csv file
     with open('CSV/' + csv_name + '.csv', mode = 'r') as csv_file:
 
@@ -73,7 +76,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
             i = 0
             first_entry_stuff = True
-            
+
             # for entry in csv_dict:
             while i < len(csv_dict):
                 entry = csv_dict[i]
@@ -121,8 +124,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     # the number of entries in the series of the current entry
                     if csv_name != 'boardgame':
                         number_of_entries_in_series = counts_dict[entry['series']]
-                    else:
-                        number_of_entries_in_series = getAttributeCount(csv_name, 'base_game')
+    
 
                     # how many line breaks in the displayed name
                     break_count = displayed_name.count('<br>')
@@ -163,13 +165,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         # boardgame compression
                         elif 'base_game' in entry.keys():
                             if len(entry['base_game']) != 0:
-                            #in number_of_entries_in_series.keys():
 
                                 if entry['type'] == 'base' and first_entry_stuff and number_of_entries_in_series[entry['name']] != 0:
 
                                     displayed_name += '<br>Plus ' + str(number_of_entries_in_series[entry['name']] - 1) + ' udvidelse'
 
-                                    if number_of_entries_in_series[entry['name']] > 1:
+                                    if number_of_entries_in_series[entry['name']] > 2:
                                         displayed_name += 'r'
                                         
                                     compress_id = 'name = compressed'

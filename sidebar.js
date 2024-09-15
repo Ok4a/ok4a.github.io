@@ -2,12 +2,14 @@ document.write('\
     <div id = "side_nav_id" class = "side_nav">\
         <div class = "side_grid">\
           <a href = "boardgame.html">Brætspil</a>\
+          <!--\
           <button class = "dropdown_btn">\
               <i class = "fa-solid fa-caret-down"></i>\
           </button>\
           <div class = "dropdown_container">\
-            <a href = "base.html">Grund spil</a>\
+            <a href = "base_boardgame.html">Grund spil</a>\
           </div>\
+          -->\
         </div>\
         <div class = "side_grid">\
           <a href = "books.html">Bøger</a>\
@@ -15,9 +17,9 @@ document.write('\
             <i class = "fa-solid fa-caret-down"></i>\
           </button>\
           <div class = "dropdown_container">\
-            <a href = "Comic.html">Comic</a>\
-            <a href = "Manga.html">Manga</a>\
-            <a href = "Roman.html">Roman</a>\
+            <a href = "Comic_books.html">Comic</a>\
+            <a href = "Manga_books.html">Manga</a>\
+            <a href = "Roman_books.html">Roman</a>\
           </div>\
         </div>\
         <a href = "lego.html">LEGO</a>\
@@ -93,7 +95,6 @@ function showCompressToggle(){
 
 
 function load_done(){
-  console.log(document.getElementsByClassName('grid_entry').length);
   if (compressed_entries && document.getElementsByClassName('grid_entry').length > 1){
     showCompressToggle();
   }
