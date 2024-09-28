@@ -9,9 +9,7 @@ body{
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.top_bar, .side_nav{
-  background-color: black;
-}
+
 
 .top_bar{
   width: 100%;
@@ -21,6 +19,10 @@ body{
   left: 0px;
   text-align: center;
   z-index: 1;
+}
+
+.top_bar, .side_nav{
+  background-color: black;
 }
 
 
@@ -177,6 +179,11 @@ body{
   .top_bar > h1{color: aqua; font-size: 50px;}
   .side_nav a, .dropdown_btn{font-size: 40px}
   .compress, .home, .open_nav{font-size: 80px;}
-  .top_bar{height: 123px;}
+  .home, .open_nav{top: 21px;}
+  .compress, .home{right: 35px;}
+  .open_nav{left: 35px;}
+  .top_bar{height: 130px;}
   .grid_entry{font-size: 24px;}
+  .grid{top: 131px;}
+  .side_nav{padding-top: 140px;}
 }
