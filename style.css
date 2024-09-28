@@ -103,6 +103,12 @@ body{
   padding-left: 12px;
 }
 
+.dropdown_btn{
+  padding: 6px 8px 6px 8px;
+  text-align: center;
+}
+
+
 
 /* Style the side_nav links and the dropdown button */
 .side_nav a, .dropdown_btn{
@@ -119,24 +125,7 @@ body{
   white-space: nowrap;
   overflow: hidden;
 }
-.dropdown_btn{
-  padding: 6px 8px 6px 8px;
-  text-align: center;
-}
 
-
-/* Optional: Style the caret down icon */
-.fa-caret-down, .fa-caret-up{
-  padding-top: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: white;
-}
-
-.fa-house, .fa-bars, .fa-bars-staggered, .top_bar > h1{
-  color: #FFF;
-}
 
 /* Add an active class to the active dropdown button */
 .active{
@@ -183,9 +172,26 @@ body{
   .home, .open_nav{top: 21px;}
   .compress, .home{right: 35px;}
   .open_nav{left: 35px;}
-  
+
   .top_bar{height: 130px;}
   .grid_entry{font-size: 24px;}
   .grid{top: 131px;}
   .side_nav{padding-top: 140px;}
+  .side_nav a, .dropdown_btn{font-size: 80px;}
+}
+
+
+
+
+/* Optional: Style the caret down icon */
+.fa-caret-down, .fa-caret-up{
+  padding-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: white;
+}
+
+.fa-house, .fa-bars, .fa-bars-staggered, .top_bar > h1{
+  color: #FFF;
 }
