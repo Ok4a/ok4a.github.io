@@ -174,6 +174,9 @@ body{
 
 
 @media screen and (max-width: 900px){
-  .top_bar > h1{color: aqua}
+  .top_bar > h1{color: aqua; font-size: 50px;}
   .side_nav a, .dropdown_btn{font-size: 40px}
+  .compress, .home, .open_nav{font-size: 80px;}
+  .top_bar{height: 123px;}
+  .grid_entry{font-size: 24px;}
 }
