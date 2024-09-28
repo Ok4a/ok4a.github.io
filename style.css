@@ -80,10 +80,6 @@ body{
 }
 
 
-/* When you mouse over the navigation links, change their color */
-.side_nav a:hover, .dropdown_btn:hover{
-  color: #f1f1f1;
-}
 
 /* Position and style the close button (top right corner) */
 .side_nav .closebtn{
@@ -127,6 +123,13 @@ body{
 }
 
 
+/* When you mouse over the navigation links, change their color */
+.side_nav a:hover, .dropdown_btn:hover{
+  color: #f1f1f1;
+}
+
+
+
 /* Add an active class to the active dropdown button */
 .active{
   /* background-color: #262626; */
@@ -163,6 +166,22 @@ body{
 }
 
 
+/* Optional: Style the caret down icon */
+.fa-caret-down, .fa-caret-up{
+  padding-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: white;
+}
+
+.fa-house, .fa-bars, .fa-bars-staggered, .top_bar > h1{
+  color: #FFF;
+}
+
+
+
+
 
 @media screen and (max-width: 900px){
   .top_bar > h1{color: aqua; font-size: 50px;}
@@ -177,21 +196,9 @@ body{
   .grid_entry{font-size: 24px;}
   .grid{top: 131px;}
   .side_nav{padding-top: 140px;}
-  .side_nav a, .dropdown_btn{font-size: 80px;}
+  .side_nav a, .dropdown_btn{font-size: 50px;}
 }
 
 
 
 
-/* Optional: Style the caret down icon */
-.fa-caret-down, .fa-caret-up{
-  padding-top: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: white;
-}
-
-.fa-house, .fa-bars, .fa-bars-staggered, .top_bar > h1{
-  color: #FFF;
-}
