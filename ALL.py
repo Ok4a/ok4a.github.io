@@ -7,15 +7,15 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
     html_name: name of the html file without '.html', default csv_name
-    sort_order_keys: the order which the csv file will be sorted, indecated by dict keys, default sorts only by key 'name'
+    sort_order_keys: the order which the csv file will be sorted, indicated by dict keys, default sorts only by key 'name'
     int_sort: indicates which key should be sorted as int
-    in_exclude_keys: list of dict keys that include and exlude will look at, default ['series', 'type']
-    include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, will add all elements if empty, default set()
-    exclude: will not add element from csv file to the html file, if the element has the types from the list, in the dict key indecated by in_exclude_keys, default set()
+    in_exclude_keys: list of dict keys that include and exclude will look at, default ['series', 'type']
+    include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indicated by in_exclude_keys, will add all elements if empty, default set()
+    exclude: will not add element from csv file to the html file, if the element has the types from the list, in the dict key indicated by in_exclude_keys, default set()
     compress_series_entries: if set to True, compress entries with more than one entry in its series, default False
     displayed_entry_name_keys: a list of the columns the displayed name will be, a 'break' in the list will make a line break between the former and next key in the list
     needed_breaks:
-    download_image: bool that determins if the image probided should be download to local storage or it should use the url for the image data, default True
+    download_image: bool that determines if the image provided should be download to local storage or it should use the url for the image data, default True
     force_download: bool that force the function to download the image even if download image is False and if the image is already downloaded, default False
     '''
     
@@ -84,14 +84,14 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                 compress_id = ''
                 hide_class = ''
 
-                # check if the entry shall be included or exluded
+                # check if the entry shall be included or excluded
                 type_set = set(entry[key] for key in in_exclude_keys)
                 include_intersection_len = len(include.intersection(type_set))
                 exclude_intersection_len = len(exclude.intersection(type_set))
 
                 if (len(include) == 0 or include_intersection_len != 0) and exclude_intersection_len  == 0:
 
-                    # adds more display name info from column choosen by displayed_entry_name_keys
+                    # adds more display name info from column chosen by displayed_entry_name_keys
                     is_new_line = True
                     displayed_name = ''
                     for key in displayed_entry_name_keys:
@@ -182,7 +182,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                     hide_class = 'hide_entry'
 
 
-                    # adds more breaks to the displayed name if neeeded, for alignment of images
+                    # adds more breaks to the displayed name if needed, for alignment of images
                     break_count = displayed_name.count('<br>')
                     while needed_breaks > break_count:
                         displayed_name += '<br>‎ '
@@ -197,7 +197,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         # replaces space with underscore in the image name
                         img_path = entry['name'].replace(' ', '_')
 
-                        # removes all intances from element of remove_str_list from img_path
+                        # removes all instances from element of remove_str_list from img_path
                         
                         for string in remove_str_list:
                             img_path = img_path.replace(string, '') 
@@ -232,7 +232,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 def getAttributes(csv_name: str, dict_key: str) -> set:
     '''
     csv_name: the name of the csv file without .csv
-    dict_key: wich column of the csv file that will be looked at
+    dict_key: which column of the csv file that will be looked at
     '''
     with open('CSV/' + csv_name + '.csv') as csv_file:
         csv_dict = csv.DictReader(csv_file, delimiter = ';')
@@ -250,7 +250,7 @@ def getAttributes(csv_name: str, dict_key: str) -> set:
 def getAttributeCount(csv_name: str, dict_key: str) -> dict:
     '''
     csv_name: the name of the csv file without .csv
-    dict_key: wich column of the csv file that will be looked at
+    dict_key: which column of the csv file that will be looked at
     '''
     with open('CSV/' + csv_name + '.csv') as csv_file:
         csv_dict = csv.DictReader(csv_file, delimiter = ';')
@@ -272,8 +272,8 @@ writeHtml('Brætspil', csv_file, needed_breaks = 1, compress_series_entries = Tr
 #writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 1)
 
 # makes a html file for each boardgame series
-boargame_series = getAttributes(csv_file, 'series')[0]
-for series in boargame_series:
+boardgame_series = getAttributes(csv_file, 'series')[0]
+for series in boardgame_series:
     writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 1, compress_series_entries = True, start_compressed = False)
 
 
