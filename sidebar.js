@@ -19,6 +19,7 @@ document.write('\
           <div class = "dropdown_container">\
             <a href = "Comic_books.html">Comic</a>\
             <a href = "Manga_books.html">Manga</a>\
+            <a href = "Non-fiction_books.html">Non-fiction</a>\
             <a href = "Roman_books.html">Roman</a>\
           </div>\
         </div>\

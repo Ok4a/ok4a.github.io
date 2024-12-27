@@ -269,7 +269,7 @@ csv_file = 'boardgame'
 writeHtml('Brætspil', csv_file, needed_breaks = 1, compress_series_entries = True)
 
 # makes a html file for only base games
-writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 1)
+#writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 1)
 
 # makes a html file for each boardgame series
 boargame_series = getAttributes(csv_file, 'series')[0]
