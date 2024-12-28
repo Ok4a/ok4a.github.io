@@ -51,9 +51,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     # gets the number of entires om each series
     counts_dict = getAttributeCount(csv_name, 'series')
 
-    if csv_name == 'boardgame':
-        number_of_entries_in_series = getAttributeCount(csv_name, 'base_game')
-
     # opens the csv file
     with open('CSV/' + csv_name + '.csv', mode = 'r') as csv_file:
 
@@ -108,11 +105,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     # finds the last index of ':' in display_name, if it exist it add a line break after.
                     name_list = splitEntryAddBetween(name_list, ':', str2add = '<br>', before = False)
 
-                    # the number of entries in the series of the current entry
-                    if csv_name != 'boardgame':
-                        number_of_entries_in_series = counts_dict[entry['series']]
-    
-
                     # how many line breaks in the displayed name
                     break_count = len(indexContainingSubstring(name_list, '<br>'))
 
@@ -122,23 +114,23 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         first_break_list_index = indexContainingSubstring(name_list, '<br>')[0]
                         name_list.insert(first_break_list_index, '<br>')
                         # adds the number of the series if there is more than one the entry in it
-                        if number_of_entries_in_series != 1 and entry['series'] != 'All You Need is Kill':
+                        if counts_dict[entry['series']] != 1 and entry['series'] != 'All You Need is Kill':
                             
                             name_list.insert(first_break_list_index + 1, '#' + entry['series_number'])
 
                     
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
-                    if number_of_entries_in_series != 1 and compress_series_entries:
+                    if counts_dict[entry['series']] != 1 and compress_series_entries:
                         if 'series_number' in entry.keys():
                             if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
 
 
                                 if entry['series'] != 'All You Need is Kill' and len(name_list[-4]) in [2, 6, 7]:
-                                    name_list.insert(-3, '- ' + str(number_of_entries_in_series))
+                                    name_list.insert(-3, '- ' + str(counts_dict[entry['series']]))
 
                                 elif entry['series'] != 'All You Need is Kill':
                                     number_index = name_list[-4].rfind('1')
-                                    name_list[-4] = name_list[-4][:(number_index + 1)] + '- ' + str(number_of_entries_in_series)
+                                    name_list[-4] = name_list[-4][:(number_index + 1)] + '- ' + str(counts_dict[entry['series']])
                                 
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
@@ -152,12 +144,13 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         # boardgame compression
                         elif 'base_game' in entry.keys():
                             if len(entry['base_game']) != 0:
-                                if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series[entry['name']] != 0:
+                                number_of_entries_in_series = getAttributeCount(csv_name, 'base_game')[entry['name']]
+                                if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series != 0:
 
                                     name_list.append('<br>')
-                                    name_list.append('Plus ' + str(number_of_entries_in_series[entry['name']] - 1) + ' udvidelse')
+                                    name_list.append('Plus ' + str(number_of_entries_in_series - 1) + ' udvidelse')
 
-                                    if number_of_entries_in_series[entry['name']] > 2:
+                                    if number_of_entries_in_series > 2:
                                         name_list[-1] += 'r'
                                         
                                     compress_id = 'name = compressed'
