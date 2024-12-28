@@ -164,7 +164,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     # adds more breaks to the displayed name if needed, for alignment of images
                     break_count_list = len(indexContainingSubstring(name_list, '<br>'))
                     while needed_breaks > break_count_list:
-                        name_list.append('<br>‎ ')
+                        name_list.append('<br>‎')
                         break_count_list += 1
 
                     # should it download the image or not
