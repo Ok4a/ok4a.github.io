@@ -280,9 +280,6 @@ csv_file = 'boardgame'
 # makes main boardgame html file
 writeHtml('Brætspil', csv_file, needed_breaks = 2, compress_series_entries = True)
 
-# makes a html file for only base games
-#writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 1)
-
 # makes a html file for each boardgame series
 boardgame_series = getAttributes(csv_file, 'series')[0]
 for series in boardgame_series:
@@ -323,7 +320,6 @@ csv_file = 'lego'
 
 # makes main html file for LEGO
 writeHtml('LEGO', csv_file, displayed_entry_name_keys = ['name', 'break', 'number'])
-
 
 # makes a html file for each LEGO series
 lego_series = getAttributes(csv_file, 'series')[0]
