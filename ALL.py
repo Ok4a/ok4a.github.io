@@ -1,6 +1,6 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
-# v 3.7.0 
+# v 3.7.1
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -83,8 +83,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                 compress_id = ''
                 hide_class = ''
 
-                
-
                 # check if the entry shall be included or excluded
                 type_set = set(entry[key] for key in in_exclude_keys)
                 include_intersection_len = len(include.intersection(type_set))
@@ -95,27 +93,21 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     name_list = []
 
                     # adds more display name info from column chosen by displayed_entry_name_keys
-                    is_new_line = True
+
                     for key in displayed_entry_name_keys:
                         # should it make a line break in the displayed name
                         if key == 'break':
                             name_list.append('<br>')
-                            is_new_line = True
 
                         else:
-                            # is it starting a new line
-                            if is_new_line:
-                                name_list.append(entry[key])
-                                is_new_line = False
+                            name_list.append(entry[key]+ ' ')
 
-                            else:
-                                name_list.append(' ' + entry[key])
 
                     # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
-                    name_list = addBreak2List(name_list, 'vol.')
+                    name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
 
                     # finds the last index of ':' in display_name, if it exist it add a line break after.
-                    name_list = addBreak2List(name_list, ':', before = False)
+                    name_list = splitEntryAddBetween(name_list, ':', str2add = '<br>', before = False)
 
                     # the number of entries in the series of the current entry
                     if csv_name != 'boardgame':
@@ -136,10 +128,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                             
                             name_list.insert(first_break_list_index + 1, '#' + entry['series_number'])
 
-
-                        
-                        
-
                     
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
                     if number_of_entries_in_series != 1 and compress_series_entries:
@@ -148,11 +136,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
 
                                 if entry['series'] != 'All You Need is Kill' and len(name_list[-4]) in [2, 6, 7]:
-                                    name_list.insert(-3, ' - ' + str(number_of_entries_in_series))
+                                    name_list.insert(-3, '- ' + str(number_of_entries_in_series))
 
                                 elif entry['series'] != 'All You Need is Kill':
                                     number_index = name_list[-4].rfind('1')
-                                    name_list[-4] = name_list[-4][:(number_index + 1)] + ' - ' + str(number_of_entries_in_series)
+                                    name_list[-4] = name_list[-4][:(number_index + 1)] + '- ' + str(number_of_entries_in_series)
                                 
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
@@ -216,7 +204,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     else:
                         img_path = entry['image']
 
-                    print(name_list)
+                    #print(name_list)
                     displayed_name = "".join(name_list)
 
                     # replaces space with underscore for the html file
@@ -238,7 +226,7 @@ def indexContainingSubstring(the_list: list, substring: str):
               index_list.append(int(i))
     return index_list
 
-def addBreak2List(the_list: list, substring: str, before: bool = True):
+def splitEntryAddBetween(the_list: list, substring: str, str2add: str = None, before: bool = True):
     index_list = indexContainingSubstring(the_list, substring)
     
     substringLength = len(substring)
@@ -255,7 +243,9 @@ def addBreak2List(the_list: list, substring: str, before: bool = True):
 
             the_list.insert(list_index + 1, the_list[list_index][(index+substringLength+1):])
             the_list[list_index] = the_list[list_index][:(index+substringLength)]
-        the_list.insert(list_index + 1, '<br>')
+
+        if str2add != None:
+            the_list.insert(list_index + 1, '<br>') 
 
 
     return the_list
