@@ -221,12 +221,12 @@ def indexContainingSubstring(the_list: list, substring: str) -> list:
               index_list.append(int(i))
     return index_list
 
-def splitEntryAddBetween(the_list: list, substring: str, str2add: str = None, before: bool = True) -> list:
+def splitEntryAddBetween(the_list: list, substring: str, str2add: str = None, before: bool = True, entry_index: int = 0) -> list:
     index_list = indexContainingSubstring(the_list, substring)
     
     substringLength = len(substring)
     if index_list != []:
-        list_index = index_list[0]
+        list_index = index_list[entry_index]
         if before:
             index = the_list[list_index].find(substring)
 
