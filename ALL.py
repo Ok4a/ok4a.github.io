@@ -159,7 +159,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                             else: # skip other entries in a series
                                 
                                 compress_id = 'name = noncompressed'
-                                hide_class = 'hide_entry'
+                                hide_class = ' hide_entry'
                                 is_first_entry = True
 
                         # boardgame compression
@@ -179,7 +179,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                 else:
                                     is_first_entry = True
                                     compress_id = 'name = noncompressed'
-                                    hide_class = 'hide_entry'
+                                    hide_class = ' hide_entry'
 
 
                     # adds more breaks to the displayed name if needed, for alignment of images
@@ -221,7 +221,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
 
                     # writes the element from the csv file
-                    html_file.write(f'\t\t<div class = "grid_entry {hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
+                    html_file.write(f'\t\t<div class = "grid_entry{hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
             html_file.write('\t</div>\n</body>')
