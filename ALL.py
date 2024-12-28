@@ -97,7 +97,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         else:
                             name_list.append(entry[key]+ ' ')
 
-
+                    print(name_list)
                     # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
                     name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
 
@@ -116,7 +116,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
                         # adds the number of the series if there is more than one the entry in it
                         if counts_dict[entry['series']] != 1 and entry['series'] != 'All You Need is Kill':
-                            name_list.insert(first_break_list_index + 1, '#' + entry['series_number'])
+                            name_list.insert(first_break_list_index + 1, '#' + entry['series_number'] + ' ')
 
                     
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
