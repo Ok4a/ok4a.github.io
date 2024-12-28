@@ -93,7 +93,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     name_list = []
 
                     # adds more display name info from column chosen by displayed_entry_name_keys
-
                     for key in displayed_entry_name_keys:
                         # should it make a line break in the displayed name
                         if key == 'break':
@@ -219,14 +218,14 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             print(page_name)
 
 
-def indexContainingSubstring(the_list: list, substring: str):
+def indexContainingSubstring(the_list: list, substring: str) -> list:
     index_list = []
     for i, s in enumerate(the_list):
         if substring in s:
               index_list.append(int(i))
     return index_list
 
-def splitEntryAddBetween(the_list: list, substring: str, str2add: str = None, before: bool = True):
+def splitEntryAddBetween(the_list: list, substring: str, str2add: str = None, before: bool = True) -> list:
     index_list = indexContainingSubstring(the_list, substring)
     
     substringLength = len(substring)
