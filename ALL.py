@@ -1,7 +1,7 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
 # v 3.6.4
-def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort = [], in_exclude_keys: list = ['series', 'type'], include: set = set(), 
+def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
     page_name: name of the page
@@ -66,7 +66,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             
             # sorts the csv file by column, order base on sort_order_list
             for key in sort_order_keys:
-                if key in int_sort or key == 'series_number': # sort by int
+                if key in int_sort: # sort by int
                     csv_dict = sorted(csv_dict, key = lambda x: int(x[key]))
                 else:
                     csv_dict = sorted(csv_dict, key = lambda x: x[key])
@@ -153,11 +153,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                 elif displayed_name.count('#') != 0:
                                     number_index = displayed_name.find('#')
                                     displayed_name = displayed_name[:(number_index + 2)] + ' - ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
+
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
                                 i -= 1 
                             else: # skip other entries in a series
-                                
                                 compress_id = 'name = noncompressed'
                                 hide_class = ' hide_entry'
                                 is_first_entry = True
@@ -165,7 +165,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         # boardgame compression
                         elif 'base_game' in entry.keys():
                             if len(entry['base_game']) != 0:
-
                                 if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series[entry['name']] != 0:
 
                                     displayed_name += '<br>Plus ' + str(number_of_entries_in_series[entry['name']] - 1) + ' udvidelse'
@@ -198,7 +197,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         img_path = entry['name'].replace(' ', '_')
 
                         # removes all instances from element of remove_str_list from img_path
-                        
                         for string in remove_str_list:
                             img_path = img_path.replace(string, '') 
 
@@ -221,7 +219,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
 
                     # writes the element from the csv file
-                    html_file.write(f'\t\t<div class = "grid_entry{hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
+                    html_file.write(f'\t\t<div class = "grid_entry{hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}" title = "{entry["name"].replace("<br>", "") }">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
             # ends html file        
             html_file.write('\t</div>\n</body>')
