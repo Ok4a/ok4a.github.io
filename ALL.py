@@ -32,7 +32,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     
 
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
-    side_bar_string = '\t<script>\n\t\t' + compressed_entries + '\n\t\t'  + uncompress_on_load + '\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
+    side_bar_string = '\t<script>\n\t\t' + compressed_entries + '\n\t\t' + uncompress_on_load + '\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
 
     if html_name == None:
         html_name = csv_name
@@ -40,7 +40,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
         html_name += '_' + csv_name
 
 
-    remove_str_list = ['<br>', ':', '?', ',', '!', "'", '.', '-']
+    remove_str_list = {'<br>', ':', '?', ',', '!', "'", '.', '-'}
 
     # replaces space with underscore for the html file
     html_name = html_name.replace(' ', '_')
@@ -50,7 +50,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
         os.makedirs('html_lists')
 
     # gets the number of entires om each series
-    counts_dict = getAttributeCount(csv_name, "series")
+    counts_dict = getAttributeCount(csv_name, 'series')
 
     if csv_name == 'boardgame':
         number_of_entries_in_series = getAttributeCount(csv_name, 'base_game')
@@ -66,7 +66,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             
             # sorts the csv file by column, order base on sort_order_list
             for key in sort_order_keys:
-                if key in int_sort or key == "series_number": # sort by int
+                if key in int_sort or key == 'series_number': # sort by int
                     csv_dict = sorted(csv_dict, key = lambda x: int(x[key]))
                 else:
                     csv_dict = sorted(csv_dict, key = lambda x: x[key])
@@ -75,7 +75,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
             # writes first lines of html file
             html_file.write(f'{start_string}<title>{page_name}</title>\n\n<body>\n{side_bar_string}\t<div class = "top_bar">\n\t\t<h1>{page_name}</h1>\n\t</div>\n\t<div class = "grid">\n')
             i = 0
-            first_entry_stuff = True
+            is_first_entry = True
 
             # for entry in csv_dict:
             while i < len(csv_dict):
@@ -145,7 +145,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
                     if number_of_entries_in_series != 1 and compress_series_entries:
                         if 'series_number' in entry.keys():
-                            if int(entry['series_number']) == 1 and first_entry_stuff: # if the entry uses 'vol' as the series counter
+                            if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
                                 if vol_index != -1: # if it is the first in its series
                                     last_break_index = displayed_name.rfind('<br>')
                                     displayed_name = displayed_name[:(vol_index + 9)] + ' - ' + str(number_of_entries_in_series) + displayed_name[last_break_index:]
@@ -154,19 +154,19 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                     number_index = displayed_name.find('#')
                                     displayed_name = displayed_name[:(number_index + 2)] + ' - ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
                                 compress_id = 'name = "compressed"'
-                                first_entry_stuff = False
+                                is_first_entry = False
                                 i -= 1 
                             else: # skip other entries in a series
                                 
                                 compress_id = 'name = noncompressed'
                                 hide_class = 'hide_entry'
-                                first_entry_stuff = True
+                                is_first_entry = True
 
                         # boardgame compression
                         elif 'base_game' in entry.keys():
                             if len(entry['base_game']) != 0:
 
-                                if entry['type'] == 'base' and first_entry_stuff and number_of_entries_in_series[entry['name']] != 0:
+                                if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series[entry['name']] != 0:
 
                                     displayed_name += '<br>Plus ' + str(number_of_entries_in_series[entry['name']] - 1) + ' udvidelse'
 
@@ -174,10 +174,10 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                         displayed_name += 'r'
                                         
                                     compress_id = 'name = compressed'
-                                    first_entry_stuff = False
+                                    is_first_entry = False
                                     i -= 1
                                 else:
-                                    first_entry_stuff = True
+                                    is_first_entry = True
                                     compress_id = 'name = noncompressed'
                                     hide_class = 'hide_entry'
 
