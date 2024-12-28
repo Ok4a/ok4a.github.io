@@ -97,12 +97,18 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                         else:
                             name_list.append(entry[key]+ ' ')
 
-                    
-                    # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
-                    name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
+                    test = indexContainingSubstring(name_list, ':')
 
-                    # finds the last index of ':' in display_name, if it exist it add a line break after.
-                    name_list = splitEntryAddBetween(name_list, ':', str2add = '<br>', before = False)
+                    if test == []:
+                        # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
+                        name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
+
+                    else:
+                        # finds the last index of ':' in display_name, if it exist it add a line break after.
+                        name_list = splitEntryAddBetween(name_list, ':', str2add = '<br>', before = False)
+
+                    
+                    
 
                     # how many line breaks in the displayed name
                     break_count = len(indexContainingSubstring(name_list, '<br>'))
@@ -124,12 +130,8 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                         if 'series_number' in entry.keys():
                             if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
 
-                                if entry['series'] != 'All You Need is Kill' and len(name_list[-4]) in [3, 6, 7]:
+                                if entry['series'] != 'All You Need is Kill':
                                     name_list.insert(-3, '- ' + str(counts_dict[entry['series']]))
-
-                                elif entry['series'] != 'All You Need is Kill':
-                                    number_index = name_list[-4].rfind('1')
-                                    name_list[-4] = name_list[-4][:(number_index + 1)] + ' - ' + str(counts_dict[entry['series']])
                                 
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
