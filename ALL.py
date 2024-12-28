@@ -119,7 +119,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     # adds the number the current entry is in its series, used mainly for books
                     if break_count == 1 and 'series_number' in entry.keys():
                         # index for the first html line break
-                        #first_break_index = displayed_name.find('<br>')
                         first_break_list_index = indexContainingSubstring(name_list, '<br>')[0]
                         name_list.insert(first_break_list_index, '<br>')
                         # adds the number of the series if there is more than one the entry in it
@@ -288,7 +287,7 @@ def getAttributeCount(csv_name: str, dict_key: str) -> dict:
 csv_file = 'boardgame'
 
 # makes main boardgame html file
-writeHtml('Brætspil', csv_file, needed_breaks = 1, compress_series_entries = True)
+writeHtml('Brætspil', csv_file, needed_breaks = 2, compress_series_entries = True)
 
 # makes a html file for only base games
 #writeHtml('Grund Spil', csv_file, html_name = 'base', include = {'base'}, needed_breaks = 1)
@@ -296,7 +295,7 @@ writeHtml('Brætspil', csv_file, needed_breaks = 1, compress_series_entries = Tr
 # makes a html file for each boardgame series
 boardgame_series = getAttributes(csv_file, 'series')[0]
 for series in boardgame_series:
-    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 1, compress_series_entries = True, start_compressed = False)
+    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 2, compress_series_entries = True, start_compressed = False)
 
 
 # Books
