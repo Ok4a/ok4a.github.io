@@ -129,7 +129,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
 
                                 elif entry['series'] != 'All You Need is Kill':
                                     number_index = name_list[-4].rfind('1')
-                                    name_list[-4] = name_list[-4][:(number_index + 1)] + '- ' + str(counts_dict[entry['series']])
+                                    name_list[-4] = name_list[-4][:(number_index + 1)] + ' - ' + str(counts_dict[entry['series']])
                                 
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
