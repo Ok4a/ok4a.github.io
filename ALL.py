@@ -213,7 +213,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
 def indexContainingSubstring(the_list: list, substring: str) -> list:
     '''
     the_list: a list of strings
-    substring: string to find the entries of the_list
+    substring: a string to find the entries of the_list
     '''
     index_list = []
     for i, s in enumerate(the_list):
@@ -230,14 +230,14 @@ def splitEntryAddBetween(the_list: list, substring: str, str2add: str = None, be
         if before:
             index = the_list[list_index].find(substring)
 
-            the_list.insert(list_index + 1, the_list[list_index][(index):])
-            the_list[list_index] = the_list[list_index][:(index-1)]
+            the_list.insert(list_index + 1, the_list[list_index][index:])
+            the_list[list_index] = the_list[list_index][:(index - 1)]
 
         else:
             index = the_list[list_index].rfind(substring)
 
-            the_list.insert(list_index + 1, the_list[list_index][(index+substringLength+1):])
-            the_list[list_index] = the_list[list_index][:(index+substringLength)]
+            the_list.insert(list_index + 1, the_list[list_index][(index + substringLength + 1):])
+            the_list[list_index] = the_list[list_index][:(index + substringLength)]
 
         if str2add != None:
             the_list.insert(list_index + 1, '<br>') 
