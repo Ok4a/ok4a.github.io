@@ -1,6 +1,7 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
-# v 3.6.4
+import re
+# v 3.7.0
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -38,7 +39,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
         html_name = csv_name
     else:
         html_name += '_' + csv_name
-
 
     remove_str_list = {'<br>', ':', '?', ',', '!', "'", '.', '-'}
 
@@ -84,6 +84,8 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                 compress_id = ''
                 hide_class = ''
 
+                
+
                 # check if the entry shall be included or excluded
                 type_set = set(entry[key] for key in in_exclude_keys)
                 include_intersection_len = len(include.intersection(type_set))
@@ -91,35 +93,30 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
                 if (len(include) == 0 or include_intersection_len != 0) and exclude_intersection_len  == 0:
 
+                    name_list = []
+
                     # adds more display name info from column chosen by displayed_entry_name_keys
                     is_new_line = True
-                    displayed_name = ''
                     for key in displayed_entry_name_keys:
                         # should it make a line break in the displayed name
                         if key == 'break':
-                            displayed_name += '<br>'
+                            name_list.append('<br>')
                             is_new_line = True
 
                         else:
                             # is it starting a new line
                             if is_new_line:
-                                displayed_name += entry[key]
+                                name_list.append(entry[key])
                                 is_new_line = False
 
                             else:
-                                displayed_name += ' ' + entry[key]
-
+                                name_list.append(' ' + entry[key])
 
                     # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
-                    vol_index = displayed_name.find('vol.')
-                    if vol_index != -1:
-                        displayed_name = displayed_name[:(vol_index - 1)] + '<br>' + displayed_name[vol_index:]
+                    name_list = addBreak2List(name_list, 'vol.')
 
                     # finds the last index of ':' in display_name, if it exist it add a line break after.
-                    colon_index = displayed_name.rfind(':')
-                    if colon_index != -1:
-                        displayed_name = displayed_name[:(colon_index + 1)] + '<br>' + displayed_name[(colon_index + 2):]
-
+                    name_list = addBreak2List(name_list, ':', before = False)
 
                     # the number of entries in the series of the current entry
                     if csv_name != 'boardgame':
@@ -127,36 +124,41 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
     
 
                     # how many line breaks in the displayed name
-                    break_count = displayed_name.count('<br>')
+                    break_count = len(indexContainingSubstring(name_list, '<br>'))
 
                     # adds the number the current entry is in its series, used mainly for books
                     if break_count == 1 and 'series_number' in entry.keys():
                         # index for the first html line break
-                        first_break_index = displayed_name.find('<br>')
-
+                        #first_break_index = displayed_name.find('<br>')
+                        first_break_list_index = indexContainingSubstring(name_list, '<br>')[0]
+                        name_list.insert(first_break_list_index, '<br>')
                         # adds the number of the series if there is more than one the entry in it
                         if number_of_entries_in_series != 1 and entry['series'] != 'All You Need is Kill':
-                            displayed_name = displayed_name[:first_break_index] + '<br>#' + entry['series_number'] + displayed_name[first_break_index:]
+                            
+                            name_list.insert(first_break_list_index + 1, '#' + entry['series_number'])
+
+
                         
-                        else: # adds line break if the entry is the only in its series
-                            displayed_name = displayed_name[:first_break_index] + '<br>' + displayed_name[first_break_index:]
+                        
 
                     
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
                     if number_of_entries_in_series != 1 and compress_series_entries:
                         if 'series_number' in entry.keys():
                             if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
-                                if vol_index != -1: # if it is the first in its series
-                                    last_break_index = displayed_name.rfind('<br>')
-                                    displayed_name = displayed_name[:(vol_index + 9)] + ' - ' + str(number_of_entries_in_series) + displayed_name[last_break_index:]
-        
-                                elif displayed_name.count('#') != 0:
-                                    number_index = displayed_name.find('#')
-                                    displayed_name = displayed_name[:(number_index + 2)] + ' - ' + str(number_of_entries_in_series) + displayed_name[(number_index+2):]
 
+
+                                if entry['series'] != 'All You Need is Kill' and len(name_list[-4]) in [2, 6, 7]:
+                                    name_list.insert(-3, ' - ' + str(number_of_entries_in_series))
+
+                                elif entry['series'] != 'All You Need is Kill':
+                                    number_index = name_list[-4].rfind('1')
+                                    name_list[-4] = name_list[-4][:(number_index + 1)] + ' - ' + str(number_of_entries_in_series)
+                                
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
                                 i -= 1 
+
                             else: # skip other entries in a series
                                 compress_id = 'name = noncompressed'
                                 hide_class = ' hide_entry'
@@ -167,10 +169,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                             if len(entry['base_game']) != 0:
                                 if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series[entry['name']] != 0:
 
-                                    displayed_name += '<br>Plus ' + str(number_of_entries_in_series[entry['name']] - 1) + ' udvidelse'
+                                    name_list.append('<br>')
+                                    name_list.append('Plus ' + str(number_of_entries_in_series[entry['name']] - 1) + ' udvidelse')
 
                                     if number_of_entries_in_series[entry['name']] > 2:
-                                        displayed_name += 'r'
+                                        name_list[-1] += 'r'
                                         
                                     compress_id = 'name = compressed'
                                     is_first_entry = False
@@ -182,15 +185,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
 
                     # adds more breaks to the displayed name if needed, for alignment of images
-                    break_count = displayed_name.count('<br>')
-                    while needed_breaks > break_count:
-                        displayed_name += '<br>‎ '
-                        break_count = displayed_name.count('<br>')
-                        
+                    break_count_list = len(indexContainingSubstring(name_list, '<br>'))
+                    while needed_breaks > break_count_list:
+                        name_list.append('<br>‎ ')
+                        break_count_list += 1
 
-                    # replaces space with underscore for the html file
-                    sub_list_ref = entry['series'].replace(' ', '_') + '_' + csv_name
-
+                    
                     # should it download the image or not
                     if download_image or force_download:
                         # replaces space with underscore in the image name
@@ -217,6 +217,11 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     else:
                         img_path = entry['image']
 
+                    print(name_list)
+                    displayed_name = "".join(name_list)
+
+                    # replaces space with underscore for the html file
+                    sub_list_ref = entry['series'].replace(' ', '_') + '_' + csv_name
 
                     # writes the element from the csv file
                     html_file.write(f'\t\t<div class = "grid_entry{hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}" title = "{entry["name"].replace("<br>", "") }">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
@@ -226,6 +231,37 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
             print(page_name)
 
+
+def indexContainingSubstring(the_list: list, substring: str):
+    index_list = []
+    for i, s in enumerate(the_list):
+        if substring in s:
+              index_list.append(int(i))
+    return index_list
+
+def addBreak2List(the_list: list, substring: str, before: bool = True):
+    index_list = indexContainingSubstring(the_list, substring)
+    
+    substringLength = len(substring)
+    if index_list != []:
+        list_index = index_list[0]
+        if before:
+            index = the_list[list_index].find(substring)
+
+            the_list.insert(list_index + 1, the_list[list_index][(index):])
+            the_list[list_index] = the_list[list_index][:(index-1)]
+
+        else:
+            index = the_list[list_index].rfind(substring)
+
+            the_list.insert(list_index + 1, the_list[list_index][(index+substringLength+1):])
+            the_list[list_index] = the_list[list_index][:(index+substringLength)]
+        the_list.insert(list_index + 1, '<br>')
+
+
+    return the_list
+
+   
 
 def getAttributes(csv_name: str, dict_key: str) -> set:
     '''
@@ -303,12 +339,13 @@ switch_series = getAttributes(csv_file, 'series')[0]
 for series in switch_series:
     writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 1)
 
-
+ 
 # LEGO
 csv_file = 'lego'
 
 # makes main html file for LEGO
 writeHtml('LEGO', csv_file, displayed_entry_name_keys = ['name', 'break', 'number'])
+
 
 # makes a html file for each LEGO series
 lego_series = getAttributes(csv_file, 'series')[0]
