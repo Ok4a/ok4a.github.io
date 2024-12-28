@@ -87,14 +87,13 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
                 if (len(include) == 0 or include_intersection_len != 0) and exclude_intersection_len  == 0:
 
-                    name_list = []
 
                     # adds more display name info from column chosen by displayed_entry_name_keys
+                    name_list = []
                     for key in displayed_entry_name_keys:
                         # should it make a line break in the displayed name
                         if key == 'break':
                             name_list.append('<br>')
-
                         else:
                             name_list.append(entry[key]+ ' ')
 
@@ -110,12 +109,13 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
 
                     # adds the number the current entry is in its series, used mainly for books
                     if break_count == 1 and 'series_number' in entry.keys():
+
                         # index for the first html line break
                         first_break_list_index = indexContainingSubstring(name_list, '<br>')[0]
                         name_list.insert(first_break_list_index, '<br>')
+
                         # adds the number of the series if there is more than one the entry in it
                         if counts_dict[entry['series']] != 1 and entry['series'] != 'All You Need is Kill':
-                            
                             name_list.insert(first_break_list_index + 1, '#' + entry['series_number'])
 
                     
@@ -123,7 +123,6 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                     if counts_dict[entry['series']] != 1 and compress_series_entries:
                         if 'series_number' in entry.keys():
                             if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
-
 
                                 if entry['series'] != 'All You Need is Kill' and len(name_list[-4]) in [2, 6, 7]:
                                     name_list.insert(-3, '- ' + str(counts_dict[entry['series']]))
@@ -145,6 +144,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         elif 'base_game' in entry.keys():
                             if len(entry['base_game']) != 0:
                                 number_of_entries_in_series = getAttributeCount(csv_name, 'base_game')[entry['name']]
+
                                 if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series != 0:
 
                                     name_list.append('<br>')
@@ -161,14 +161,12 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                                     compress_id = 'name = noncompressed'
                                     hide_class = ' hide_entry'
 
-
                     # adds more breaks to the displayed name if needed, for alignment of images
                     break_count_list = len(indexContainingSubstring(name_list, '<br>'))
                     while needed_breaks > break_count_list:
                         name_list.append('<br>‎ ')
                         break_count_list += 1
 
-                    
                     # should it download the image or not
                     if download_image or force_download:
                         # replaces space with underscore in the image name
@@ -295,7 +293,7 @@ for series in boardgame_series:
 csv_file = 'books'
 
 # make main book html file
-writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Math', 'Digt'}, compress_series_entries = True)
+writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Digt'}, compress_series_entries = True)
 
 # makes html file for each type of book
 book_type = getAttributes(csv_file, 'type')[0]
