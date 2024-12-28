@@ -1,6 +1,6 @@
 import csv, requests, pathlib, os
 from collections import defaultdict
-# v 3.7.1
+# v 3.7.2
 def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -97,7 +97,7 @@ def writeHtml(page_name: str, csv_name: str,  html_name: str = None, sort_order_
                         else:
                             name_list.append(entry[key]+ ' ')
 
-                    print(name_list)
+                    
                     # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
                     name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
 
