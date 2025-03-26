@@ -1,6 +1,7 @@
-import csv, requests, pathlib, os
+import requests, pathlib, os
 from collections import defaultdict
-# v 3.7.3
+from csv import DictReader
+# v 3.7.4
 def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -18,26 +19,14 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
     download_image: bool that determines if the image provided should be download to local storage or it should use the url for the image data, default True
     force_download: bool that force the function to download the image even if download image is False and if the image is already downloaded, default False
     '''
-    
-
-    if start_compressed:
-        uncompress_on_load = 'uncompress_on_load = false;'
-    else:
-        uncompress_on_load = 'uncompress_on_load = true;'
-
-    if compress_series_entries:
-        compressed_entries = 'compressed_entries = true;'
-    else:
-        compressed_entries = 'compressed_entries = false;'
-    
 
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
-    side_bar_string = '\t<script>\n\t\t' + compressed_entries + '\n\t\t' + uncompress_on_load + '\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
+    side_bar_string = f'\t<script>\n\t\t compressed_entries = {str(compress_series_entries).lower()};\n\t\t uncompress_on_load = {str(not start_compressed).lower()};\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
 
     if html_name == None:
         html_name = csv_name
     else:
-        html_name += '_' + csv_name
+        html_name += f'_{csv_name}'
 
     remove_str_list = {'<br>', ':', '?', ',', '!', "'", '.', '-'}
 
@@ -52,13 +41,13 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
     counts_dict = getAttributeCount(csv_name, 'series')
 
     # opens the csv file
-    with open('CSV/' + csv_name + '.csv', mode = 'r') as csv_file:
+    with open(f'CSV/{csv_name}.csv', mode = 'r') as csv_file:
 
         # opens/creates the html file
-        with open('html_lists/' + html_name + '.html', mode = 'w', encoding = 'utf-8') as html_file:
+        with open(f'html_lists/{html_name}.html', mode = 'w', encoding = 'utf-8') as html_file:
             
             # reads the csv as a dict with keys from first row (header)
-            csv_dict = csv.DictReader(csv_file, delimiter = ';')
+            csv_dict = DictReader(csv_file, delimiter = ';')
             
             # sorts the csv file by column, order base on sort_order_list
             for key in sort_order_keys:
@@ -95,7 +84,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                         if key == 'break':
                             name_list.append('<br>')
                         else:
-                            name_list.append(entry[key]+ ' ')
+                            name_list.append(f'{entry[key]} ')
 
                     test = indexContainingSubstring(name_list, ':')
 
@@ -122,7 +111,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
 
                         # adds the number of the series if there is more than one the entry in it
                         if counts_dict[entry['series']] != 1 and entry['series'] != 'All You Need is Kill':
-                            name_list.insert(first_break_list_index + 1, '#' + entry['series_number'] + ' ')
+                            name_list.insert(first_break_list_index + 1, f'#{entry["series_number"]} ')
 
                     
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
@@ -131,7 +120,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                             if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
 
                                 if entry['series'] != 'All You Need is Kill':
-                                    name_list.insert(-3, '- ' + str(counts_dict[entry['series']]))
+                                    name_list.insert(-3, f'- {str(counts_dict[entry["series"]])}')
                                 
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
@@ -150,7 +139,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                                 if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series != 0:
 
                                     name_list.append('<br>')
-                                    name_list.append('Plus ' + str(number_of_entries_in_series - 1) + ' udvidelse')
+                                    name_list.append(f'Plus {str(number_of_entries_in_series - 1)} udvidelse')
 
                                     if number_of_entries_in_series > 2:
                                         name_list[-1] += 'r'
@@ -178,11 +167,11 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                         for string in remove_str_list:
                             img_path = img_path.replace(string, '') 
 
-                        img_path = 'list_img/' + csv_name + '/' + img_path + '_' + entry['type'] + '.jpg'
+                        img_path = f'list_img/{csv_name}/{img_path}_{entry["type"]}.jpg'
 
                         # if the folder for the images does not exits, creates it
-                        if not os.path.exists('list_img/'+ csv_name):
-                            os.makedirs('list_img/'+ csv_name)                    
+                        if not os.path.exists(f'list_img/{csv_name}'):
+                            os.makedirs(f'list_img/{csv_name}')                    
 
                         # checks if the image is already downloaded, if not downloads it
                         if  not pathlib.Path(img_path).is_file() or force_download:
@@ -199,7 +188,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                     displayed_name = "".join(name_list)
 
                     # replaces space with underscore for the html file
-                    sub_list_ref = entry['series'].replace(' ', '_') + '_' + csv_name
+                    sub_list_ref = f'{entry["series"].replace(" ", "_")}_{csv_name}'
 
                     # writes the element from the csv file
                     html_file.write(f'\t\t<div class = "grid_entry{hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}" title = "{entry["name"].replace("<br>", "") }">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
@@ -252,8 +241,8 @@ def getAttributes(csv_name: str, dict_key: str) -> set:
     csv_name: the name of the csv file without .csv
     dict_key: which column of the csv file that will be looked at
     '''
-    with open('CSV/' + csv_name + '.csv') as csv_file:
-        csv_dict = csv.DictReader(csv_file, delimiter = ';')
+    with open(f'CSV/{csv_name}.csv') as csv_file:
+        csv_dict = DictReader(csv_file, delimiter = ';')
         attribute_set = set()
         non_unique_set = set()
 
@@ -270,8 +259,8 @@ def getAttributeCount(csv_name: str, dict_key: str) -> dict:
     csv_name: the name of the csv file without .csv
     dict_key: which column of the csv file that will be looked at
     '''
-    with open('CSV/' + csv_name + '.csv') as csv_file:
-        csv_dict = csv.DictReader(csv_file, delimiter = ';')
+    with open(f'CSV/{csv_name}.csv') as csv_file:
+        csv_dict = DictReader(csv_file, delimiter = ';')
         series_count = defaultdict(int)
 
         for entry in csv_dict:
