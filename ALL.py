@@ -21,7 +21,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
     '''
 
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
-    side_bar_string = f'\t<script>\n\t\t compressed_entries = {str(compress_series_entries).lower()};\n\t\t uncompress_on_load = {str(not start_compressed).lower()};\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
+    side_bar_string = f'\t<script>\n\t\tcompressed_entries = {str(compress_series_entries).lower()};\n\t\tuncompress_on_load = {str(not start_compressed).lower()};\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
 
     if html_name == None:
         html_name = csv_name
