@@ -76,7 +76,6 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
 
                 if (len(include) == 0 or include_intersection_len != 0) and exclude_intersection_len  == 0:
 
-
                     # adds more display name info from column chosen by displayed_entry_name_keys
                     name_list = []
                     for key in displayed_entry_name_keys:
