@@ -1,7 +1,7 @@
 import requests, pathlib, os
 from collections import defaultdict
 from csv import DictReader
-# v 3.7.4
+# v 3.7.5
 def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -85,17 +85,15 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                         else:
                             name_list.append(f'{entry[key]} ')
 
-                    test = indexContainingSubstring(name_list, ':')
 
-                    if test == []:
-                        # finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
+                    if indexContainingSubstring(name_list, ':') == []:
+                        # NOT CORRECT: finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
                         name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
 
                     else:
-                        # finds the last index of ':' in display_name, if it exist it add a line break after.
+                        # NOT CORRECT: finds the last index of ':' in display_name, if it exist it add a line break after.
                         name_list = splitEntryAddBetween(name_list, ':', str2add = '<br>', before = False)
 
-                    
                     
 
                     # how many line breaks in the displayed name
@@ -179,7 +177,7 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
                             with open(img_path, mode = 'wb') as img_file:
                                 img_file.write(img_data)
 
-                        img_path = '../' + img_path
+                        img_path = f'../{img_path}'
                     else:
                         img_path = entry['image']
 
@@ -198,42 +196,40 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
             print(page_name)
 
 
-def indexContainingSubstring(the_list: list, substring: str) -> list:
+def indexContainingSubstring(str_list: list, substring: str) -> list:
     '''
-    the_list: a list of strings
-    substring: a string to find the entries of the_list
+    str_list: a list of strings
+    substring: a string to find the entries of str_list
     '''
     index_list = []
-    for i, s in enumerate(the_list):
+    for i, s in enumerate(str_list):
         if substring in s:
               index_list.append(int(i))
     return index_list
 
-def splitEntryAddBetween(the_list: list, substring: str, str2add: str = None, before: bool = True, entry_index: int = 0) -> list:
-    index_list = indexContainingSubstring(the_list, substring)
+def splitEntryAddBetween(str_list: list, substring: str, str2add: str = None, before: bool = True, entry_index: int = None) -> list:
+    substring_index_list = indexContainingSubstring(str_list, substring)
     
-    substringLength = len(substring)
-    if index_list != []:
-        list_index = index_list[entry_index]
-        if before:
-            index = the_list[list_index].find(substring)
+    substring_length = len(substring)
+    if substring_index_list != []:
+        for i in substring_index_list:
+            if before:
+                index = str_list[i].find(substring)
 
-            the_list.insert(list_index + 1, the_list[list_index][index:])
-            the_list[list_index] = the_list[list_index][:(index - 1)]
+                str_list.insert(i + 1, str_list[i][index:])
+                str_list[i] = str_list[i][:(index - 1)]
 
-        else:
-            index = the_list[list_index].rfind(substring)
+            else:
+                index = str_list[i].rfind(substring)
 
-            the_list.insert(list_index + 1, the_list[list_index][(index + substringLength + 1):])
-            the_list[list_index] = the_list[list_index][:(index + substringLength)]
+                str_list.insert(i + 1, str_list[i][(index + substring_length + 1):])
+                str_list[i] = str_list[i][:(index + substring_length)]
 
-        if str2add != None:
-            the_list.insert(list_index + 1, '<br>') 
+            if str2add != None:
+                str_list.insert(i + 1, '<br>') 
 
+    return str_list
 
-    return the_list
-
-   
 
 def getAttributes(csv_name: str, dict_key: str) -> set:
     '''
@@ -268,54 +264,56 @@ def getAttributeCount(csv_name: str, dict_key: str) -> dict:
     return series_count
 
 
-# Boardgames
-csv_file = 'boardgame'
 
-# makes main boardgame html file
-writeHtml('Brætspil', csv_file, needed_breaks = 2, compress_series_entries = True)
+if __name__ == "__main__":
+    # Boardgames
+    csv_file = 'boardgame'
 
-# makes a html file for each boardgame series
-boardgame_series = getAttributes(csv_file, 'series')[0]
-for series in boardgame_series:
-    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 2, compress_series_entries = True, start_compressed = False)
+    # makes main boardgame html file
+    writeHtml('Brætspil', csv_file, needed_breaks = 2, compress_series_entries = True)
 
-
-# Books
-csv_file = 'books'
-
-# make main book html file
-writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Digt'}, compress_series_entries = True)
-
-# makes html file for each type of book
-book_type = getAttributes(csv_file, 'type')[0]
-for series in book_type:
-    writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True)
-
-# makes html file for each book series
-book_series = getAttributes(csv_file, 'series')[0]
-for series in book_series:
-    writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True, start_compressed = False)
+    # makes a html file for each boardgame series
+    boardgame_series = getAttributes(csv_file, 'series')[0]
+    for series in boardgame_series:
+        writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 2, compress_series_entries = True, start_compressed = False)
 
 
-# Switch games
-csv_file = 'switch'
+    # Books
+    csv_file = 'books'
 
-# make main switch game html
-writeHtml('Switch Spil', csv_file, needed_breaks = 1)
+    # make main book html file
+    writeHtml('Bøger', csv_file, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Digt'}, compress_series_entries = True)
 
-# make a html for each switch series
-switch_series = getAttributes(csv_file, 'series')[0]
-for series in switch_series:
-    writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 1)
+    # makes html file for each type of book
+    book_type = getAttributes(csv_file, 'type')[0]
+    for series in book_type:
+        writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True)
 
- 
-# LEGO
-csv_file = 'lego'
+    # makes html file for each book series
+    book_series = getAttributes(csv_file, 'series')[0]
+    for series in book_series:
+        writeHtml(series, csv_file, html_name = series, sort_order_keys = ['series_number', 'series', 'last_name'], displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True, start_compressed = False)
 
-# makes main html file for LEGO
-writeHtml('LEGO', csv_file, displayed_entry_name_keys = ['name', 'break', 'number'])
 
-# makes a html file for each LEGO series
-lego_series = getAttributes(csv_file, 'series')[0]
-for series in lego_series:
-    writeHtml(series, csv_file, html_name = series, displayed_entry_name_keys = ['name', 'break', 'number'], include = {series})
+    # Switch games
+    csv_file = 'switch'
+
+    # make main switch game html
+    writeHtml('Switch Spil', csv_file, needed_breaks = 1)
+
+    # make a html for each switch series
+    switch_series = getAttributes(csv_file, 'series')[0]
+    for series in switch_series:
+        writeHtml(series, csv_file, html_name = series, include = {series}, needed_breaks = 1)
+
+    
+    # LEGO
+    csv_file = 'lego'
+
+    # makes main html file for LEGO
+    writeHtml('LEGO', csv_file, displayed_entry_name_keys = ['name', 'break', 'number'])
+
+    # makes a html file for each LEGO series
+    lego_series = getAttributes(csv_file, 'series')[0]
+    for series in lego_series:
+        writeHtml(series, csv_file, html_name = series, displayed_entry_name_keys = ['name', 'break', 'number'], include = {series})
