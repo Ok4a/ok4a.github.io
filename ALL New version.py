@@ -34,7 +34,7 @@ def test_func():
         for row in csv_dict:
             if row["series"] not in series_plural.keys():
                 series_plural[row["series"]] = series(name= row["series"], type=row["type"])
-            test = entry(last_name= row["last_name"], first_name=row["first_name"], name=row["name"], img=row["image"], series_num= row["series_number"])
+            test = entry(last_name= row["last_name"], first_name=row["first_name"], name=row["name"], img = row["image"], series_num= row["series_number"])
             series_plural[row["series"]].addEntry(test)
         print(list(series_plural.keys()))
         

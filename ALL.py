@@ -246,7 +246,7 @@ def getAttributes(csv_name: str, dict_key: str) -> set:
                 non_unique_set.add(entry[dict_key])
             attribute_set.add(entry[dict_key])
 
-    return [attribute_set, non_unique_set]
+    return attribute_set, non_unique_set
 
 
 def getAttributeCount(csv_name: str, dict_key: str) -> dict:
