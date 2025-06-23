@@ -5,29 +5,39 @@ from dataclasses import dataclass, field
 # v 3.7.5
 
 
-@dataclass(order = True)
+@dataclass
 class entry():
     last_name: str
     first_name: str
     name: str
-    series: str
     series_num: int
     img: str
-    type: str
 
 
-@dataclass
+@dataclass(order = True)
 class series():
     name: str
-    entries: list
-    num_entries: int
+    type: str = field(compare=False)
+    entries: list = field(compare = False, default_factory = list)
+    num_entries: int = field(compare = False, default = 1)
+
+    def addEntry(self, new_entry: entry):
+        self.entries.append(new_entry)
+        self.num_entries += 1
+
 
 def test_func():
     csv_name = "books"
+    series_plural = dict()
     with open(f'CSV/{csv_name}.csv', mode = 'r') as csv_file:
         csv_dict = DictReader(csv_file, delimiter = ';')
         for row in csv_dict:
-            test = entry()
+            if row["series"] not in series_plural.keys():
+                series_plural[row["series"]] = series(name= row["series"], type=row["type"])
+            test = entry(last_name= row["last_name"], first_name=row["first_name"], name=row["name"], img=row["image"], series_num= row["series_number"])
+            series_plural[row["series"]].addEntry(test)
+        print(list(series_plural.keys()))
+        
 
 
 def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
