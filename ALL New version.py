@@ -2,7 +2,7 @@ import requests, pathlib, os
 from collections import defaultdict
 from csv import DictReader
 from dataclasses import dataclass, field
-# v 3.7.5
+# v 3.8.0 (4?.0.0)
 
 
 @dataclass
@@ -12,6 +12,9 @@ class entry():
     name: str
     series_num: int
     img: str
+    
+    def __repr__(self):
+        return self.name
 
 
 @dataclass(order = True)
@@ -29,14 +32,22 @@ class series():
 def test_func():
     csv_name = "books"
     series_plural = dict()
+    sort_order_keys = ['series_number', 'series', 'last_name']
+    A=[]
     with open(f'CSV/{csv_name}.csv', mode = 'r') as csv_file:
         csv_dict = DictReader(csv_file, delimiter = ';')
+        for key in sort_order_keys:
+            if key in {'series_number'}: # sort by int
+                csv_dict = sorted(csv_dict, key = lambda x: int(x[key]))
+            else:
+                csv_dict = sorted(csv_dict, key = lambda x: x[key])
+      
         for row in csv_dict:
-            if row["series"] not in series_plural.keys():
-                series_plural[row["series"]] = series(name= row["series"], type=row["type"])
+            # if row["series"] not in series_plural.keys():
+            #     series_plural[row["series"]] = series(name= row["series"], type=row["type"])
             test = entry(last_name= row["last_name"], first_name=row["first_name"], name=row["name"], img = row["image"], series_num= row["series_number"])
-            series_plural[row["series"]].addEntry(test)
-        print(list(series_plural.keys()))
+            A.append(test)
+        print(A)
         
 
 
