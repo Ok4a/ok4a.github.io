@@ -1,7 +1,7 @@
 import requests, pathlib, os
 from collections import defaultdict
 from csv import DictReader
-# v 3.7.5
+# v 3.7.6
 def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
@@ -112,12 +112,21 @@ def writeHtml(page_name: str, csv_name: str, html_name: str = None, sort_order_k
 
                     
                     # compress entries if there is more than one entry in its series and if only_first_in_series is True
-                    if counts_dict[entry['series']] != 1 and compress_series_entries:
+                    if counts_dict[entry['series']] > 1 and compress_series_entries:
                         if 'series_number' in entry.keys():
                             if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
 
-                                if entry['series'] != 'All You Need is Kill':
+                                # if entry['series'] != 'All You Need is Kill':
+
+                                if entry["sub_series"] != "":
+                                    number_of_entries_in_subseries = getAttributeCount(csv_name, 'sub_series')[entry['sub_series']]
+                                    if number_of_entries_in_subseries > 1:
+                                        name_list.insert(-3, f'- {str(number_of_entries_in_subseries)}')
+                                    
+                                else:
                                     name_list.insert(-3, f'- {str(counts_dict[entry["series"]])}')
+
+
                                 
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
@@ -262,6 +271,21 @@ def getAttributeCount(csv_name: str, dict_key: str) -> dict:
             series_count[entry[dict_key]] += 1
 
     return series_count
+
+
+def loadCSV(csv_name: str, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}) -> dict:
+
+    with open(f'CSV/{csv_name}.csv', mode = 'r') as csv_file:
+        # reads the csv as a dict with keys from first row (header)
+            csv_dict = DictReader(csv_file, delimiter = ';')
+            
+            # sorts the csv file by column, order base on sort_order_list
+            for key in sort_order_keys:
+                if key in int_sort: # sort by int
+                    csv_dict = sorted(csv_dict, key = lambda x: int(x[key]))
+                else:
+                    csv_dict = sorted(csv_dict, key = lambda x: x[key])
+    return csv_dict
 
 
 
