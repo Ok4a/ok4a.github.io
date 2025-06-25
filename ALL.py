@@ -1,7 +1,7 @@
 import requests, pathlib, os
 from collections import defaultdict
 from csv import DictReader
-# v 3.8.0
+# v 3.8.1
 
 def writeHtml(page_name: str, csv_name: str, csv_dict: dict, html_name: str = None, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
@@ -109,13 +109,17 @@ def writeHtml(page_name: str, csv_name: str, csv_dict: dict, html_name: str = No
                                 number_of_entries_in_subseries = getAttributeCount(csv_dict, 'sub_series')[entry['sub_series']]
                                 if number_of_entries_in_subseries > 1:
                                     name_list.insert(-3, f'- {str(number_of_entries_in_subseries)}')
+
+                                    compress_id = 'name = "compressed"'
+                                    is_first_entry = False
+                                    i -= 1 
                                 
                             else:
                                 name_list.insert(-3, f'- {str(counts_dict[entry["series"]])}')
 
-                            compress_id = 'name = "compressed"'
-                            is_first_entry = False
-                            i -= 1 
+                                compress_id = 'name = "compressed"'
+                                is_first_entry = False
+                                i -= 1 
 
                         else: # skip other entries in a series
                             compress_id = 'name = noncompressed'
