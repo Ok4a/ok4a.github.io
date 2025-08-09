@@ -3,12 +3,12 @@ from collections import defaultdict
 from csv import DictReader
 # v 3.8.1
 
-def writeHtml(page_name: str, csv_name: str, csv_dict: dict, html_name: str = None, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
+def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: str = None, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
     '''
     page_name: name of the page
     csv_name: name of the csv file without '.csv'
-    csv_dict
+    csv_data
     html_name: name of the html file without '.html', default csv_name
     in_exclude_keys: list of dict keys that include and exclude will look at, default ['series', 'type']
     include: will only add elements from the csv file to the html file, if the element has the types from the list, in the dict key indicated by in_exclude_keys, will add all elements if empty, default set()
@@ -38,7 +38,7 @@ def writeHtml(page_name: str, csv_name: str, csv_dict: dict, html_name: str = No
         os.makedirs('html_lists')
 
     # gets the number of entires om each series
-    counts_dict = getAttributeCount(csv_dict, 'series')
+    counts_dict = getAttributeCount(csv_data, 'series')
 
 
     # opens/creates the html file
@@ -50,8 +50,8 @@ def writeHtml(page_name: str, csv_name: str, csv_dict: dict, html_name: str = No
         is_first_entry = True
 
         # for entry in csv_dict:
-        while i < len(csv_dict):
-            entry = csv_dict[i]
+        while i < len(csv_data):
+            entry = csv_data[i]
             i += 1
             compress_id = ''
             hide_class = ''
@@ -106,7 +106,7 @@ def writeHtml(page_name: str, csv_name: str, csv_dict: dict, html_name: str = No
                             # if entry['series'] != 'All You Need is Kill':
 
                             if entry["sub_series"] != "":
-                                number_of_entries_in_subseries = getAttributeCount(csv_dict, 'sub_series')[entry['sub_series']]
+                                number_of_entries_in_subseries = getAttributeCount(csv_data, 'sub_series')[entry['sub_series']]
                                 if number_of_entries_in_subseries > 1:
                                     name_list.insert(-3, f'- {str(number_of_entries_in_subseries)}')
 
@@ -129,7 +129,7 @@ def writeHtml(page_name: str, csv_name: str, csv_dict: dict, html_name: str = No
                     # boardgame compression
                     elif 'base_game' in entry.keys():
                         if len(entry['base_game']) != 0:
-                            number_of_entries_in_series = getAttributeCount(csv_dict, 'base_game')[entry['name']]
+                            number_of_entries_in_series = getAttributeCount(csv_data, 'base_game')[entry['name']]
 
                             if entry['type'] == 'base' and is_first_entry and number_of_entries_in_series != 0:
 
@@ -229,15 +229,15 @@ def splitEntryAddBetween(str_list: list, substring: str, str2add: str = None, be
     return str_list
 
 
-def getAttributes(csv_dict: str, dict_key: str) -> set:
+def getAttributes(csv_data: list[dict], dict_key: str) -> set:
     '''
-    csv_dict: data from csv as dict
+    csv_data:
     dict_key: which column of the csv file that will be looked at
     '''
     attribute_set = set()
     non_unique_set = set()
 
-    for entry in csv_dict:
+    for entry in csv_data:
         if entry[dict_key] in attribute_set:
             non_unique_set.add(entry[dict_key])
         attribute_set.add(entry[dict_key])
@@ -245,14 +245,14 @@ def getAttributes(csv_dict: str, dict_key: str) -> set:
     return attribute_set, non_unique_set
 
 
-def getAttributeCount(csv_dict: str, dict_key: str) -> dict:
+def getAttributeCount(csv_data: list[dict], dict_key: str) -> dict:
     '''
-    csv_dict: data from csv as dict
+    csv_data:
     dict_key: which column of the csv file that will be looked at
     '''
     series_count = defaultdict(int)
 
-    for entry in csv_dict:
+    for entry in csv_data:
         series_count[entry[dict_key]] += 1
 
     return series_count
