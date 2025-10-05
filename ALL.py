@@ -1,7 +1,7 @@
 import requests, pathlib, os
 from collections import defaultdict
 from csv import DictReader
-# v 3.8.1
+# v 3.8.2
 
 def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: str = None, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
@@ -189,7 +189,7 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
 
                 for string in remove_str_list:
                         sub_list_ref = sub_list_ref.replace(string, '') 
-                        
+
                 # writes the element from the csv file
                 html_file.write(f'\t\t<div class = "grid_entry{hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}" title = "{entry["name"].replace("<br>", "") }">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
