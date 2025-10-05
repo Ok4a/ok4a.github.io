@@ -19,6 +19,7 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
     download_image: bool that determines if the image provided should be download to local storage or it should use the url for the image data, default True
     force_download: bool that force the function to download the image even if download image is False and if the image is already downloaded, default False
     '''
+    remove_str_list = {'<br>', ':', '?', ',', '!', "'", '.', '-'}
 
     start_string = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
     side_bar_string = f'\t<script>\n\t\tcompressed_entries = {str(compress_series_entries).lower()};\n\t\tuncompress_on_load = {str(not start_compressed).lower()};\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
@@ -28,7 +29,8 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
     else:
         html_name += f'_{csv_name}'
 
-    remove_str_list = {'<br>', ':', '?', ',', '!', "'", '.', '-'}
+    for string in remove_str_list:
+        html_name = html_name.replace(string, '') 
 
     # replaces space with underscore for the html file
     html_name = html_name.replace(' ', '_')
@@ -185,6 +187,9 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
                 # replaces space with underscore for the html file
                 sub_list_ref = f'{entry["series"].replace(" ", "_")}_{csv_name}'
 
+                for string in remove_str_list:
+                        sub_list_ref = sub_list_ref.replace(string, '') 
+                        
                 # writes the element from the csv file
                 html_file.write(f'\t\t<div class = "grid_entry{hide_class}" {compress_id}>\n\t\t\t<a href = "{sub_list_ref}.html">\n\t\t\t\t<img src = "{img_path}" title = "{entry["name"].replace("<br>", "") }">\n\t\t\t</a>\n\t\t\t<br>\n\t\t\t<a class = "entry_name">\n\t\t\t\t{displayed_name}\n\t\t\t</a>\n\t\t</div>\n')
 
