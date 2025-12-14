@@ -299,17 +299,17 @@ def loadCSV(csv_name: str, sort_order_keys: list = ['name'], int_sort: set = {'s
 
 
 if __name__ == "__main__":
-    # # Boardgames
-    # csv_file = 'boardgame'
-    # csv_dict = loadCSV(csv_file)
+    # Boardgames
+    csv_file = 'boardgame'
+    csv_dict = loadCSV(csv_file)
 
-    # # makes main boardgame html file
-    # writeHtml('Brætspil', csv_file, csv_dict, needed_breaks = 2, compress_series_entries = True)
+    # makes main boardgame html file
+    writeHtml('Brætspil', csv_file, csv_dict, needed_breaks = 2, compress_series_entries = True)
 
-    # # makes a html file for each boardgame series
-    # boardgame_series = getAttributes(csv_dict, 'series')[0]
-    # for series in boardgame_series:
-    #     writeHtml(series, csv_file, csv_dict, html_name = series, include = {series}, needed_breaks = 2, compress_series_entries = True, start_compressed = False)
+    # makes a html file for each boardgame series
+    boardgame_series = getAttributes(csv_dict, 'series')[0]
+    for series in boardgame_series:
+        writeHtml(series, csv_file, csv_dict, html_name = series, include = {series}, needed_breaks = 2, compress_series_entries = True, start_compressed = False)
 
 
     # Books
