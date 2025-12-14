@@ -273,9 +273,6 @@ def getAttributeCount(csv_data: list[dict], dict_key: str) -> dict:
     if dict_key not in csv_data[0].keys():
         return att_count
 
-
-    
-
     for entry in csv_data:
         att_count[entry[dict_key]] += 1
     # att_count[''] = 1

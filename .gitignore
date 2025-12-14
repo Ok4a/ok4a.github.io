@@ -1,8 +1,4 @@
-copy of data/boardgame.csv
-copy of data/books.csv
-copy of data/lego.csv
-copy of data/switch.csv
-copy of data/index.html
-list_img/desktop.ini
-.vscode/settings.json
+copy of data
+.vscode
 ALL New version.py
+__pycache__
