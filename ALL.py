@@ -1,7 +1,7 @@
 import requests, pathlib, os
 from collections import defaultdict
 from csv import DictReader
-# v 3.8.2
+# v 3.8.3
 
 def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: str = None, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
@@ -171,7 +171,7 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
                         os.makedirs(f'list_img/{csv_name}')                    
 
                     # checks if the image is already downloaded, if not downloads it
-                    if  not pathlib.Path(img_path).is_file() or force_download:
+                    if  (not pathlib.Path(img_path).is_file() or force_download) and entry['image'] != "":
                         # gets image data from url
                         img_data = requests.get(entry['image']).content
                         with open(img_path, mode = 'wb') as img_file:
