@@ -1,7 +1,7 @@
 import requests, pathlib, os
 from collections import defaultdict
 from csv import DictReader
-# v 3.8.3
+# v 3.9.0
 
 def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: str = None, in_exclude_keys: list = ['series', 'type'], include: set = set(), 
               exclude: set = set(), compress_series_entries: bool = False, start_compressed: bool = True, displayed_entry_name_keys: list = ['name'], needed_breaks: int = 0, download_image: bool = True, force_download: bool = False) -> None: 
@@ -40,7 +40,8 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
         os.makedirs('html_lists')
 
     # gets the number of entires om each series
-    counts_dict = getAttributeCount(csv_data, 'series')
+    series_counts_dict = getAttributeCount(csv_data, 'series')
+    sub_series_counts_dict = getAttributeCount(csv_data, 'sub_series')
 
 
     # opens/creates the html file
@@ -71,17 +72,23 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
                     # should it make a line break in the displayed name
                     if key == 'break':
                         name_list.append('<br>')
+                    elif key == 'series_number':
+                        if (series_counts_dict[entry['series']] !=1 and sub_series_counts_dict[entry['sub_series']] !=1) or entry['type'] == 'Manga':
+                            name_list.append(f'<br># {entry[key]} ')
                     else:
                         name_list.append(f'{entry[key]} ')
 
 
-                if indexContainingSubstring(name_list, ':') == []:
-                    # NOT CORRECT: finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
-                    name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
+                # if indexContainingSubstring(name_list, ':') == []:
+                #     # NOT CORRECT: finds the first index of 'vol.' in display_name, if it exist it adds a line break before. made for book sites
+                #     name_list = splitEntryAddBetween(name_list, 'vol.', str2add = '<br>')
 
-                else:
-                    # NOT CORRECT: finds the last index of ':' in display_name, if it exist it add a line break after.
-                    name_list = splitEntryAddBetween(name_list, ':', str2add = '<br>', before = False)
+                # else:
+                #     # NOT CORRECT: finds the last index of ':' in display_name, if it exist it add a line break after.
+                
+                name_list = splitEntryAddBetween(name_list, ':', str2add = '<br>', before = False)
+
+
 
                 
 
@@ -96,19 +103,21 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
                     name_list.insert(first_break_list_index, '<br>')
 
                     # adds the number of the series if there is more than one the entry in it
-                    if counts_dict[entry['series']] != 1 and entry['series'] != 'All You Need is Kill':
+                    if series_counts_dict[entry['series']] != 1 and entry['series'] != 'All You Need is Kill':
                         name_list.insert(first_break_list_index + 1, f'#{entry["series_number"]} ')
+
+
 
                 
                 # compress entries if there is more than one entry in its series and if only_first_in_series is True
-                if counts_dict[entry['series']] > 1 and compress_series_entries:
+                if series_counts_dict[entry['series']] > 1 and compress_series_entries:
                     if 'series_number' in entry.keys():
                         if int(entry['series_number']) == 1 and is_first_entry: # if the entry uses 'vol' as the series counter
 
                             # if entry['series'] != 'All You Need is Kill':
 
                             if entry["sub_series"] != "":
-                                number_of_entries_in_subseries = getAttributeCount(csv_data, 'sub_series')[entry['sub_series']]
+                                number_of_entries_in_subseries = sub_series_counts_dict[entry['sub_series']]
                                 if number_of_entries_in_subseries > 1:
                                     name_list.insert(-3, f'- {str(number_of_entries_in_subseries)}')
 
@@ -117,7 +126,7 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
                                     i -= 1 
                                 
                             else:
-                                name_list.insert(-3, f'- {str(counts_dict[entry["series"]])}')
+                                name_list.insert(-3, f'- {str(series_counts_dict[entry["series"]])}')
 
                                 compress_id = 'name = "compressed"'
                                 is_first_entry = False
@@ -164,7 +173,12 @@ def writeHtml(page_name: str, csv_name: str, csv_data: list[dict], html_name: st
                     for string in remove_str_list:
                         img_path = img_path.replace(string, '') 
 
-                    img_path = f'list_img/{csv_name}/{img_path}_{entry["type"]}.jpg'
+                    if "series_number" in entry.keys():
+                        seriesNum = f'_{entry["series_number"]}'
+                    else:
+                        seriesNum = ''
+
+                    img_path = f'list_img/{csv_name}/{img_path}{seriesNum}_{entry["type"]}.jpg'
 
                     # if the folder for the images does not exits, creates it
                     if not os.path.exists(f'list_img/{csv_name}'):
@@ -255,12 +269,17 @@ def getAttributeCount(csv_data: list[dict], dict_key: str) -> dict:
     csv_data:
     dict_key: which column of the csv file that will be looked at
     '''
-    series_count = defaultdict(int)
+    att_count = defaultdict(int)
+    if dict_key not in csv_data[0].keys():
+        return att_count
+
+
+    
 
     for entry in csv_data:
-        series_count[entry[dict_key]] += 1
-
-    return series_count
+        att_count[entry[dict_key]] += 1
+    # att_count[''] = 1
+    return att_count
 
 
 def loadCSV(csv_name: str, sort_order_keys: list = ['name'], int_sort: set = {'series_number'}) -> dict:
@@ -280,35 +299,38 @@ def loadCSV(csv_name: str, sort_order_keys: list = ['name'], int_sort: set = {'s
 
 
 if __name__ == "__main__":
-    # Boardgames
-    csv_file = 'boardgame'
-    csv_dict = loadCSV(csv_file)
+    # # Boardgames
+    # csv_file = 'boardgame'
+    # csv_dict = loadCSV(csv_file)
 
-    # makes main boardgame html file
-    writeHtml('Brætspil', csv_file, csv_dict, needed_breaks = 2, compress_series_entries = True)
+    # # makes main boardgame html file
+    # writeHtml('Brætspil', csv_file, csv_dict, needed_breaks = 2, compress_series_entries = True)
 
-    # makes a html file for each boardgame series
-    boardgame_series = getAttributes(csv_dict, 'series')[0]
-    for series in boardgame_series:
-        writeHtml(series, csv_file, csv_dict, html_name = series, include = {series}, needed_breaks = 2, compress_series_entries = True, start_compressed = False)
+    # # makes a html file for each boardgame series
+    # boardgame_series = getAttributes(csv_dict, 'series')[0]
+    # for series in boardgame_series:
+    #     writeHtml(series, csv_file, csv_dict, html_name = series, include = {series}, needed_breaks = 2, compress_series_entries = True, start_compressed = False)
 
 
     # Books
     csv_file = 'books'
     csv_dict = loadCSV(csv_file, sort_order_keys = ['series_number', 'series', 'last_name'])
 
+
+    name_display = ['name', 'series_number', 'break', 'first_name', 'last_name']
+    compress = True 
     # make main book html file
-    writeHtml('Bøger', csv_file, csv_dict,  displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], exclude = {'Digt'}, compress_series_entries = True)
+    writeHtml('Bøger', csv_file, csv_dict,  displayed_entry_name_keys = name_display, compress_series_entries = compress)
 
     # makes html file for each type of book
     book_type = getAttributes(csv_dict, 'type')[0]
     for series in book_type:
-        writeHtml(series, csv_file,csv_dict, html_name = series, displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True)
+        writeHtml(series, csv_file,csv_dict, html_name = series, displayed_entry_name_keys = name_display, include = {series}, compress_series_entries = compress)
 
     # makes html file for each book series
     book_series = getAttributes(csv_dict, 'series')[0]
     for series in book_series:
-        writeHtml(series, csv_file, csv_dict, html_name = series, displayed_entry_name_keys = ['name', 'break', 'first_name', 'last_name'], include = {series}, compress_series_entries = True, start_compressed = False)
+        writeHtml(series, csv_file, csv_dict, html_name = series, displayed_entry_name_keys = name_display, include = {series}, compress_series_entries = compress, start_compressed = False)
 
 
     # Switch games
