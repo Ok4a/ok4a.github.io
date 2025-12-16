@@ -13,7 +13,7 @@ document.write('\
         </div>\
         <div class = "side_grid">\
           <a href = "books.html">Bøger</a>\
-          <button class = "dropdown_btn">\
+          <!--<button class = "dropdown_btn">\
             <i class = "fa-solid fa-caret-down"></i>\
           </button>\
           <div class = "dropdown_container">\
@@ -21,7 +21,7 @@ document.write('\
             <a href = "Manga_books.html">Manga</a>\
             <a href = "Nonfiction_books.html">Non-fiction</a>\
             <a href = "Roman_books.html">Roman</a>\
-          </div>\
+          </div>-->\
         </div>\
         <a href = "lego.html">LEGO</a>\
         <a href = "switch.html">Switch</a>\
