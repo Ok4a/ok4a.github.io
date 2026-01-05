@@ -6,21 +6,32 @@ import requests, pathlib, os
 
 
 
-@dataclass(order=True)
+@dataclass(order = True)
 class seriesData:
+    '''
+    Docstring for seriesData
+
+    :param name: name of the series
+    :param entries: list of entries in the series
+    :param count: number of entries in the series
+    :param subSeries: dict of seriesData
+    :param sub: is it a subseries
+    '''
     name: str
-    # type: str = field(compare=False)
-    entries: list = field(default_factory=list,compare=False,repr=True)
+    # type: str = field(compare = False)
+    entries: list = field(default_factory = list, compare = False, repr = True)
     count: int = field(default = 0, compare = False)
     subSeries: dict = field(default_factory = dict, compare = False)
     sub: bool = field(default = False, compare = False)
 
     
-    def __len__(self):
+    def __len__(self) -> int: 
+  
         return self.count
 
-    def addEntry(self, entry):
-        self.count +=1
+    def addEntry(self, entry: baseData) -> None: # add an entry to the series
+
+        self.count += 1
         self.entries.append(entry)
         self.entries.sort()
 
@@ -28,54 +39,59 @@ class seriesData:
 
 @dataclass
 class baseData:
+
     name: str
-    img: str = field(compare=False, repr=False)
-    series: seriesData = field(compare=False)
-    type: str = field(compare=False)
-    # dataType: str = field(compare=False)
+    img: str = field(compare = False, repr = False)
+    series: seriesData = field(compare = False)
+    type: str = field(compare = False)
+    # dataType: str = field(compare = False)
 
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+
         return f'D({self.name})'
     
     def isFirst(self):
         pass
+
     def isPartOfSubSeries(self) -> bool:
         pass
+
     def hasImage(self) -> bool:
         return self.img != ''
-    def getNumber(self):
+    
+    def getNumber(self) -> int | None:
         try:
             return self.number
         except:
-            return ''
+            return None
+        
     def getType(self):
         try:
             return self.type
         except:
             return ''
 
-
-
     def ref(self):
+ 
         string = f'{self.series.name}_{self.dataType}'
-        string = cleanStr(string)
 
-        return f'{string}.html'
+        return f'{cleanStr(string)}.html'
 
     def getImg(self, download: bool) -> str:
+
         if download:
             img_folder = f'list_img/{self.dataType}'
             if not os.path.exists(img_folder):
                 os.makedirs(img_folder)
 
-            tempNum = f'_{self.getNumber()}' if self.getNumber() != '' else ''
+            tempNum = f'_{self.getNumber()}' if self.getNumber() is not None else ''
 
             imgFileName = f'{img_folder}/{cleanStr(self.name)}{tempNum}_{self.getType()}.jpg'
 
             if not pathlib.Path(imgFileName).is_file() and self.hasImage():
                 img_data = requests.get(self.img).content
-                with open(imgFileName, mode='wb') as imgFile:
+                with open(imgFileName, mode = 'wb') as imgFile:
                     imgFile.write(img_data)
 
             return f'../{imgFileName}'
@@ -89,22 +105,22 @@ class baseData:
  
 
 # @validate_call
-@dataclass(order=True)
+@dataclass(order = True)
 class bookData(baseData):
-    name: str = field(compare=False)
-    first: str = field(compare=False)
+    name: str = field(compare = False)
+    first: str = field(compare = False)
     last: str
     number: int
-    subSeries: seriesData | None = field(default=None, repr=False)
-    dataType: str = field(default='books', compare=False)
+    subSeries: seriesData | None = field(default = None, repr = False)
+    dataType: str = field(default = 'books', compare = False)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"D({self.name} {self.number})"
     
-    def isPartOfSubSeries(self):
+    def isPartOfSubSeries(self) -> bool:
         return self.subSeries is not None
     
-    def displayedName(self, compress):
+    def displayedName(self, compress: bool) -> str:
         string = colonBreak(self.name)
         
 
@@ -124,37 +140,37 @@ class bookData(baseData):
 
         
 
-        string = breakAfter(string,2)
+        string = breakAfter(string, 2)
         string += f'<br>{self.first} {self.last}'
 
         return string
     
-    def isFirst(self):
-        return self.number == 1
+    def isFirst(self) -> bool:
+        return self.number == self.series.entries[0].number
 
-def createBookData(entry, series):
-    return bookData(name=entry['name'], first=entry['first_name'], last=entry['last_name'], series=series[0], subSeries = series[1], number=entry['series_number'], img=entry['image'], type = entry['type'])
+def createBookData(entry: dict, series: list[seriesData]) -> bookData:
+    return bookData(name = entry['name'], first = entry['first_name'], last = entry['last_name'], series = series[0], subSeries = series[1], number = entry['series_number'], img = entry['image'], type = entry['type'])
 
 
-@dataclass(order=True)
+@dataclass(order = True)
 class legoData(baseData):
-    number: int = field(compare=False)
-    dataType: str = field(default='lego', compare=False)
+    number: int = field(compare = False)
+    dataType: str = field(default = 'lego', compare = False)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'D({self.name} {self.number})'
     
-    def displayedName(self, compress: bool):
+    def displayedName(self, compress: bool) -> str:
         return f'{self.name} <br>\n\t\t\t\t{self.number}'
     
-def createLegoData(entry, series):
-    return legoData(name=entry['name'], number=entry['number'], series=series[0], img=entry['image'], type = entry['type'])
+def createLegoData(entry:dict, series: list[seriesData]):
+    return legoData(name = entry['name'], number = entry['number'], series = series[0], img = entry['image'], type = entry['type'])
     
 
-@dataclass(order=True)
+@dataclass(order = True)
 class switchData(baseData):
-    series: seriesData = field(compare=False)
-    dataType: str = field(default='switch', compare=False)
+    series: seriesData = field(compare = False)
+    dataType: str = field(default = 'switch', compare = False)
 
     
     def displayedName(self, compress: bool) -> str:
@@ -164,16 +180,16 @@ class switchData(baseData):
         return string
 
 def createSwitchData(entry, series):
-    return switchData(name=entry['name'], series = series[0], type = entry['type'], img=entry['image'])
+    return switchData(name = entry['name'], series = series[0], type = entry['type'], img = entry['image'])
     
-@dataclass(order=True)
+@dataclass(order = True)
 class boardgameData(baseData):
     name: str
-    series: seriesData = field(compare=True)
-    type: str = field(compare=False)
-    img: str = field(compare=False, repr=False)
-    subSeries: seriesData | None = field(default=None, repr=False)
-    dataType: str = field(default='boardgame', compare=False)
+    series: seriesData = field(compare = True)
+    type: str = field(compare = False)
+    img: str = field(compare = False, repr = False)
+    subSeries: seriesData | None = field(default = None, repr = False)
+    dataType: str = field(default = 'boardgame', compare = False)
 
     def isPartOfSubSeries(self) -> bool:
         return self.subSeries is not None
@@ -181,7 +197,7 @@ class boardgameData(baseData):
     def isBase(self) -> bool:
         return self.type == 'base'
     
-    def isFirst(self):
+    def isFirst(self) -> bool:
         return self.isBase()
     
     def displayedName(self, compress: bool) -> str:
@@ -199,12 +215,12 @@ class boardgameData(baseData):
         return string
     
 
-def createBoardgameData(entry, series):
-    return boardgameData(name=entry['name'], series=series[0], subSeries = series[1], type = entry['type'],img=entry['image'])
+def createBoardgameData(entry: dict, series: tuple[seriesData]) -> boardgameData:
+    return boardgameData(name = entry['name'], series =series[0], subSeries = series[1], type = entry['type'],img =entry['image'])
 
 
 
-def loadData(csv:str, createFun: function):
+def loadData(csv:str, createFun: function) -> tuple[list]:
     series = dict()
     entries = list()
 
@@ -214,7 +230,7 @@ def loadData(csv:str, createFun: function):
             seriesName = entry['series']
 
             if seriesName not in series.keys():
-                seri= seriesData(seriesName)
+                seri = seriesData(seriesName)
                 series[seriesName] = seri
             else:
                 seri = series[seriesName]
@@ -227,7 +243,7 @@ def loadData(csv:str, createFun: function):
 
                     # has the sub series been seen before
                     if subSeriesName not in seri.subSeries.keys():
-                        subSeries= seriesData(subSeriesName, sub = True)
+                        subSeries = seriesData(subSeriesName, sub = True)
                         seri.subSeries[subSeriesName] = subSeries
                     else:
                         subSeries = seri.subSeries[subSeriesName]
@@ -242,36 +258,36 @@ def loadData(csv:str, createFun: function):
                 subSeries.addEntry(ent)
 
 
-    return series, entries
+    return list(series.values()), entries
 
 
 
 
-def writeHTML(data, pageName: str, HTMLName: str = None, startCompressed = False, compress_series_entries = False):
+def writeHTML(data: list[baseData], pageName: str, HTMLName: str = None, start_compressed: bool = False, compress_series_entries: bool = False):
 
-    startString = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width=device-width, initial-scale = 0.6">\n</head>\n\n'
-    sideBarString = f'\t<script>\n\t\tcompressed_entries = {str(compress_series_entries).lower()};\n\t\tuncompress_on_load = {str(not startCompressed).lower()};\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
+    startString = '<!DOCTYPE html>\n<html lang = "en" dir = "ltr">\n<link rel = "stylesheet" href = "../style.css">\n<head>\n\t<meta charset = "utf-8" name = "viewport" content = "width = device-width, initial-scale = 0.6">\n</head>\n\n'
+    sideBarString = f'\t<script>\n\t\tcompressed_entries = {str(compress_series_entries).lower()};\n\t\tuncompress_on_load = {str(not start_compressed).lower()};\n\t</script>\n\t<script src = "../sidebar.js"></script>\n'
 
     HTMLName = pageName if HTMLName is None else HTMLName
     is_first_entry = True
     hide_class = ''
 
     data.sort()
-    with open(f'html_lists/{cleanStr(HTMLName)}.html', mode='w', encoding = 'utf-8') as HTMLFile:
+    with open(f'html_lists/{cleanStr(HTMLName)}.html', mode = 'w', encoding = 'utf-8') as HTMLFile:
         HTMLFile.write(f'{startString}<title>{pageName}</title>\n\n<body>\n{sideBarString}\t<div class = "top_bar">\n\t\t<h1>{pageName}</h1>\n\t</div>\n\t<div class = "grid">\n')
         compress_id = ''
 
         i = 0
         while i < len(data):
             entry: baseData = data[i]
-            i+=1
+            i += 1
 
             if is_first_entry and entry.isFirst():
                 displayed_name = entry.displayedName(compress = True)
                 is_first_entry = False
                 hide_class = ''
                 compress_id = 'name = compressed'
-                i-=1
+                i -= 1
             else:
                 displayed_name = entry.displayedName(compress = False)
                 is_first_entry = True
@@ -284,10 +300,10 @@ def writeHTML(data, pageName: str, HTMLName: str = None, startCompressed = False
 
 
 
-def colonBreak(string:str) -> str:
+def colonBreak(string: str) -> str:
     return string.replace(':', ': <br>')
 
-def breakAfter(string:str, minimum: int):
+def breakAfter(string:str, minimum: int) -> str:
     count = string.count('<br>') + string.count('<br />')
     if  count < minimum:
         for _ in range(minimum-count):
@@ -297,7 +313,7 @@ def breakAfter(string:str, minimum: int):
     return string
 
 
-def cleanStr(string:str):
+def cleanStr(string:str) -> str:
     string = string.replace(' ', '_')
     for s in {'<br>', ':', '?', ',', '!', "'", '.', '-'}:
         string = string.replace(s, '')
