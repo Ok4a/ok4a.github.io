@@ -1,7 +1,9 @@
-from distutils.dir_util import copy_tree
+# from distutils.dir_util import copy_tree
+from shutil import copytree
 src = 'CSV'
 dst = 'copy of data'
 
-copy_tree(src, dst)
 
-print('\nData copyed\n')
+copytree(src, dst, dirs_exist_ok=True)
+
+print('\nData copied\n')
