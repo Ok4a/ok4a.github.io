@@ -12,7 +12,7 @@ for series in Ser:
 
 csv_name = 'switch'
 Ser, Ent = loadData(csv_name, createFun = createSwitchData)
-writeHTML(Ent, csv_name, csv_name)
+writeHTML(Ent, 'Switch', csv_name)
 for series in Ser:
     print(series.name)
     writeHTML(series.entries, series.name, f'{series.name}_{csv_name}')
