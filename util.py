@@ -29,7 +29,7 @@ class seriesData:
   
         return self.count
 
-    def addEntry(self, entry: baseData) -> None: # add an entry to the series
+    def addEntry(self, entry) -> None: # add an entry to the series
 
         self.count += 1
         self.entries.append(entry)
@@ -98,24 +98,19 @@ class baseData:
         else:
             return self.img
 
-            
 
-
-        
- 
-
-# @validate_call
 @dataclass(order = True)
 class bookData(baseData):
     name: str = field(compare = False)
     first: str = field(compare = False)
     last: str
+    # name_sort: str
     number: int
     subSeries: seriesData | None = field(default = None, repr = False)
     dataType: str = field(default = 'books', compare = False)
 
     def __repr__(self) -> str:
-        return f"D({self.name} {self.number})"
+        return f"bD({self.name}, {self.number})"
     
     def isPartOfSubSeries(self) -> bool:
         return self.subSeries is not None
@@ -158,7 +153,7 @@ class legoData(baseData):
     dataType: str = field(default = 'lego', compare = False)
 
     def __repr__(self) -> str:
-        return f'D({self.name} {self.number})'
+        return f'lD({self.name}, {self.number})'
     
     def displayedName(self, compress: bool) -> str:
         return f'{self.name} <br>\n\t\t\t\t{self.number}'
@@ -220,7 +215,7 @@ def createBoardgameData(entry: dict, series: tuple[seriesData]) -> boardgameData
 
 
 
-def loadData(csv:str, createFun: function) -> tuple[list]:
+def loadData(csv:str, createFun) -> tuple[list]:
     series = dict()
     entries = list()
 
@@ -313,8 +308,26 @@ def breakAfter(string:str, minimum: int) -> str:
     return string
 
 
-def cleanStr(string:str) -> str:
+def cleanStr(string: str) -> str:
     string = string.replace(' ', '_')
     for s in {'<br>', ':', '?', ',', '!', "'", '.', '-'}:
         string = string.replace(s, '')
     return string
+
+
+
+if __name__ == '__main__':
+    hdiuaw = bookSeries('2',[])
+    csv_name = 'books'
+    Ser, Ent = loadData(csv_name, createFun = createBookData)
+
+
+    tempname = ['Suzume','your name.', 'Weathering With You']
+    A = []
+    for series in Ser:
+        if series.name in tempname:
+            for e in series.entries:
+                A.append(e)
+    A.sort()
+    for a in A:
+        print(a)

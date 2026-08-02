@@ -33,3 +33,5 @@ writeHTML(Ent, 'Bøger', csv_name, compress_series_entries = True, start_compres
 for series in Ser:
     print(series.name)
     writeHTML(series.entries, series.name, f'{series.name}_{csv_name}', compress_series_entries = True)
+
+
